@@ -13,6 +13,9 @@ start-production:
 db-create-development:
 	@./scripts/db.sh development
 
+db-create-sample:
+	@./scripts/db.sh development use-sample
+
 db-create:
 	@./scripts/db.sh production
 

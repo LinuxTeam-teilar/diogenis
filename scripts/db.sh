@@ -19,7 +19,10 @@ function psqlExec()
 DATABASE_ADMIN=$(readConfigurationValue "database_admin")
 DATABASE_USER=$(readConfigurationValue "database_user")
 DATABASE=$(readConfigurationValue "database_name")
-DATABASE_FILES=("schema/university.sql" "api/university.sql")
+DATABASE_FILES=("schema/university.sql"
+                "api/university.sql"
+                "schema/department.sql"
+                "api/department.sql")
 
 if [ $1 == "development" ]; then
 
@@ -42,4 +45,10 @@ for i in ${DATABASE_FILES[@]}; do
     echo "**********************************"
     echo
 done
+
+if [ $2 == "use-sample" ]; then
+    echo "**********************************"
+    echo "Executing Sample!!!"
+    psqlExec "sample.sql" false
+fi
 
