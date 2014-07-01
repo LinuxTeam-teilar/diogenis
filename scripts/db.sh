@@ -6,13 +6,39 @@ function readConfigurationValue()
     awk -v key="$key" -F "=" '$0 ~ key  {print $2}' diogenis.conf
 }
 
-if [ $1 == "create" ]; then
-    DATABASE_ADMIN=$(readConfigurationValue "database_admin")
-    DATABASE_USER=$(readConfigurationValue "database_user")
-    DATABASE=$(readConfigurationValue "database_name")
+function psqlExec()
+{
+    USER=$DATABASE_USER
+    if [ $2 == true ]; then
+        USER=$DATABASE_ADMIN
+    fi
 
+    PGOPTIONS='--client-min-messages=warning' psql -U $USER $DATABASE -f $PWD/db/$1
+}
+
+DATABASE_ADMIN=$(readConfigurationValue "database_admin")
+DATABASE_USER=$(readConfigurationValue "database_user")
+DATABASE=$(readConfigurationValue "database_name")
+DATABASE_FILES=("schema/university.sql")
+
+if [ $1 == "development" ]; then
+
+    dropdb -U $DATABASE_ADMIN $DATABASE
+else
     dropdb -i -U $DATABASE_ADMIN $DATABASE
-
-    createdb -U $DATABASE_ADMIN -O $DATABASE_USER $DATABASE
 fi
+
+createdb -U $DATABASE_ADMIN -O $DATABASE_USER $DATABASE
+
+psqlExec "schema/superUserCommands.sql" true
+
+for i in $DATABASE_FILES; do
+    echo "**********************************"
+    echo "Executing file: $i"
+    echo
+    psqlExec $i false
+    echo
+    echo "Done executing file: $i"
+    echo "**********************************"
+done
 

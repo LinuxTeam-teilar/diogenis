@@ -10,8 +10,11 @@ start-production:
 #################################
 # db
 #################################
+db-create-development:
+	@./scripts/db.sh development
+
 db-create:
-	@./scripts/db.sh create
+	@./scripts/db.sh production
 
 #################################
 # install
@@ -19,4 +22,4 @@ db-create:
 install:
 	@npm install
 
-.PHONY: start start-production install db-create
+.PHONY: start start-production install db-create db-create-development
