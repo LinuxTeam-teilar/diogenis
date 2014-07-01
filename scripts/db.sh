@@ -19,7 +19,7 @@ function psqlExec()
 DATABASE_ADMIN=$(readConfigurationValue "database_admin")
 DATABASE_USER=$(readConfigurationValue "database_user")
 DATABASE=$(readConfigurationValue "database_name")
-DATABASE_FILES=("schema/university.sql")
+DATABASE_FILES=("schema/university.sql" "api/university.sql")
 
 if [ $1 == "development" ]; then
 
@@ -31,8 +31,8 @@ fi
 createdb -U $DATABASE_ADMIN -O $DATABASE_USER $DATABASE
 
 psqlExec "schema/superUserCommands.sql" true
-
-for i in $DATABASE_FILES; do
+echo $DATABASE_FILES
+for i in ${DATABASE_FILES[@]}; do
     echo "**********************************"
     echo "Executing file: $i"
     echo
@@ -40,5 +40,6 @@ for i in $DATABASE_FILES; do
     echo
     echo "Done executing file: $i"
     echo "**********************************"
+    echo
 done
 
