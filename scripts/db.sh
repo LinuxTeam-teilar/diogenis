@@ -21,8 +21,12 @@ DATABASE_USER=$(readConfigurationValue "database_user")
 DATABASE=$(readConfigurationValue "database_name")
 DATABASE_FILES=("schema/university.sql"
                 "api/university.sql"
+
                 "schema/department.sql"
-                "api/department.sql")
+                "api/department.sql"
+
+                "schema/teacher.sql"
+                "api/teacher.sql")
 
 if [ $1 == "development" ]; then
 
