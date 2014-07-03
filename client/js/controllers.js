@@ -11,13 +11,16 @@ phonecatControllers.controller('DiogenisSecreteryTeacher', ['$scope', '$routePar
         {username: 'iatrelis@cs.teilar.gr', name: 'Omiros Iatrelis'}
     ];
 
-    $scope.modalTeacher;
-
+    $scope.teacherExists = false;
     $scope.addTeacher = function(newTeacher) {
-        $scope.teachers.push({
-            username: newTeacher[0].username,
-            name: newTeacher[0].name
-        });
+        if (angular.toJson(this.teachers).indexOf(newTeacher.username) >=0) {
+            $scope.teacherExists = true;
+        } else {
+            $scope.teachers.push({
+                username: newTeacher.username,
+                name: newTeacher.name
+            });
+        }
     }
 
     $scope.ModalDemoCtrl = function ($scope, $modal, $log) {
@@ -38,10 +41,10 @@ phonecatControllers.controller('DiogenisSecreteryTeacher', ['$scope', '$routePar
 
     $scope.ModalInstanceCtrl = function ($scope, $modalInstance) {
         $scope.ok = function (teacherEmail, teacherName) {
-            var newTeacher = [ {
+            var newTeacher = {
                 username: teacherEmail,
                 name: teacherName
-            }];
+            };
 
             $modalInstance.close(newTeacher);
         };
@@ -50,5 +53,20 @@ phonecatControllers.controller('DiogenisSecreteryTeacher', ['$scope', '$routePar
             $modalInstance.dismiss('cancel');
         };
     };
+
+
+    $scope.AlertComponentCtrl = function($scope) {
+        $scope.alerts = [
+            { type: 'alert round', msg: 'Teacher already exists!' }
+        ];
+
+        $scope.addAlert = function() {
+            $scope.alerts.push({msg: "Another alert!"});
+        };
+
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
+        };
+    }
 
   }]);
