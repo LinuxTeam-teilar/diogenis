@@ -4,19 +4,51 @@
 
 var phonecatControllers = angular.module('phonecatControllers', []);
 
-phonecatControllers.controller('PhoneListCtrl', ['$scope', 'Phone',
-  function($scope, Phone) {
-    $scope.phones = Phone.query();
-    $scope.orderProp = 'age';
-  }]);
+phonecatControllers.controller('DiogenisSecreteryTeacher', ['$scope', '$routeParams',
+  function($scope, $routeParams) {
 
-phonecatControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
-  function($scope, $routeParams, Phone) {
-    $scope.phone = Phone.get({phoneId: $routeParams.phoneId}, function(phone) {
-      $scope.mainImageUrl = phone.images[0];
-    });
+    $scope.teachers = [
+        {username: 'iatrelis@cs.teilar.gr', name: 'Omiros Iatrelis'}
+    ];
 
-    $scope.setImage = function(imageUrl) {
-      $scope.mainImageUrl = imageUrl;
+    $scope.modalTeacher;
+
+    $scope.addTeacher = function(newTeacher) {
+        $scope.teachers.push({
+            username: newTeacher[0].username,
+            name: newTeacher[0].name
+        });
     }
+
+    $scope.ModalDemoCtrl = function ($scope, $modal, $log) {
+        $scope.open = function () {
+            var modalInstance = $modal.open({
+            templateUrl: 'myModalContent.html',
+            controller: $scope.ModalInstanceCtrl,
+            });
+
+            modalInstance.result.then(function (newTeacher) {
+                $scope.addTeacher(newTeacher)
+            });
+        };
+    };
+
+    // Please note that $modalInstance represents a modal window (instance) dependency.
+    // It is not the same as the $modal service used above.
+
+    $scope.ModalInstanceCtrl = function ($scope, $modalInstance) {
+        $scope.ok = function (teacherEmail, teacherName) {
+            var newTeacher = [ {
+                username: teacherEmail,
+                name: teacherName
+            }];
+
+            $modalInstance.close(newTeacher);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    };
+
   }]);

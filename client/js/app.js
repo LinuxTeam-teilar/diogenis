@@ -14,13 +14,9 @@ phonecatApp.config(['$routeProvider',
     $routeProvider.
       when('/secretary', {
         templateUrl: 'partials/secretary.html',
-        controller: 'PhoneListCtrl'
-      }).
-      when('/phones/:phoneId', {
-        templateUrl: 'partials/phone-detail.html',
-        controller: 'PhoneDetailCtrl'
+        controller: 'DiogenisSecreteryTeacher'
       }).
       otherwise({
-        redirectTo: '/phones'
+        redirectTo: '/secretary'
       });
   }]);
