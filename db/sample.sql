@@ -1,5 +1,5 @@
 -- Here is a list of the lines that *MUST* FAIL
--- 11, 15, 22, 23, 27, 31, 32, 38, 39
+-- 11, 15, 22, 23, 27, 31, 32, 38, 39, 48
 
 
 SELECT university_create('TEI Thessaly');
@@ -38,4 +38,12 @@ SELECT lesson_create(1, 1, 'Programming 1');
 SELECT lesson_create(1, 1, 'Programming 1');
 SELECT lesson_records_presence('Programming 2', false);
 SELECT lesson_records_presence('Programming 1', true);
+
+--------------------------------------semester
+SELECT semester_create('2014 X');
+SELECT semester_add_lesson(1, 1);
+SELECT semester_remove_lesson(1, 1);
+
+--this must raise an exception
+SELECT semester_remove_lesson(222, 222);
 
