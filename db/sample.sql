@@ -1,6 +1,5 @@
 -- Here is a list of the lines that *MUST* FAIL
--- 11, 15, 22, 23, 27, 31, 32, 38, 39, 48
-
+-- 11, 15, 22, 23, 27, 30, 31 , 39, 40, 48
 
 SELECT university_create('TEI Thessaly');
 SELECT department_create('T.P.T', 1);
@@ -34,10 +33,11 @@ SELECT student_update_email('AntonisTsiapaliokas', 'foo@bar.gr');
 
 --------------------------------------lesson
 SELECT lesson_create(1, 1, 'Programming 1');
+SELECT lesson_add_student(1, 1);
+
 -- those must raise an exception
 SELECT lesson_create(1, 1, 'Programming 1');
 SELECT lesson_records_presence('Programming 2', false);
-SELECT lesson_records_presence('Programming 1', true);
 
 --------------------------------------semester
 SELECT semester_create('2014 X');
