@@ -35,7 +35,9 @@ DATABASE_FILES=("schema/university.sql"
                 "api/lesson.sql"
 
                 "schema/semester.sql"
-                "api/semester.sql")
+                "api/semester.sql"
+
+                "schema/classroom")
 
 if [ $1 == "development" ]; then
 
