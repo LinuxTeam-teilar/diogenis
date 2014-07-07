@@ -4,8 +4,8 @@ This README would normally document whatever steps are necessary to get your app
 
 # What is this repository for? #
 
-* Online Labs Registration Platformi Reborn
-* v0.7 (why? cause I can.Also SOAD)
+* Online Labs Registration Platform Reborn
+* v0.7 (why? cause I can. Also SOAD)
 
 # How do I get set up? #
 
