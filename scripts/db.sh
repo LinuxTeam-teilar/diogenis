@@ -61,7 +61,7 @@ for i in ${DATABASE_FILES[@]}; do
     echo
 done
 
-if [ $2 == "use-sample" ]; then
+if [ -n "$2" ] && [ $2 == "use-sample" ]; then
     echo "**********************************"
     echo "Executing Sample!!!"
     psqlExec "sample.sql" false
