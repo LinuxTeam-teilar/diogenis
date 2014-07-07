@@ -1,3 +1,5 @@
+REPORTER = spec
+
 ##################################
 # start
 ##################################
@@ -28,4 +30,7 @@ install:
 check:
 	@./node_modules/.bin/jshint --verbose --extra-ext .json . ; if [ $$? -eq 0 ] ; then echo "Done. Clean!" ; fi
 
-.PHONY: start start-production install db-create db-create-development
+test:
+	@./node_modules/.bin/mocha --reporter $(REPORTER)
+
+.PHONY: start start-production install db-create db-create-development db-create-sample check test
