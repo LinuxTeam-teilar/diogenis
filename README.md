@@ -4,9 +4,8 @@ This README would normally document whatever steps are necessary to get your app
 
 ### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* Online Labs Registration Platformi Reborn
+* v0.7 (why? cause I can.Also SOAD)
 
 ### How do I get set up? ###
 
@@ -16,16 +15,15 @@ This README would normally document whatever steps are necessary to get your app
 * Database configuration
 * How to run tests
 * Deployment instructions
+* TODO
 
 ### Contribution guidelines ###
 
 * Writing tests
 * Code review
 * Other guidelines
+* TODO
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
-
-###*I'll fix it eventually.###
+* To any of the devs
