@@ -14,6 +14,7 @@ start-production:
 #################################
 db-create-development:
 	@./scripts/db.sh development
+	@make defaultdata
 
 db-create-sample:
 	@./scripts/db.sh development use-sample
@@ -35,8 +36,5 @@ check:
 
 test:
 	@./node_modules/.bin/mocha --reporter $(REPORTER)
-
-test/fast:
-	db-create-development defaultdata test
 
 .PHONY: start start-production install defaultdata db-create db-create-development db-create-sample check test test/fast
