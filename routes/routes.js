@@ -1,11 +1,7 @@
 var index = require('./index.js');
-var university = require('./university.js');
-var department = require('./department.js');
 
 module.exports = function(app) {
     app.use('/', index);
-    app.use('/university', university);
-    app.use('/department', department);
 
     /// catch 404 and forward to error handler
     app.use(function(req, res, next) {
