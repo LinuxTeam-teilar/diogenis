@@ -1,7 +1,9 @@
 var index = require('./index.js');
+var secretary = require('./secretary.js');
 
 module.exports = function(app) {
     app.use('/', index);
+    app.use('/secretary', secretary);
 
     /// catch 404 and forward to error handler
     app.use(function(req, res, next) {
