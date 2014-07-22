@@ -32,7 +32,13 @@ describe('Secretary', function() {
 
         it('Should fail', function(done) {
             var expected = {
-                error: 'Auth Failed'
+                error: {
+                    name: 'AuthorizationFailed',
+                    id: 1
+                },
+                auth: {
+                    success: false
+                }
             };
 
             var opts = {
