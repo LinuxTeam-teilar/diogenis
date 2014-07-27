@@ -37,4 +37,4 @@ check:
 test:
 	@./node_modules/.bin/mocha --reporter $(REPORTER)
 
-.PHONY: start start-production install defaultdata db-create db-create-development db-create-sample check test test/fast
+.PHONY: start start-production install defaultdata db-create db-create-development db-create-sample check test
