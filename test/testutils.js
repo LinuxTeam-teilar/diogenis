@@ -4,11 +4,35 @@ var fs = require('fs')
 
 var config = ini.parse(fs.readFileSync(process.cwd() + '/diogenis.conf', 'utf-8'));
 
+var cookie = '';
 
-module.exports.getUrl = function(opts, cb) {
+module.exports.authSecretary = function(cb) {
+    var opts = {
+        path: 'secretary/auth',
+        method: 'POST'
+    };
+
+    opts.form = {
+        username: 'tpt-secretary',
+        password: '1234567890'
+    };
+
+    getUrl(opts, function(res, body) {
+        cookie = res.headers['set-cookie'];
+
+        if (cb) {
+            cb(res);
+        }
+    });
+};
+
+function getUrl(opts, cb) {
     var options = {
         url: 'http://' + config.server.server_host + ':' + config.server.server_port,
-        method: opts.method ? opts.method : 'GET'
+        method: opts.method ? opts.method : 'GET',
+        headers: {
+            'Cookie': opts.auth ? cookie : null
+        }
     };
 
     options.url += '/' + opts.path;
@@ -31,5 +55,6 @@ module.exports.getUrl = function(opts, cb) {
             error.should.equal(null);
         }
     });
-};
+}
 
+module.exports.getUrl = getUrl;
