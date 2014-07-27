@@ -4,6 +4,7 @@ var should = require('should');
 describe('Teacher', function() {
 
     describe('Create Teacher', function() {
+
         it('Should succeed', function(done) {
             testUtils.authSecretary(function(secretaryRes) {
                 var expected = {};
@@ -40,6 +41,40 @@ describe('Teacher', function() {
                 });
             });
         });
+
+        it('Invalid Parameters', function(done) {
+            testUtils.authSecretary(function(secretaryRes) {
+                var expected = {};
+
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: 3,
+                        name: 'InvalidParameters'
+                    }
+                };
+
+                var opts = {
+                    path: 'teacher/create',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    username: 'superteacher',
+                    password: 'superteacher'//,
+                    //email: 'superteacher@teilar.gr'
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
     });
 
 });
