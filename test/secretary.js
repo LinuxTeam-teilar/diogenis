@@ -53,6 +53,35 @@ describe('Secretary', function() {
                 done();
             });
         });
+
+
+        it('Invalid Parameters', function(done) {
+            var expected = {
+                error: {
+                    name: 'InvalidParameters',
+                    id: 3
+                },
+                auth: {
+                    success: false
+                }
+            };
+
+            var opts = {
+                path: 'secretary/auth',
+                method: 'POST'
+            };
+
+            opts.form = {
+                username: 'fail'//,
+                //password: 'fail'
+            };
+
+            testUtils.getUrl(opts, function(res, body) {
+                res.body.should.eql(expected)
+                done();
+            });
+        });
+
     });
 });
 
