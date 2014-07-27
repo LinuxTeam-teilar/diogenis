@@ -45,7 +45,13 @@ function getUrl(opts, cb) {
 
     request(options, function (error, response, body) {
         if (!error) {
-            response.statusCode.should.equal(200);
+
+            if (opts.statusCode) {
+                response.statusCode.should.equal(opts.statusCode);
+            } else {
+                response.statusCode.should.equal(200);
+            }
+
             response.body = JSON.parse(response.body)
             cb(response, body);
         } else {
