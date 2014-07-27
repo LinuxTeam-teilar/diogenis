@@ -6,28 +6,25 @@ describe('Secretary', function() {
     describe('Auth Secretary', function() {
         it('Should succeed', function(done) {
             var expected = {
-                error: '',
+                error: {
+                    name: '',
+                    id: -1
+                },
                 auth: {
                     success: true,
-                    isSecretary: true,
-                    username: "tpt-secretary"
+                },
+                user: {
+                    username: 'tpt-secretary',
+                    email: ''
                 }
             };
 
-            var opts = {
-                path: 'secretary/auth',
-                method: 'POST'
-            };
-
-            opts.form = {
-                username: 'tpt-secretary',
-                password: '1234567890'
-            };
-
-            testUtils.getUrl(opts, function(res, body) {
+            function verifyTest(res) {
                 res.body.should.eql(expected)
                 done();
-            });
+            }
+
+            testUtils.authSecretary(verifyTest);
         });
 
         it('Should fail', function(done) {
