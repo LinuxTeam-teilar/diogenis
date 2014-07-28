@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION lesson_create(teacherId int, departmentId int, lessonName text) RETURNS TEXT AS $$
+CREATE OR REPLACE FUNCTION lesson_create(teacherId int, departmentId int, lessonName text) RETURNS JSON AS $$
 DECLARE
     lessonRecord record;
 BEGIN
@@ -10,7 +10,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION lesson_records_presence(lessonName text, presence boolean) RETURNS TEXT AS $$
+CREATE OR REPLACE FUNCTION lesson_records_presence(lessonName text, presence boolean) RETURNS JSON AS $$
 DECLARE
     lessonRecord record;
 BEGIN

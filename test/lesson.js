@@ -20,7 +20,7 @@ describe('Lesson', function() {
                         name: 'Programming 1',
                         teacher: 1,
                         department: 1,
-                        recordsPresence: false
+                        recordspresence: false
                     }
                 };
 
@@ -153,7 +153,7 @@ describe('Lesson', function() {
                         name: 'Programming 1',
                         teacher: 1,
                         department: 1,
-                        recordsPresence: true
+                        recordspresence: true
                     }
                 };
 
