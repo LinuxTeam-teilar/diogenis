@@ -3,7 +3,7 @@ DECLARE
     lessonRecord record;
 BEGIN
     INSERT INTO lesson (name, teacher, department) VALUES (lessonName, teacherId, departmentId)
-    RETURNING id, name, teacher, department INTO lessonRecord;
+    RETURNING id, name, teacher, department, recordspresence INTO lessonRecord;
 
     RETURN row_to_json(lessonRecord);
 

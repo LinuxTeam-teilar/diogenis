@@ -16,9 +16,11 @@ describe('Lesson', function() {
                         name: ''
                     },
                     lesson: {
+                        id: 1,
                         name: 'Programming 1',
                         teacher: 1,
-                        department: 1
+                        department: 1,
+                        recordsPresence: false
                     }
                 };
 
