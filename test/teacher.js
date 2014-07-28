@@ -17,7 +17,7 @@ describe('Teacher', function() {
                     },
                     user: {
                         email: 'superteacher@teilar.gr',
-                        username: 'superteacher'
+                        name: 'Super Teacher'
                     }
                 };
 
@@ -28,7 +28,7 @@ describe('Teacher', function() {
                 };
 
                 opts.form = {
-                    username: 'superteacher',
+                    name: 'Super Teacher',
                     password: 'superteacher',
                     email: 'superteacher@teilar.gr'
                 };
@@ -59,7 +59,7 @@ describe('Teacher', function() {
                 };
 
                 opts.form = {
-                    username: 'superteacher',
+                    name: 'Super Teacher',
                     password: 'superteacher'//,
                     //email: 'superteacher@teilar.gr'
                 };
@@ -89,7 +89,7 @@ describe('Teacher', function() {
             };
 
             opts.form = {
-                username: 'superteacher',
+                name: 'Super Teacher',
                 password: 'superteacher',
                 email: 'superteacher@teilar.gr'
             };
@@ -101,6 +101,5 @@ describe('Teacher', function() {
         });
 
     });
-
 });
 
