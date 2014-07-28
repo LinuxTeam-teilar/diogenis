@@ -1,7 +1,12 @@
-CREATE OR REPLACE FUNCTION semester_create(semesterName text) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION semester_create(semesterName text) RETURNS TEXT AS $$
 DECLARE
+    semesterRecord record;
 BEGIN
-    INSERT INTO semester (name) VALUES (semesterName);
+    INSERT INTO semester (name) VALUES (semesterName)
+    RETURNING id, name INTO semesterRecord;
+
+    RETURN row_to_json(semesterRecord);
+
 END;
 $$ LANGUAGE plpgsql;
 
