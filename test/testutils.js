@@ -52,7 +52,14 @@ function getUrl(opts, cb) {
                 response.statusCode.should.equal(200);
             }
 
-            response.body = JSON.parse(response.body)
+            try {
+                response.body = JSON.parse(response.body);
+            } catch (e) {
+                console.log('\n');
+                console.log('Exception:');
+                console.log(e);
+                console.log('\n');
+            }
             cb(response, body);
         } else {
             console.log('Error in request!!!');
