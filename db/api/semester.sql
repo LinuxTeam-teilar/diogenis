@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION semester_create(semesterName text) RETURNS TEXT AS $$
+CREATE OR REPLACE FUNCTION semester_create(semesterName text) RETURNS JSON AS $$
 DECLARE
     semesterRecord record;
 BEGIN
