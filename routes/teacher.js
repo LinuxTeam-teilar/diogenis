@@ -8,5 +8,9 @@ router.post('/create', routeMiddleware.isSecretary, function(req, res) {
     teacherDb.create(req, res);
 });
 
+router.post('/auth', function(req, res) {
+    teacherDb.auth(req, res);
+});
+
 module.exports = router;
 
