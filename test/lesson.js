@@ -256,11 +256,22 @@ describe('Lesson', function() {
             };
 
             var opts = {
-                path: 'lesson/list',
+                path: 'lesson/list/1',
             };
 
             testUtils.getUrl(opts, function(res, body) {
                 res.body.should.eql(expected)
+                done();
+            });
+        });
+
+        it('Invalid Parameters', function(done) {
+            var opts = {
+                path: 'lesson/list',
+                statusCode: 404
+            };
+
+            testUtils.getUrl(opts, function(res, body) {
                 done();
             });
         });

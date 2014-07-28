@@ -22,12 +22,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION lesson_list_all() RETURNS JSON AS $$
+CREATE OR REPLACE FUNCTION lesson_list_all(departmentId int) RETURNS JSON AS $$
 DECLARE
     jsonArray json[];
     it record;
 BEGIN
-    FOR it IN SELECT * FROM lesson
+    FOR it IN SELECT * FROM lesson WHERE department = departmentId
     LOOP
         jsonArray := array_append(jsonArray, row_to_json(it));
     END LOOP;

@@ -12,7 +12,7 @@ router.post('/recordsPresence', routeMiddleware.isSecretaryOrTeacher, function(r
     lessonDb.recordsPresence(req, res);
 });
 
-router.get('/list', function(req, res) {
+router.get('/list/:departmentId', function(req, res) {
     lessonDb.listAll(req, res);
 });
 
