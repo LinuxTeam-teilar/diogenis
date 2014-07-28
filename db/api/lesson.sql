@@ -1,7 +1,12 @@
-CREATE OR REPLACE FUNCTION lesson_create(teacherId int, departmentId int, lessonName text) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION lesson_create(teacherId int, departmentId int, lessonName text) RETURNS TEXT AS $$
 DECLARE
+    lessonRecord record;
 BEGIN
-    INSERT INTO lesson (name, teacher, department) VALUES (lessonName, teacherId, departmentId);
+    INSERT INTO lesson (name, teacher, department) VALUES (lessonName, teacherId, departmentId)
+    RETURNING id, name, teacher, department INTO lessonRecord;
+
+    RETURN row_to_json(lessonRecord);
+
 END;
 $$ LANGUAGE plpgsql;
 
