@@ -10,13 +10,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION lesson_records_presence(lessonName text, presence boolean) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION lesson_records_presence(lessonName text, presence boolean) RETURNS TEXT AS $$
 DECLARE
+    lessonRecord record;
 BEGIN
-    UPDATE lesson SET recordsPresence = presence WHERE name = lessonName;
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'The lesson does not exist';
-    END IF;
+    UPDATE lesson SET recordsPresence = presence WHERE name = lessonName
+    RETURNING id, name, teacher, department, recordsPresence INTO lessonRecord;
+
+    RETURN row_to_json(lessonRecord);
 
 END;
 $$ LANGUAGE plpgsql;
