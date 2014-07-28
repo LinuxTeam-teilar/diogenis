@@ -234,5 +234,37 @@ describe('Lesson', function() {
         });
 
     });
+
+    describe('List All Lessons', function() {
+
+        it('Should succeed', function(done) {
+            var expected = {
+                "auth": {
+                    "success": false
+                },
+                "error": {
+                    "id": -1,
+                    "name": ""
+                },
+                "lessons": [{
+                    "department": 1,
+                    "id": 1,
+                    "name": "Programming 1",
+                    "recordspresence": true,
+                    "teacher": 1
+                }]
+            };
+
+            var opts = {
+                path: 'lesson/list',
+            };
+
+            testUtils.getUrl(opts, function(res, body) {
+                res.body.should.eql(expected)
+                done();
+            });
+        });
+
+    });
 });
 

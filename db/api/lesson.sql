@@ -22,6 +22,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION lesson_list_all() RETURNS JSON AS $$
+DECLARE
+    jsonArray json[];
+    it record;
+BEGIN
+    FOR it IN SELECT * FROM lesson
+    LOOP
+        jsonArray := array_append(jsonArray, row_to_json(it));
+    END LOOP;
+    RETURN array_to_json(jsonArray);
+
+END;
+$$ LANGUAGE plpgsql;
+
+
 CREATE OR REPLACE FUNCTION lesson_add_student(lessonId int, studentId int) RETURNS VOID AS $$
 DECLARE
 BEGIN
