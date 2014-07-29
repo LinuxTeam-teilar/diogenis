@@ -19,7 +19,8 @@ function psqlExec()
 DATABASE_ADMIN=$(readConfigurationValue "database_admin")
 DATABASE_USER=$(readConfigurationValue "database_user")
 DATABASE=$(readConfigurationValue "database_name")
-DATABASE_FILES=("schema/university.sql"
+DATABASE_FILES=("utils.sql"
+                "schema/university.sql"
                 "api/university.sql"
 
                 "schema/department.sql"
