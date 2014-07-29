@@ -12,5 +12,9 @@ router.post('/lesson/add', routeMiddleware.isSecretary, function(req, res) {
     semesterDb.addLesson(req, res);
 });
 
+router.post('/lesson/remove', routeMiddleware.isSecretary, function(req, res) {
+    semesterDb.removeLesson(req, res);
+});
+
 module.exports = router;
 

@@ -29,14 +29,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION semester_remove_lesson(semesterId int, lessonId int) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION semester_remove_lesson(semesterId int, lessonId int) RETURNS JSON AS $$
 DECLARE
+    semesterAttributesJson json;
 BEGIN
+    PERFORM lesson, semester FROM semesterAttributes
+    WHERE lesson = lessonId AND semester = semesterId;
 
-    DELETE FROM semesterAttributes WHERE semester = semesterId AND lesson = lessonId;
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Could not delete lesson from semester';
+    IF FOUND THEN
+        DELETE FROM semesterAttributes WHERE semester = semesterId AND lesson = lessonId;
+        SELECT utils_create_json('lesson', 'semester', semesterId, lessonId) INTO semesterAttributesJson;
+    ELSE
+        SELECT row_to_json(ROW()) INTO semesterAttributesJson;
     END IF;
+
+    RETURN semesterAttributesJson;
 
 END;
 $$ LANGUAGE plpgsql;
