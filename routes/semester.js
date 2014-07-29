@@ -8,5 +8,9 @@ router.post('/create', routeMiddleware.isSecretary, function(req, res) {
     semesterDb.create(req, res);
 });
 
+router.post('/lesson/add', routeMiddleware.isSecretary, function(req, res) {
+    semesterDb.addLesson(req, res);
+});
+
 module.exports = router;
 
