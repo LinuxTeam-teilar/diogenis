@@ -3,6 +3,7 @@ var secretary = require('./secretary.js');
 var teacher = require('./teacher.js');
 var lesson = require('./lesson.js');
 var semester = require('./semester.js');
+var student = require('./student.js');
 
 module.exports = function(app) {
     app.use('/', index);
@@ -10,6 +11,7 @@ module.exports = function(app) {
     app.use('/teacher', teacher);
     app.use('/lesson', lesson);
     app.use('/semester', semester);
+    app.use('/student', student);
 
     /// catch 404 and forward to error handler
     app.use(function(req, res, next) {
