@@ -3,6 +3,7 @@ var ini = require('ini');
 var fs = require('fs')
 
 var config = ini.parse(fs.readFileSync(process.cwd() + '/diogenis.conf', 'utf-8'));
+var testConfig = ini.parse(fs.readFileSync(process.cwd() + '/test/test_passwords.conf', 'utf-8'));
 
 var cookie = '';
 
@@ -69,5 +70,9 @@ function getUrl(opts, cb) {
         }
     });
 }
+
+module.exports.dionysosCredentials = function() {
+    return testConfig.dionysos;
+};
 
 module.exports.getUrl = getUrl;
