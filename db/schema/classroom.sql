@@ -6,7 +6,7 @@ CREATE TABLE classroom
     name               text        not null
 );
 
-CREATE TABLE classroomHours
+CREATE TABLE classroomSchedule
 (
     classroom    int    not null references classroom(id) on delete cascade,
     lesson       int    not null references lesson(id) on delete cascade,
