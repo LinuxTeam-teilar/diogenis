@@ -2,19 +2,23 @@
 
 /* App Module */
 
-var phonecatApp = angular.module('phonecatApp', [
+var diogenisApp = angular.module('diogenisApp', [
   'ngRoute',
-  'mm.foundation',
-  'phonecatControllers',
-  'phonecatServices'
+  'ui.bootstrap',
+  'diogenisControllers',
+  'diogenisServices'
 ]);
 
-phonecatApp.config(['$routeProvider',
+diogenisApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/secretary', {
         templateUrl: 'partials/secretary.html',
         controller: 'DiogenisSecreteryTeacher'
+      }).
+      when('/', {
+        templateUrl: 'partials/home.html',
+        controller: 'DiogenisLoginCtrl'
       }).
       otherwise({
         redirectTo: '/secretary'
