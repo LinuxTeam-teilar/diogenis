@@ -1,6 +1,14 @@
 var express = require('express');
 var path = require('path');
 var app = express();
+var fs = require('fs');
+
+var dionysosExists = fs.existsSync(process.cwd() + '/tmp/bin/dionysos');
+if (!dionysosExists) {
+    console.warn("dionysos tool doesn't exist");
+    console.warn("have you executed `make tools`?");
+    process.abort()
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
