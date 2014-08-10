@@ -1,0 +1,11 @@
+{
+	"ImportPath": "diogenis/tools",
+	"GoVersion": "go1.3",
+	"Deps": [
+		{
+			"ImportPath": "github.com/qiniu/iconv",
+			"Comment": "v1.0.03",
+			"Rev": "172b3ad91d7973617ea6b6ed03d9fec080f8901d"
+		}
+	]
+}

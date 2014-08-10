@@ -37,4 +37,10 @@ check:
 test:
 	@./scripts/mocha.sh $(REPORTER)
 
-.PHONY: start start-production install defaultdata db-create db-create-development db-create-sample check test
+tools:
+	@./scripts/tools.sh
+
+help:
+	@./scripts/help.sh
+
+.PHONY: start start-production install defaultdata db-create db-create-development db-create-sample check test help tools
