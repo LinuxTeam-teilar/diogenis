@@ -4,5 +4,6 @@
                                              test/teacher.js \
                                              test/lesson.js \
                                              test/semester.js \
+                                             test/classroom.js \
                                              test/student.js
 
