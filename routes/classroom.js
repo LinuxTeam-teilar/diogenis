@@ -12,5 +12,9 @@ router.post('/rename', routeMiddleware.isSecretary, function(req, res) {
     classroomDb.rename(req, res);
 });
 
+router.post('/use', routeMiddleware.isSecretaryOrTeacher, function(req, res) {
+    classroomDb.use(req, res);
+});
+
 module.exports = router;
 
