@@ -413,5 +413,134 @@ describe('Lesson', function() {
 
     });
 
+    describe('Remove student', function() {
+
+        it('Should succeed', function(done) {
+            testUtils.authSecretary(function(secretaryRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: -1,
+                        name: ''
+                    },
+                    operation: {
+                        lesson: 1,
+                        student: 1,
+                        status: true
+                    }
+                };
+
+                var opts = {
+                    path: 'lesson/remove/student',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    lessonId: 1,
+                    studentId: 1
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+       it('Should Fail', function(done) {
+            testUtils.authSecretary(function(secretaryRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: 8,
+                        name: 'DeletionFailed'
+                    }
+                };
+
+                var opts = {
+                    path: 'lesson/remove/student',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    lessonId: 1000000000,
+                    studentId: 100000000
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+
+        it('Invalid Parameters', function(done) {
+            testUtils.authSecretary(function(secretaryRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: 3,
+                        name: 'InvalidParameters'
+                    }
+                };
+
+                var opts = {
+                    path: 'lesson/remove/student',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    lessonId: 1
+                    //studentId: 1
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+        it('UnAuthorized Request', function(done) {
+            var expected = {
+                auth: {
+                    success: false
+                },
+                error: {
+                    id: 2,
+                    name: 'UnAuthorized'
+                }
+            };
+
+            var opts = {
+                path: 'lesson/remove/student',
+                method: 'POST',
+                statusCode: 401
+            };
+
+            opts.form = {
+                lessonId: 1,
+                studentId: 1
+            };
+
+            testUtils.getUrl(opts, function(res, body) {
+                res.body.should.eql(expected)
+                done();
+            });
+        });
+
+    });
+
+
 });
 
