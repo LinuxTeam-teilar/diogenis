@@ -1,9 +1,9 @@
-CREATE OR REPLACE FUNCTION lesson_create(teacherId int, departmentId int, lessonName text) RETURNS JSON AS $$
+CREATE OR REPLACE FUNCTION lesson_create(teacherId int, departmentId int, lessonName text, _limit int) RETURNS JSON AS $$
 DECLARE
     lessonRecord record;
 BEGIN
-    INSERT INTO lesson (name, teacher, department) VALUES (lessonName, teacherId, departmentId)
-    RETURNING id, name, teacher, department, recordspresence INTO lessonRecord;
+    INSERT INTO lesson (name, teacher, department, lessonLimit) VALUES (lessonName, teacherId, departmentId, _limit)
+    RETURNING * INTO lessonRecord;
 
     RETURN row_to_json(lessonRecord);
 
@@ -15,7 +15,7 @@ DECLARE
     lessonRecord record;
 BEGIN
     UPDATE lesson SET recordsPresence = presence WHERE name = lessonName
-    RETURNING id, name, teacher, department, recordsPresence INTO lessonRecord;
+    RETURNING * INTO lessonRecord;
 
     RETURN row_to_json(lessonRecord);
 
@@ -37,45 +37,52 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION lesson_add_student(lessonId int, studentId int) RETURNS VOID AS $$
-DECLARE
-BEGIN
-
-    INSERT INTO lessonAttributes (lesson, student) VALUES (lessonId, studentId);
-
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION validateDepartmentId() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION lesson_add_student(lessonId int, studentId int) RETURNS JSON AS $$
 DECLARE
     lessonDepartmentId int;
     studentDepartmentId int;
+    lessonLimit int;
+    lessonCount int;
+    lessonAttributesJson json;
+    inQueue boolean;
 BEGIN
-    SELECT INTO lessonDepartmentId department FROM lesson WHERE NEW.lesson = id;
-    SELECT INTO studentDepartmentId department FROM student WHERE NEW.student = id;
+    SELECT INTO lessonDepartmentId department FROM lesson WHERE lessonId = id;
+    SELECT INTO studentDepartmentId department FROM student WHERE studentId = id;
 
     IF lessonDepartmentId != studentDepartmentId THEN
-        RAISE EXCEPTION 'You cannot associate a student with a lesson when they don belong in the same department';
+        RETURN row_to_json(ROW());
     END IF;
 
-    RETURN NEW;
+    SELECT INTO lessonLimit lesson.lessonLimit FROM lesson WHERE lessonId = id;
+
+    SELECT INTO lessonCount count(student) FROM lessonAttributes
+    WHERE lessonId = lesson AND studentId = student;
+
+    IF lessonCount >= lessonLimit THEN
+        inQueue := TRUE;
+    ELSE
+        inQueue := FALSE;
+    END IF;
+
+    INSERT INTO lessonAttributes (lesson, student, isStudentInQueue)
+    VALUES (lessonId, studentId, inQueue)
+    RETURNING row_to_json(lessonAttributes.*) INTO lessonAttributesJson;
+
+    RETURN lessonAttributesJson;
+
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS trg_validateDepartmentId ON lessonAttributes;
-CREATE TRIGGER trg_validateDepartmentId BEFORE INSERT OR UPDATE ON lessonAttributes
-FOR EACH ROW EXECUTE PROCEDURE validateDepartmentId();
-
-
-CREATE OR REPLACE FUNCTION lesson_remove_student(lessonId int, studentId int) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION lesson_remove_student(lessonId int, studentId int) RETURNS INT AS $$
 DECLARE
 BEGIN
 
     DELETE FROM lessonAttributes WHERE lesson = lessonId AND student =  studentId;
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'Could not delete student from lesson!';
+        RETURN 1;
     END IF;
 
+    RETURN 0;
 END;
 $$ LANGUAGE plpgsql;
 

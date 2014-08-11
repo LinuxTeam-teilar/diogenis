@@ -144,7 +144,8 @@ describe('Semester', function() {
                             id: 1,
                             name: 'Programming 1',
                             recordspresence: true,
-                            teacher: 1
+                            teacher: 1,
+                            lessonlimit: 25
                         },
                         semester: {
                             id: 1,
@@ -280,7 +281,8 @@ describe('Semester', function() {
                             id: 1,
                             name: 'Programming 1',
                             recordspresence: true,
-                            teacher: 1
+                            teacher: 1,
+                            lessonlimit: 25
                         },
                         semester: {
                             id: 1,

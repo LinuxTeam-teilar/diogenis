@@ -16,5 +16,9 @@ router.get('/list/:departmentId', function(req, res) {
     lessonDb.listAll(req, res);
 });
 
+router.post('/add/student', routeMiddleware.isSecretaryOrTeacher, function(req, res) {
+    lessonDb.addStudent(req, res);
+});
+
 module.exports = router;
 

@@ -20,7 +20,8 @@ describe('Lesson', function() {
                         name: 'Programming 1',
                         teacher: 1,
                         department: 1,
-                        recordspresence: false
+                        recordspresence: false,
+                        lessonlimit: 25
                     }
                 };
 
@@ -33,7 +34,8 @@ describe('Lesson', function() {
                 opts.form = {
                     name: 'Programming 1',
                     teacher: 1,
-                    department: 1
+                    department: 1,
+                    limit: 25
                 };
 
                 testUtils.getUrl(opts, function(res, body) {
@@ -64,7 +66,8 @@ describe('Lesson', function() {
                 opts.form = {
                     name: 'Programming 1',
                     teacher: 1,
-                    department: 1
+                    department: 1,
+                    limit: 25
                 };
 
                 testUtils.getUrl(opts, function(res, body) {
@@ -95,8 +98,9 @@ describe('Lesson', function() {
 
                 opts.form = {
                     name: 'Programming 1',
-                    teacher: 1
-                    //department: 1
+                    teacher: 1,
+                    department: 1
+                    //limit: 25
                 };
 
                 testUtils.getUrl(opts, function(res, body) {
@@ -126,7 +130,8 @@ describe('Lesson', function() {
             opts.form = {
                 name: 'Programming 1',
                 teacher: 1,
-                department: 1
+                department: 1,
+                limit: 25
             };
 
             testUtils.getUrl(opts, function(res, body) {
@@ -153,7 +158,8 @@ describe('Lesson', function() {
                         name: 'Programming 1',
                         teacher: 1,
                         department: 1,
-                        recordspresence: true
+                        recordspresence: true,
+                        lessonlimit: 25
                     }
                 };
 
@@ -251,7 +257,8 @@ describe('Lesson', function() {
                     "id": 1,
                     "name": "Programming 1",
                     "recordspresence": true,
-                    "teacher": 1
+                    "teacher": 1,
+                    "lessonlimit": 25
                 }]
             };
 
@@ -277,5 +284,134 @@ describe('Lesson', function() {
         });
 
     });
+
+    describe('Add student', function() {
+
+        it('Should succeed', function(done) {
+            testUtils.authSecretary(function(secretaryRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: -1,
+                        name: ''
+                    },
+                    lessonAttributes: {
+                        lesson: 1,
+                        student: 1,
+                        isstudentinqueue: false
+                    }
+                };
+
+                var opts = {
+                    path: 'lesson/add/student',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    lessonId: 1,
+                    studentId: 1
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+       it('Should Fail', function(done) {
+            testUtils.authSecretary(function(secretaryRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: 9,
+                        name: 'DbError'
+                    }
+                };
+
+                var opts = {
+                    path: 'lesson/add/student',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    lessonId: 1000000000,
+                    studentId: 100000000
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+
+        it('Invalid Parameters', function(done) {
+            testUtils.authSecretary(function(secretaryRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: 3,
+                        name: 'InvalidParameters'
+                    }
+                };
+
+                var opts = {
+                    path: 'lesson/add/student',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    lessonId: 1
+                    //studentId: 1
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+        it('UnAuthorized Request', function(done) {
+            var expected = {
+                auth: {
+                    success: false
+                },
+                error: {
+                    id: 2,
+                    name: 'UnAuthorized'
+                }
+            };
+
+            var opts = {
+                path: 'lesson/add/student',
+                method: 'POST',
+                statusCode: 401
+            };
+
+            opts.form = {
+                lessonId: 1,
+                studentId: 1
+            };
+
+            testUtils.getUrl(opts, function(res, body) {
+                res.body.should.eql(expected)
+                done();
+            });
+        });
+
+    });
+
 });
 
