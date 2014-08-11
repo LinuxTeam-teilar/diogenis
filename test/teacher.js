@@ -118,19 +118,9 @@ describe('Teacher', function() {
                 }
             };
 
-            var opts = {
-                path: 'teacher/auth',
-                method: 'POST'
-            };
-
-            opts.form = {
-                username: 'superteacher@teilar.gr',
-                password: 'superteacher',
-            };
-
-            testUtils.getUrl(opts, function(res, body) {
-               res.body.should.eql(expected);
-               done();
+            testUtils.authTeacher(function(res) {
+                res.body.should.eql(expected);
+                done();
             });
 
         });

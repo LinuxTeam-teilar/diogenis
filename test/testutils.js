@@ -27,6 +27,26 @@ module.exports.authSecretary = function(cb) {
     });
 };
 
+module.exports.authTeacher = function(cb) {
+    var opts = {
+        path: 'teacher/auth',
+        method: 'POST'
+    };
+
+    opts.form = {
+        username: 'superteacher@teilar.gr',
+        password: 'superteacher',
+    };
+
+    getUrl(opts, function(res, body) {
+        cookie = res.headers['set-cookie'];
+
+        if (cb) {
+            cb(res);
+        }
+    });
+};
+
 function getUrl(opts, cb) {
     var options = {
         url: 'http://' + config.server.server_host + ':' + config.server.server_port,
