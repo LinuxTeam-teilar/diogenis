@@ -59,3 +59,62 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION student_add_record(studentId int, lessonId int) RETURNS JSON AS $$
+DECLARE
+    studentRecordJson json;
+BEGIN
+    PERFORM * FROM student WHERE id = studentId;
+
+    IF NOT FOUND THEN
+        RETURN row_to_json(ROW());
+    END IF;
+
+    PERFORM * FROM lesson WHERE id = lessonId;
+
+    IF NOT FOUND THEN
+        RETURN row_to_json(ROW());
+    END IF;
+
+    INSERT INTO studentRecord (student, lesson) VALUES (studentId, lessonId)
+    RETURNING row_to_json(studentRecord.*) INTO studentRecordJson;
+
+    RETURN studentRecordJson;
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION student_remove_record(studentId int, lessonId int) RETURNS JSON AS $$
+DECLARE
+    studentRecordJson json;
+    recordId int;
+BEGIN
+    PERFORM * FROM student WHERE id = studentId;
+
+    IF NOT FOUND THEN
+        RETURN row_to_json(ROW());
+    END IF;
+
+    PERFORM * FROM lesson WHERE id = lessonId;
+
+    IF NOT FOUND THEN
+        RETURN row_to_json(ROW());
+    END IF;
+
+    SELECT INTO recordId id FROM studentRecord
+    WHERE student = studentId AND lesson = lessonId
+    ORDER BY record DESC
+    LIMIT 1;
+
+    IF NOT FOUND THEN
+        RETURN row_to_json(ROW());
+    END IF;
+
+    DELETE FROM studentRecord WHERE id = recordId
+    RETURNING row_to_json(studentRecord.*) INTO studentRecordJson;
+
+    RETURN studentRecordJson;
+
+END;
+$$ LANGUAGE plpgsql;
+
