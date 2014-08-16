@@ -12,13 +12,13 @@ var diogenisApp = angular.module('diogenisApp', [
 diogenisApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
-      when('/secretary', {
-        templateUrl: 'partials/secretary.html',
-        controller: 'DiogenisSecreteryTeacher'
-      }).
       when('/', {
         templateUrl: 'partials/home.html',
         controller: 'DiogenisLoginCtrl'
+      }).
+      when('/secretary', {
+        templateUrl: 'partials/secretary.html',
+        controller: 'DiogenisSecretaryCtrl'
       }).
       otherwise({
         redirectTo: '/secretary'

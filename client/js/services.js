@@ -20,3 +20,4 @@ diogenisServices.factory('Person', ['$resource',
       loginTeacher: {method:'POST', params: {role: 'teacher'} }
     });
   }]);
+
