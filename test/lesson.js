@@ -16,8 +16,8 @@ describe('Lesson', function() {
                         name: ''
                     },
                     lesson: {
-                        id: 1,
-                        name: 'Programming 1',
+                        id: 2,
+                        name: 'Programming 4',
                         teacher: 1,
                         department: 1,
                         recordspresence: false,
@@ -25,27 +25,14 @@ describe('Lesson', function() {
                     }
                 };
 
-                var opts = {
-                    path: 'lesson/create',
-                    method: 'POST',
-                    auth: true
-                };
-
-                opts.form = {
-                    name: 'Programming 1',
-                    teacher: 1,
-                    department: 1,
-                    limit: 25
-                };
-
-                testUtils.getUrl(opts, function(res, body) {
-                    res.body.should.eql(expected)
+                testUtils.createLesson('Programming 4', function(res) {
+                    res.body.should.eql(expected);
                     done();
                 });
             });
         });
 
-       it('Should Fail', function(done) {
+        it('Should Fail', function(done) {
             testUtils.authSecretary(function(secretaryRes) {
                 var expected = {
                     auth: {
@@ -57,23 +44,11 @@ describe('Lesson', function() {
                     }
                 };
 
-                var opts = {
-                    path: 'lesson/create',
-                    method: 'POST',
-                    auth: true
-                };
-
-                opts.form = {
-                    name: 'Programming 1',
-                    teacher: 1,
-                    department: 1,
-                    limit: 25
-                };
-
-                testUtils.getUrl(opts, function(res, body) {
+                testUtils.createLesson('Programming 4', function(res) {
                     res.body.should.eql(expected)
                     done();
                 });
+
             });
         });
 
@@ -253,6 +228,14 @@ describe('Lesson', function() {
                     "name": ""
                 },
                 "lessons": [{
+                    "department": 1,
+                    "id": 2,
+                    "name": "Programming 4",
+                    "recordspresence": false,
+                    "teacher": 1,
+                    "lessonlimit": 25
+                },
+                {
                     "department": 1,
                     "id": 1,
                     "name": "Programming 1",

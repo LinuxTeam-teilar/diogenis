@@ -182,7 +182,7 @@ describe('Teacher', function() {
         });
 
     });
-
+    describe('List all', function() {})
 
 });
 
