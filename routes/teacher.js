@@ -12,5 +12,9 @@ router.post('/auth', function(req, res) {
     teacherDb.auth(req, res);
 });
 
+router.get('/list', routeMiddleware.isSecretaryOrTeacher, function(req, res) {
+    teacherDb.listAll(req, res);
+});
+
 module.exports = router;
 
