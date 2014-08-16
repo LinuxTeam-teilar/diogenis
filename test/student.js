@@ -105,5 +105,138 @@ describe('Student', function() {
 
     });
 
+    describe('Add record', function() {
+
+        it('Should succeed', function(done) {
+            testUtils.authTeacher(function(teacherRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: -1,
+                        name: ''
+                    },
+                    lesson: {
+                        id: 1,
+                        name: 'Programming 1',
+                        teacher: 1,
+                        department: 1,
+                        recordspresence: false,
+                        lessonlimit: 25
+                    }
+                };
+
+                var opts = {
+                    path: 'student/add/record',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    lessonId: 1,
+                    studentId: 1
+                };
+
+                testUtils.createLesson('Programming 1', function(lessonRes) {
+                    testUtils.getUrl(opts, function(res, body) {
+                        res.body.should.eql(expected)
+                        done();
+                    });
+                });
+            });
+        });
+
+       it('Should Fail', function(done) {
+            testUtils.authTeacher(function(teacherRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: 4,
+                        name: 'CreationFailed'
+                    }
+                };
+
+                var opts = {
+                    path: 'student/add/record',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    lessonId: 1000000000,
+                    studentId: 1000000000
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+
+        it('Invalid Parameters', function(done) {
+            testUtils.authTeacher(function(teacherRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: 3,
+                        name: 'InvalidParameters'
+                    }
+                };
+
+                var opts = {
+                    path: 'student/add/record',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    lessonId: 1
+                    //studentId: 1
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+        it('UnAuthorized Request', function(done) {
+            var expected = {
+                auth: {
+                    success: false
+                },
+                error: {
+                    id: 2,
+                    name: 'UnAuthorized'
+                }
+            };
+
+            var opts = {
+                path: 'student/add/record',
+                method: 'POST',
+                statusCode: 401
+            };
+
+            opts.form = {
+                lessonId: 1,
+                studentId: 1
+            };
+
+            testUtils.getUrl(opts, function(res, body) {
+                res.body.should.eql(expected)
+                done();
+            });
+        });
+
+    });
+
 });
 
