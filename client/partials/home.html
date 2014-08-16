@@ -26,11 +26,41 @@
     </div>
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
-      <div class="container">
+      <div class="container container-sm-height">
         <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+        <p>&nbsp</p>
+        <div class="row">
+          <div class="col-sm-4 col-md-4">
+            <a href="#" class="thumbnail">
+              <img ng-src="vendors/images/students_promo.png" alt="...">
+              <div class="caption">
+                <p class="text-center"> Ο φοιτητής </p>
+                <p class="text-center"> γλιτώνει από το ψάξιμο </p>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-sm-4 col-md-4 col-lg-height">
+            <a href="#" class="thumbnail">
+              <img ng-src="vendors/images/teachers_promo2.png" alt="...">
+              <div class="caption">
+                <p class="text-center"> Ο καθηγητής </p>
+                <p class="text-center"> κερδίζει χρόνο </p>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-sm-4 col-md-4 col-lg-height">
+            <a href="#" class="thumbnail">
+              <img ng-src="vendors/images/everyones_happy_promo.png" alt="...">
+              <div class="caption">
+                <p class="text-center"> Όλοι </p>
+                <p class="text-center"> είναι ευχαριστημένοι </p>
+              </div>
+            </a>
+          </div>
+        </div>
+
       </div>
     </div>
   </div><!-- Controller div-->
