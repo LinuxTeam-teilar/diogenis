@@ -17,3 +17,16 @@ CREATE TABLE lessonAttributes
     isStudentInQueue  boolean
 );
 
+
+-- student record table has been placed here
+-- due to dependency issues
+CREATE SEQUENCE seq_studentRecordIds;
+
+CREATE TABLE studentRecord
+(
+    id              int            primary key default nextval('seq_studentRecordIds'),
+    student         int            references student(id) on delete cascade,
+    lesson          int            references lesson(id) on delete cascade,
+    record          timestamp (0)  not null default now()
+);
+
