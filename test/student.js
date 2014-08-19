@@ -117,14 +117,12 @@ describe('Student', function() {
                         id: -1,
                         name: ''
                     },
-                    lesson: {
+                    studentRecord: {
                         id: 1,
-                        name: 'Programming 1',
-                        teacher: 1,
-                        department: 1,
-                        recordspresence: false,
-                        lessonlimit: 25
+                        lesson: 1,
+                        student: 1
                     }
+
                 };
 
                 var opts = {
@@ -140,7 +138,11 @@ describe('Student', function() {
 
                 testUtils.createLesson('Programming 1', function(lessonRes) {
                     testUtils.getUrl(opts, function(res, body) {
-                        res.body.should.eql(expected)
+                        res.body.auth.should.eql(expected.auth)
+                        res.body.error.should.eql(expected.error)
+                        res.body.studentRecord.id.should.eql(expected.studentRecord.id)
+                        res.body.studentRecord.lesson.should.eql(expected.studentRecord.lesson)
+                        res.body.studentRecord.student.should.eql(expected.studentRecord.student)
                         done();
                     });
                 });
