@@ -10,20 +10,26 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION secretary_auth(secretaryName text, passwordCandidate text) RETURNS BOOLEAN AS $$
+CREATE OR REPLACE FUNCTION secretary_auth(secretaryName text, passwordCandidate text, OUT success boolean,
+                                                                                      OUT departmentId int) AS $$
 DECLARE
-    secretaryPassword text;
+    secretaryRecord record;
+    department int;
 BEGIN
-    SELECT INTO secretaryPassword password FROM secretary WHERE secretaryName = name;
+    success := TRUE;
+
+    SELECT INTO secretaryRecord * FROM secretary WHERE secretaryName = name;
 
     IF NOT FOUND THEN
-        RETURN FALSE;
+        success := FALSE;
+        RETURN;
     END IF;
 
-    IF secretaryPassword != crypt(passwordCandidate, secretaryPassword) THEN
-        RETURN FALSE;
+    IF secretaryRecord.password != crypt(passwordCandidate, secretaryRecord.password) THEN
+        success := FALSE;
+        RETURN;
     END IF;
 
-    RETURN TRUE;
+    departmentId := secretaryRecord.department;
 END;
 $$ LANGUAGE plpgsql;
