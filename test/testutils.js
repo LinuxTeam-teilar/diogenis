@@ -56,9 +56,7 @@ module.exports.createLesson = function(lessonName, cb) {
 
     opts.form = {
         name: lessonName,
-        teacher: 1,
-        department: 1,
-        limit: 25
+        department: 1
     };
 
     getUrl(opts, function(res, body) {

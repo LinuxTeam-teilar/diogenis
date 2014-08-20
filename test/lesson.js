@@ -18,10 +18,7 @@ describe('Lesson', function() {
                     lesson: {
                         id: 2,
                         name: 'Programming 4',
-                        teacher: 1,
-                        department: 1,
-                        recordspresence: false,
-                        lessonlimit: 25
+                        department: 1
                     }
                 };
 
@@ -72,14 +69,12 @@ describe('Lesson', function() {
                 };
 
                 opts.form = {
-                    name: 'Programming 1',
-                    teacher: 1,
-                    department: 1
-                    //limit: 25
+                    name: 'Programming 1'
+                    //department: 1
                 };
 
                 testUtils.getUrl(opts, function(res, body) {
-                    res.body.should.eql(expected)
+                    res.body.should.eql(expected);
                     done();
                 });
             });
@@ -104,9 +99,7 @@ describe('Lesson', function() {
 
             opts.form = {
                 name: 'Programming 1',
-                teacher: 1,
-                department: 1,
-                limit: 25
+                department: 1
             };
 
             testUtils.getUrl(opts, function(res, body) {
@@ -117,7 +110,7 @@ describe('Lesson', function() {
 
     });
 
-    describe('Records Presence', function() {
+    describe('Add teacher', function() {
         it('Should succeed', function(done) {
             testUtils.authSecretary(function(secretaryRes) {
                 var expected = {
@@ -129,24 +122,20 @@ describe('Lesson', function() {
                         name: ''
                     },
                     lesson: {
-                        id: 1,
-                        name: 'Programming 1',
-                        teacher: 1,
-                        department: 1,
-                        recordspresence: true,
-                        lessonlimit: 25
+                        lesson: 1,
+                        teacher: 1
                     }
                 };
 
                 var opts = {
-                    path: 'lesson/recordsPresence',
+                    path: 'lesson/add/teacher',
                     method: 'POST',
                     auth: true
                 };
 
                 opts.form = {
-                    name: 'Programming 1',
-                    recordsPresence: true
+                    lesson: 1,
+                    teacher: 1
                 };
 
                 testUtils.getUrl(opts, function(res, body) {
@@ -169,14 +158,14 @@ describe('Lesson', function() {
                 };
 
                 var opts = {
-                    path: 'lesson/recordsPresence',
+                    path: 'lesson/add/teacher',
                     method: 'POST',
                     auth: true
                 };
 
                 opts.form = {
-                    name: 'Programming 1'
-                    //recordsPresence: true
+                    lesson: 1
+                    //teacher: 1
                 };
 
                 testUtils.getUrl(opts, function(res, body) {
@@ -198,14 +187,14 @@ describe('Lesson', function() {
             };
 
             var opts = {
-                path: 'lesson/recordsPresence',
+                path: 'lesson/add/teacher',
                 method: 'POST',
                 statusCode: 401
             };
 
             opts.form = {
-                name: 'Programming 1',
-                recordsPresence: true
+                lesson: 1,
+                teacher: 1
             };
 
             testUtils.getUrl(opts, function(res, body) {
@@ -213,64 +202,13 @@ describe('Lesson', function() {
                 done();
             });
         });
+
 
     });
 
     describe('List All Lessons', function() {
 
         it('Should succeed', function(done) {
-            var expected = {
-                "auth": {
-                    "success": false
-                },
-                "error": {
-                    "id": -1,
-                    "name": ""
-                },
-                "lessons": [{
-                    "department": 1,
-                    "id": 2,
-                    "name": "Programming 4",
-                    "recordspresence": false,
-                    "teacher": 1,
-                    "lessonlimit": 25
-                },
-                {
-                    "department": 1,
-                    "id": 1,
-                    "name": "Programming 1",
-                    "recordspresence": true,
-                    "teacher": 1,
-                    "lessonlimit": 25
-                }]
-            };
-
-            var opts = {
-                path: 'lesson/list/1',
-            };
-
-            testUtils.getUrl(opts, function(res, body) {
-                res.body.should.eql(expected)
-                done();
-            });
-        });
-
-        it('Invalid Parameters', function(done) {
-            var opts = {
-                path: 'lesson/list',
-                statusCode: 404
-            };
-
-            testUtils.getUrl(opts, function(res, body) {
-                done();
-            });
-        });
-
-    });
-
-    describe('Add student', function() {
-
-        it('Should succeed', function(done) {
             testUtils.authSecretary(function(secretaryRes) {
                 var expected = {
                     auth: {
@@ -278,24 +216,22 @@ describe('Lesson', function() {
                     },
                     error: {
                         id: -1,
-                        name: ''
+                        name: ""
                     },
-                    lessonAttributes: {
-                        lesson: 1,
-                        student: 1,
-                        isstudentinqueue: false
+                    lesson: {
+                        id: 1,
+                        name: "Programming 1",
+                        teachers: [{
+                            email: "superteacher@teilar.gr",
+                            id: 1,
+                            name: "Super Teacher"
+                        }]
                     }
                 };
 
                 var opts = {
-                    path: 'lesson/add/student',
-                    method: 'POST',
+                    path: 'lesson/list',
                     auth: true
-                };
-
-                opts.form = {
-                    lessonId: 1,
-                    studentId: 1
                 };
 
                 testUtils.getUrl(opts, function(res, body) {
@@ -304,226 +240,7 @@ describe('Lesson', function() {
                 });
             });
         });
-
-       it('Should Fail', function(done) {
-            testUtils.authSecretary(function(secretaryRes) {
-                var expected = {
-                    auth: {
-                        success: true
-                    },
-                    error: {
-                        id: 9,
-                        name: 'DbError'
-                    }
-                };
-
-                var opts = {
-                    path: 'lesson/add/student',
-                    method: 'POST',
-                    auth: true
-                };
-
-                opts.form = {
-                    lessonId: 1000000000,
-                    studentId: 100000000
-                };
-
-                testUtils.getUrl(opts, function(res, body) {
-                    res.body.should.eql(expected)
-                    done();
-                });
-            });
-        });
-
-
-        it('Invalid Parameters', function(done) {
-            testUtils.authSecretary(function(secretaryRes) {
-                var expected = {
-                    auth: {
-                        success: true
-                    },
-                    error: {
-                        id: 3,
-                        name: 'InvalidParameters'
-                    }
-                };
-
-                var opts = {
-                    path: 'lesson/add/student',
-                    method: 'POST',
-                    auth: true
-                };
-
-                opts.form = {
-                    lessonId: 1
-                    //studentId: 1
-                };
-
-                testUtils.getUrl(opts, function(res, body) {
-                    res.body.should.eql(expected)
-                    done();
-                });
-            });
-        });
-
-        it('UnAuthorized Request', function(done) {
-            var expected = {
-                auth: {
-                    success: false
-                },
-                error: {
-                    id: 2,
-                    name: 'UnAuthorized'
-                }
-            };
-
-            var opts = {
-                path: 'lesson/add/student',
-                method: 'POST',
-                statusCode: 401
-            };
-
-            opts.form = {
-                lessonId: 1,
-                studentId: 1
-            };
-
-            testUtils.getUrl(opts, function(res, body) {
-                res.body.should.eql(expected)
-                done();
-            });
-        });
-
     });
-
-    describe('Remove student', function() {
-
-        it('Should succeed', function(done) {
-            testUtils.authSecretary(function(secretaryRes) {
-                var expected = {
-                    auth: {
-                        success: true
-                    },
-                    error: {
-                        id: -1,
-                        name: ''
-                    },
-                    operation: {
-                        lesson: 1,
-                        student: 1,
-                        status: true
-                    }
-                };
-
-                var opts = {
-                    path: 'lesson/remove/student',
-                    method: 'POST',
-                    auth: true
-                };
-
-                opts.form = {
-                    lessonId: 1,
-                    studentId: 1
-                };
-
-                testUtils.getUrl(opts, function(res, body) {
-                    res.body.should.eql(expected)
-                    done();
-                });
-            });
-        });
-
-       it('Should Fail', function(done) {
-            testUtils.authSecretary(function(secretaryRes) {
-                var expected = {
-                    auth: {
-                        success: true
-                    },
-                    error: {
-                        id: 8,
-                        name: 'DeletionFailed'
-                    }
-                };
-
-                var opts = {
-                    path: 'lesson/remove/student',
-                    method: 'POST',
-                    auth: true
-                };
-
-                opts.form = {
-                    lessonId: 1000000000,
-                    studentId: 100000000
-                };
-
-                testUtils.getUrl(opts, function(res, body) {
-                    res.body.should.eql(expected)
-                    done();
-                });
-            });
-        });
-
-
-        it('Invalid Parameters', function(done) {
-            testUtils.authSecretary(function(secretaryRes) {
-                var expected = {
-                    auth: {
-                        success: true
-                    },
-                    error: {
-                        id: 3,
-                        name: 'InvalidParameters'
-                    }
-                };
-
-                var opts = {
-                    path: 'lesson/remove/student',
-                    method: 'POST',
-                    auth: true
-                };
-
-                opts.form = {
-                    lessonId: 1
-                    //studentId: 1
-                };
-
-                testUtils.getUrl(opts, function(res, body) {
-                    res.body.should.eql(expected)
-                    done();
-                });
-            });
-        });
-
-        it('UnAuthorized Request', function(done) {
-            var expected = {
-                auth: {
-                    success: false
-                },
-                error: {
-                    id: 2,
-                    name: 'UnAuthorized'
-                }
-            };
-
-            var opts = {
-                path: 'lesson/remove/student',
-                method: 'POST',
-                statusCode: 401
-            };
-
-            opts.form = {
-                lessonId: 1,
-                studentId: 1
-            };
-
-            testUtils.getUrl(opts, function(res, body) {
-                res.body.should.eql(expected)
-                done();
-            });
-        });
-
-    });
-
 
 });
 

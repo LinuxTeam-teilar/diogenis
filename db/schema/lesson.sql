@@ -4,8 +4,7 @@ CREATE TABLE lesson
 (
     id                 int         primary key default nextval('seq_lessonIds'),
     name               text        unique not null,
-    teacher            int         not null references teacher(id),
-    department         int         not null references department(id),
+    department         int         not null references department(id)
 );
 
 CREATE TABLE lessonTeachers
