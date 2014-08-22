@@ -2,7 +2,6 @@ var index = require('./index.js');
 var secretary = require('./secretary.js');
 var teacher = require('./teacher.js');
 var lesson = require('./lesson.js');
-var semester = require('./semester.js');
 var student = require('./student.js');
 var classroom = require('./classroom.js');
 var lab = require('./lab.js');
@@ -12,7 +11,6 @@ module.exports = function(app) {
     app.use('/secretary', secretary);
     app.use('/teacher', teacher);
     app.use('/lesson', lesson);
-    app.use('/semester', semester);
     app.use('/student', student);
     app.use('/classroom', classroom);
     app.use('/lab', lab)
