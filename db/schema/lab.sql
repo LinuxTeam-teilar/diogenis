@@ -5,8 +5,12 @@ CREATE TABLE lab
     id              int     primary key default nextval('seq_labIds'),
     lesson          int     not null references lesson(id),
     teacher         int     not null references teacher(id),
-    recordsPresence boolean default false,
-    labLimit        int
+    recordsPresence boolean,
+    classroom       int     not null references classroom(id),
+    labLimit        int     not null,
+    timeStart       int     check(timeStart > 0),
+    timeEnd         int     check(timeStart > 0),
+    day             int     check(day > 0 AND day < 6)
 );
 
 CREATE TABLE labAttributes
@@ -15,7 +19,6 @@ CREATE TABLE labAttributes
     student          int      not null references student(id) on delete cascade,
     isStudentInQueue boolean
 );
-
 
 -- student record table has been placed here
 -- due to dependency issues

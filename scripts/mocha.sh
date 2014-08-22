@@ -4,6 +4,6 @@
                                              test/student.js \
                                              test/secretary.js \
                                              test/lesson.js \
-                                             test/semester.js \
-                                             test/classroom.js
+                                             test/classroom.js \
+                                             test/lab.js
 
