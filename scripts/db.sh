@@ -35,9 +35,6 @@ DATABASE_FILES=("utils.sql"
                 "schema/lesson.sql"
                 "api/lesson.sql"
 
-                "schema/semester.sql"
-                "api/semester.sql"
-
                 "schema/secretary.sql"
                 "api/secretary.sql"
 
