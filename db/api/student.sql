@@ -59,7 +59,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION student_add_record(studentId int, lessonId int) RETURNS JSON AS $$
+CREATE OR REPLACE FUNCTION student_add_record(studentId int, labId int) RETURNS JSON AS $$
 DECLARE
     studentRecordJson json;
 BEGIN
@@ -69,13 +69,13 @@ BEGIN
         RETURN row_to_json(ROW());
     END IF;
 
-    PERFORM * FROM lesson WHERE id = lessonId;
+    PERFORM * FROM lab WHERE id = labId;
 
     IF NOT FOUND THEN
         RETURN row_to_json(ROW());
     END IF;
 
-    INSERT INTO studentRecord (student, lesson) VALUES (studentId, lessonId)
+    INSERT INTO studentRecord (student, lab) VALUES (studentId, labId)
     RETURNING row_to_json(studentRecord.*) INTO studentRecordJson;
 
     RETURN studentRecordJson;
@@ -84,7 +84,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION student_remove_record(studentId int, lessonId int) RETURNS JSON AS $$
+CREATE OR REPLACE FUNCTION student_remove_record(studentId int, labId int) RETURNS JSON AS $$
 DECLARE
     studentRecordJson json;
     recordId int;
@@ -95,14 +95,14 @@ BEGIN
         RETURN row_to_json(ROW());
     END IF;
 
-    PERFORM * FROM lesson WHERE id = lessonId;
+    PERFORM * FROM lab WHERE id = labId;
 
     IF NOT FOUND THEN
         RETURN row_to_json(ROW());
     END IF;
 
     SELECT INTO recordId id FROM studentRecord
-    WHERE student = studentId AND lesson = lessonId
+    WHERE student = studentId AND lab = labId
     ORDER BY record DESC
     LIMIT 1;
 
