@@ -1,0 +1,40 @@
+<div class="modal-header">
+      <h3 class="modal-title">Δημιουργεία Μαθήματος</h3>
+    </div>
+    <div class="modal-body">
+<form name="myForm" class="form-horizontal">
+<fieldset>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="name">Όνομα Μαθήματος</label>
+  <div class="col-md-5">
+  <input id="name" name="name" type="name" ng-model="name" placeholder="Όνομα Μαθήματος" class="form-control input-md" required="">
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="teacherSelection">Καθηγητής</label>
+  <div class="col-md-5">
+    <select id="teacherSelection" ng-model="currentTeacher" ng-options="teacher.name for teacher in teacherList" name="teacherSelection" class="form-control" required>
+      <option value="1">Option one</option>
+      <option value="2">Option two</option>
+    </select>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-primary" type="submit" ng-click="myForm.$valid ?
+    ok(data = {
+      'type': 'lesson',
+      'url': 'lesson/create',
+      'name': name,
+      'currentTeacher': currentTeacher }) : return">
+  Δημιουργεία Μαθήματος</button>
+  <button class="btn btn-warning" ng-click="cancel()">Ακύρωση</button>
+</div>
+
+</fieldset>
+</form>
+
