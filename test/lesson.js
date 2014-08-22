@@ -16,13 +16,25 @@ describe('Lesson', function() {
                         name: ''
                     },
                     lesson: {
-                        id: 2,
-                        name: 'Programming 4',
+                        id: 1,
+                        name: 'Programming 1',
                         department: 1
                     }
                 };
 
-                testUtils.createLesson('Programming 4', function(res) {
+
+                var opts = {
+                    path: 'lesson/create',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    name: 'Programming 1',
+                    department: 1
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
                     res.body.should.eql(expected);
                     done();
                 });
@@ -41,11 +53,21 @@ describe('Lesson', function() {
                     }
                 };
 
-                testUtils.createLesson('Programming 4', function(res) {
-                    res.body.should.eql(expected)
+              var opts = {
+                    path: 'lesson/create',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    name: 'Programming 1',
+                    department: 1
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected);
                     done();
                 });
-
             });
         });
 

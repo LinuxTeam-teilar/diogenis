@@ -47,25 +47,6 @@ module.exports.authTeacher = function(cb) {
     });
 };
 
-module.exports.createLesson = function(lessonName, cb) {
-    var opts = {
-        path: 'lesson/create',
-        method: 'POST',
-        auth: true
-    };
-
-    opts.form = {
-        name: lessonName,
-        department: 1
-    };
-
-    getUrl(opts, function(res, body) {
-        if (cb) {
-            cb(res);
-        }
-    });
-};
-
 function getUrl(opts, cb) {
     var options = {
         url: 'http://' + config.server.server_host + ':' + config.server.server_port,
