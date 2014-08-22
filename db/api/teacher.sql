@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION teacher_create(teacherName text, teacherEmail text, teacherPassword text) RETURNS BOOLEAN AS $$
+CREATE OR REPLACE FUNCTION teacher_create(teacherName text, teacherEmail text, teacherPassword text, departmentId int) RETURNS BOOLEAN AS $$
 DECLARE
 BEGIN
     PERFORM email FROM teacher WHERE email = teacherEmail;
@@ -6,27 +6,34 @@ BEGIN
         RETURN FALSE;
     END IF;
 
-    INSERT INTO teacher (name, email, password) VALUES
-                        (teacherName, teacherEmail, crypt(teacherPassword, gen_salt('md5')));
+    INSERT INTO teacher (name, email, password, department) VALUES
+                        (teacherName, teacherEmail, crypt(teacherPassword, gen_salt('md5')), departmentId);
     RETURN TRUE;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION teacher_auth(teacherEmail text, passwordCandidate text) RETURNS BOOLEAN AS $$
+CREATE OR REPLACE FUNCTION teacher_auth(teacherEmail text, passwordCandidate text, OUT success boolean,
+                                                                                   OUT departmentId int) AS $$
 DECLARE
-    teacherPassword text;
+    teacherRecord record;
+    department int;
 BEGIN
-    SELECT INTO teacherPassword password FROM teacher WHERE teacherEmail = email;
+    success := TRUE;
+
+    SELECT INTO teacherRecord * FROM teacher WHERE teacherEmail = email;
 
     IF NOT FOUND THEN
-        RETURN FALSE;
+        success := FALSE;
+        RETURN;
     END IF;
 
-    IF teacherPassword != crypt(passwordCandidate, teacherPassword) THEN
-        RETURN FALSE;
+    IF teacherRecord.password != crypt(passwordCandidate, teacherRecord.password) THEN
+        success := FALSE;
+        RETURN;
     END IF;
 
-    RETURN TRUE;
+    departmentId := teacherRecord.department;
+
 END;
 $$ LANGUAGE plpgsql;
 
