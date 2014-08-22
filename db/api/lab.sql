@@ -59,17 +59,19 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION lab_add_student(labId int, studentId int) RETURNS JSON AS $$
 DECLARE
-    labDepartmentId int;
+    lessonDepartmentId int;
     studentDepartmentId int;
     labLimit int;
     labCount int;
     labAttributesJson json;
     inQueue boolean;
 BEGIN
-    SELECT INTO labDepartmentId department FROM lab WHERE labId = id;
+    SELECT INTO lessonDepartmentId department FROM lesson
+    INNER JOIN lab ON lesson.id = lab.lesson;
+
     SELECT INTO studentDepartmentId department FROM student WHERE studentId = id;
 
-    IF labDepartmentId != studentDepartmentId THEN
+    IF lessonDepartmentId != studentDepartmentId THEN
         RETURN row_to_json(ROW());
     END IF;
 
