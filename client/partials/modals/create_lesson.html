@@ -17,10 +17,12 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="teacherSelection">Καθηγητής</label>
   <div class="col-md-5">
-    <select id="teacherSelection" ng-model="currentTeacher" ng-options="teacher.name for teacher in teacherList" name="teacherSelection" class="form-control" required>
-      <option value="1">Option one</option>
-      <option value="2">Option two</option>
-    </select>
+    <div multi-select
+      input-model="teacherListCheckBox"
+      button-label="icon name"
+      item-label="icon name email"
+      tick-property="ticked">
+    </div>
   </div>
 </div>
 
@@ -30,7 +32,7 @@
       'type': 'lesson',
       'url': 'lesson/create',
       'name': name,
-      'currentTeacher': currentTeacher }) : return">
+      'teacherListCheckBox': teacherListCheckBox }) : return">
   Δημιουργεία Μαθήματος</button>
   <button class="btn btn-warning" ng-click="cancel()">Ακύρωση</button>
 </div>

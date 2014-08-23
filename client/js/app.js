@@ -6,6 +6,7 @@ var diogenisApp = angular.module('diogenisApp', [
   'ngRoute',
   'ui.bootstrap',
   'ngGrid',
+  'multi-select',
   'diogenisControllers',
   'diogenisServices'
 ]);

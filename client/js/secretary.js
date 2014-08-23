@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams', '$http', '$location',
-  function($scope, $routeParams, $http, $location) {
+diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams', '$http', '$route', '$location',
+  function($scope, $routeParams, $http, $route, $location) {
 
     $scope.navs = [
       { title: "Καθηγητές", visible: false, partial: "partials/_secretary_teacher.html"},
@@ -12,17 +12,32 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
 
     $scope.teacherList = null;
     $scope.lessonList = null;
-    $scope.gridOptions = {
-      data: 'teacherList',
-      columnDefs: [
-        { field: 'name', displayName: 'Όνοματεπώνυμο'},
-        { field: 'email', displayName: 'Όνομα Χρήστη'}
-      ]
+    $scope.gridData = null;
+
+    var gridPossibleOptions = {};
+    $scope.selectedOpts = {};
+    $scope.selectedOpts.data = $scope.teacherList
+
+    gridPossibleOptions.gridTeacher = {
+                                    data: 'teacherList',
+                                    columnDefs: [
+                                      { field: 'name', displayName: 'Όνοματεπώνυμο'},
+                                      { field: 'email', displayName: 'Όνομα Χρήστη'}
+                                    ]}
+
+    gridPossibleOptions.gridLesson = {
+                                    data: 'lessonList',
+                                    columnDefs: [
+                                      { field: 'name', displayName: 'Όνομα Μαθήματος'}
+                                    ]}
+
+    $scope.gridOptions = { data: 'selectedOpts.data',
+                           columnDefs: 'selectedOpts.columnDefs'
     }
 
     $scope.changeNav = function(item) {
       if (item.visible) {
-        //loadTableAsset(item);
+        loadTableAsset(item);
         //don't disable the current nav
         return;
       } else {
@@ -49,6 +64,8 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                 return;
               }
               $scope.teacherList = result.teachers;
+              $scope.selectedOpts = gridPossibleOptions.gridTeacher;
+              $scope.selectedOpts.data = $scope.teacherList;
             }).
             error(function (result, status) {
               if (status === 401) {
@@ -58,13 +75,16 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
             })
           break;
         case 'Μαθήματα':
-          $http.get('/lesson/list/1').
+          $http.get('/lesson/list').
             success(function (result) {
               //We have not teachers at the moment
-              if (result.teachers === null) {
+              if (result.lessons === null) {
                 return;
               }
-              $scope.lessonList = result.lessons;
+              $scope.lessonList = result.lesson;
+              $scope.selectedOpts = null;
+              $scope.selectedOpts = gridPossibleOptions.gridLesson;
+              $scope.selectedOpts.data = $scope.lessonList;
             }).
             error(function (result, status) {
               if (status === 401) {
@@ -77,7 +97,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
     }
 
     //Teacher Modal
-    $scope.ModalDemoCtrl = function ($scope, $modal) {
+    $scope.ModalDemoCtrl = function ($scope, $modal, $route) {
 
       $scope.alerts = []
       $scope.closeAlert = function(index) {
@@ -118,6 +138,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                     $scope.alerts.push({ msg: "Ο καθητής υπαρχεί ήδη", type: 'danger'});
                   } else if (result.error.id == -1 && result.auth.success) {
                     $scope.alerts.push({msg : "Ο καθητής δημιουργήθηκε επιτυχώς", type: "success"});
+                    //refresh our page
                   } else {
                     $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
                   }
@@ -133,9 +154,9 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
               var newLesson = {
                 name: data.name,
                 department: 1,
-                teacher: data.currentTeacher.id,
-                limit: 25
               };
+
+              var currentTeachers;
 
               $http.post(data.url, newLesson).
                 success(function (result) {
@@ -145,6 +166,23 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                     $scope.alerts.push({ msg: "To μάθημα υπαρχεί ήδη", type: 'danger'});
                   } else if (result.error.id == -1 && result.auth.success) {
                     $scope.alerts.push({msg : "Το μάθημα δημιουργήθηκε επιτυχώς", type: "success"});
+                    angular.forEach(data.teacherListCheckBox, function(value, key) {
+                      if (value.ticked) {
+                        var assignTeacher = {
+                          lesson: result.lesson.id,
+                          teacher: value.id
+                        }
+
+                        $http.post('lesson/add/teacher', assignTeacher).
+                          success(function (resultNested) {
+                            if (resultNested.error.id ==-1 && resultNested.lesson.teacher) {
+                              $scope.alerts.push({msg : "Ο Καθηγητής " + value.name + " προστέθηκε επιτυχώς στο μάθημα", type: "success"});
+                            }
+                          })
+                      }
+                    });
+                    //refresh our page
+                    //$route.reload();
                   } else {
                     $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
                   }
@@ -167,7 +205,11 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
     // It is not the same as the $modal service used above.
 
     $scope.ModalInstanceCtrl = function ($scope, $modalInstance, teacherList) {
-      $scope.teacherList = teacherList;
+      $scope.teacherListCheckBox = teacherList;
+      angular.forEach($scope.teacherListCheckBox, function(value, key) {
+        value["ticked"] = false;
+      });
+
       $scope.ok = function (data) {
         $modalInstance.close(data);
       };
