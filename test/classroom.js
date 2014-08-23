@@ -252,5 +252,37 @@ describe('classroom', function() {
         });
 
     });
+
+    describe('List all classrooms', function() {
+        it('Should succeed', function(done) {
+            testUtils.authSecretary(function(secretaryRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: -1,
+                        name: ''
+                    },
+                    classrooms: [
+                        {
+                            id: 1,
+                            name: 'new_unix'
+                        }
+                    ]
+                };
+
+                var opts = {
+                    path: 'classroom/list',
+                    auth: true
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+    })
 });
 
