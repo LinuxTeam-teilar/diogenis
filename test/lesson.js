@@ -240,15 +240,18 @@ describe('Lesson', function() {
                         id: -1,
                         name: ""
                     },
-                    lesson: {
-                        id: 1,
-                        name: "Programming 1",
-                        teachers: [{
-                            email: "superteacher@teilar.gr",
+                    lessons: [
+                        {
                             id: 1,
-                            name: "Super Teacher"
-                        }]
-                    }
+                            name: "Programming 1",
+                            teachers: [{
+                                email: "superteacher@teilar.gr",
+                                id: 1,
+                                name: "Super Teacher",
+                                department: 1
+                            }]
+                        }
+                    ]
                 };
 
                 var opts = {
