@@ -13,7 +13,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION teacher_auth(teacherEmail text, passwordCandidate text, OUT success boolean,
-                                                                                   OUT departmentId int) AS $$
+                                                                                   OUT departmentId int,
+                                                                                   OUT teacherId int) AS $$
 DECLARE
     teacherRecord record;
     department int;
@@ -33,6 +34,7 @@ BEGIN
     END IF;
 
     departmentId := teacherRecord.department;
+    teacherId := teacherRecord.id;
 
 END;
 $$ LANGUAGE plpgsql;

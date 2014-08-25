@@ -5,5 +5,6 @@
                                              test/secretary.js \
                                              test/lesson.js \
                                              test/classroom.js \
-                                             test/lab.js
+                                             test/lab.js \
+                                             test/teacher_list.js
 

@@ -356,7 +356,22 @@ describe('lab', function() {
 
                 testUtils.getUrl(opts, function(res, body) {
                     res.body.should.eql(expected)
-                    done();
+
+                    // now we must restore the data
+                    var opts = {
+                        path: 'lab/add/student',
+                        method: 'POST',
+                        auth: true
+                    };
+
+                    opts.form = {
+                        labId: 1,
+                        studentId: 1
+                    };
+
+                    testUtils.getUrl(opts, function(res, body) {
+                        done();
+                    });
                 });
             });
         });

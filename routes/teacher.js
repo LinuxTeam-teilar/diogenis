@@ -16,5 +16,9 @@ router.get('/list', routeMiddleware.isSecretaryOrTeacher, function(req, res) {
     teacherDb.listAll(req, res);
 });
 
+router.get('/list/students', routeMiddleware.isTeacher, function(req, res) {
+    teacherDb.listStudents(req, res);
+});
+
 module.exports = router;
 
