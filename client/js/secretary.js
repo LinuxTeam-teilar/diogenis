@@ -7,11 +7,13 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
 
     $scope.navs = [
       { title: "Καθηγητές", visible: false, partial: "partials/_secretary_teacher.html"},
-      { title: "Μαθήματα", visible : false, partial: "partials/_secretary_leasson.html"}
+      { title: "Μαθήματα", visible : false, partial: "partials/_secretary_leasson.html"},
+      { title: "Αίθουσες", visible : false, partial: "partials/_secretary_classroom.html"}
     ];
 
     $scope.teacherList = null;
     $scope.lessonList = null;
+    $scope.classroomList = null;
     $scope.gridData = null;
 
     var gridPossibleOptions = {};
@@ -29,6 +31,12 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                                     data: 'lessonList',
                                     columnDefs: [
                                       { field: 'name', displayName: 'Όνομα Μαθήματος'}
+                                    ]}
+
+    gridPossibleOptions.gridClassroom = {
+                                    data: 'classroomList',
+                                    columnDefs: [
+                                      { field: 'name', displayName: 'Όνομα Αίθουσας'}
                                     ]}
 
     $scope.gridOptions = { data: 'selectedOpts.data',
@@ -85,6 +93,26 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
               $scope.selectedOpts = null;
               $scope.selectedOpts = gridPossibleOptions.gridLesson;
               $scope.selectedOpts.data = $scope.lessonList;
+            }).
+            error(function (result, status) {
+              if (status === 401) {
+                //Unathorized
+                $location.path('/')
+              }
+            })
+          break;
+
+        case 'Αίθουσες':
+          $http.get('/classroom/list').
+            success(function (result) {
+              //We have no classrooms at the moment
+              if (result.classrooms.length === 0) {
+                return;
+              }
+              $scope.classroomList = result.classrooms;
+              $scope.selectedOpts = null;
+              $scope.selectedOpts = gridPossibleOptions.gridClassroom;
+              $scope.selectedOpts.data = $scope.classroomList;
             }).
             error(function (result, status) {
               if (status === 401) {
@@ -184,6 +212,34 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                           })
                       }
                     });
+                  } else {
+                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
+                  }
+                }).
+                error(function (result, status) {
+                  if (status === 401) {
+                    //Unathorized
+                    $location.path('/')
+                  }
+                })
+              break;
+
+            case 'classroom':
+              var newClassroom =
+              {
+                name: data.name
+              };
+
+              $http.post(data.url, newClassroom).
+                success(function (result) {
+                  //clear the alerts
+                  $scope.alerts = [];
+                  if (result.error.id == 4 && result.error.name == "CreationFailed") {
+                    $scope.alerts.push({ msg: "Η αίθουσα υπαρχεί ήδη", type: 'danger'});
+                  } else if (result.error.id == -1 && result.auth.success) {
+                    $scope.alerts.push({msg : "Η αίθουσα δημιουργήθηκε επιτυχώς", type: "success"});
+                    //refresh our page
+                    $scope.changeNav($scope.navs[2])
                   } else {
                     $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
                   }
