@@ -81,7 +81,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
               if (result.lessons === null) {
                 return;
               }
-              $scope.lessonList = result.lesson;
+              $scope.lessonList = result.lessons;
               $scope.selectedOpts = null;
               $scope.selectedOpts = gridPossibleOptions.gridLesson;
               $scope.selectedOpts.data = $scope.lessonList;
@@ -139,6 +139,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                   } else if (result.error.id == -1 && result.auth.success) {
                     $scope.alerts.push({msg : "Ο καθητής δημιουργήθηκε επιτυχώς", type: "success"});
                     //refresh our page
+                    $scope.changeNav($scope.navs[0])
                   } else {
                     $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
                   }
@@ -178,11 +179,11 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                             if (resultNested.error.id ==-1 && resultNested.lesson.teacher) {
                               $scope.alerts.push({msg : "Ο Καθηγητής " + value.name + " προστέθηκε επιτυχώς στο μάθημα", type: "success"});
                             }
+                            //refresh our page
+                            $scope.changeNav($scope.navs[1])
                           })
                       }
                     });
-                    //refresh our page
-                    //$route.reload();
                   } else {
                     $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
                   }
