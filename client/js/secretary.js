@@ -395,10 +395,10 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
         $scope.timeStart.push([i])
       }
 
-      $scope.timeEnd = [];
-      for (var i=1; i<=60; i++) {
-        $scope.timeEnd.push([i])
-      }
+      //$scope.timeEnd = [];
+      //for (var i=1; i<=60; i++) {
+      //  $scope.timeEnd.push([i])
+      //}
 
       angular.forEach($scope.teacherListCheckBox, function(value, key) {
         value["ticked"] = false;
