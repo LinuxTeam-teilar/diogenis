@@ -7,7 +7,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
 
     $scope.navs = [
       { title: "Καθηγητές", visible: false, partial: "partials/_secretary_teacher.html"},
-      { title: "Μαθήματα", visible : false, partial: "partials/_secretary_leasson.html"},
+      { title: "Μαθήματα", visible : false, partial: "partials/_secretary_lesson.html"},
       { title: "Αίθουσες", visible : false, partial: "partials/_secretary_classroom.html"},
       { title: "Εργαστήρια", visible : false, partial: "partials/_secretary_lab.html"}
     ];
@@ -48,8 +48,8 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                                       { field: 'lessonname', displayName: 'Όνομα Μαθήματος'},
                                       { field: 'classroomname', displayName: 'Όνομα Καθηγητή'},
                                       { field: 'day', displayName: 'Ημέρα'},
-                                      { field: 'timestart', displayName: 'Αρχίζει'},
-                                      { field: 'timeend', displayName: 'Τελειώνει'},
+                                      { field: 'timestart', displayName: 'Ώρα Έναρξης'},
+                                      { field: 'timeend', displayName: 'Ώρα Λήξης'},
                                       { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου'}
                                     ]}
 
@@ -222,9 +222,9 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                   $scope.alerts = [];
 
                   if (result.error.id == 4 && result.error.name == "CreationFailed") {
-                    $scope.alerts.push({ msg: "Ο καθητής υπαρχεί ήδη", type: 'danger'});
+                    $scope.alerts.push({ msg: "Ο καθητής υπάρχει ήδη", type: 'danger'});
                   } else if (result.error.id == -1 && result.auth.success) {
-                    $scope.alerts.push({msg : "Ο καθητής δημιουργήθηκε επιτυχώς", type: "success"});
+                    $scope.alerts.push({msg : "Ο καθηγητής δημιουργήθηκε επιτυχώς", type: "success"});
                     //refresh our page
                     $scope.changeNav($scope.navs[0])
                   } else {
@@ -251,7 +251,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                   //clear the alerts
                   $scope.alerts = [];
                   if (result.error.id == 4 && result.error.name == "CreationFailed") {
-                    $scope.alerts.push({ msg: "To μάθημα υπαρχεί ήδη", type: 'danger'});
+                    $scope.alerts.push({ msg: "To μάθημα υπάρχει ήδη", type: 'danger'});
                   } else if (result.error.id == -1 && result.auth.success) {
                     $scope.alerts.push({msg : "Το μάθημα δημιουργήθηκε επιτυχώς", type: "success"});
                     angular.forEach(data.teacherListCheckBox, function(value, key) {
@@ -294,7 +294,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                   //clear the alerts
                   $scope.alerts = [];
                   if (result.error.id == 4 && result.error.name == "CreationFailed") {
-                    $scope.alerts.push({ msg: "Η αίθουσα υπαρχεί ήδη", type: 'danger'});
+                    $scope.alerts.push({ msg: "Η αίθουσα υπάρχει ήδη", type: 'danger'});
                   } else if (result.error.id == -1 && result.auth.success) {
                     $scope.alerts.push({msg : "Η αίθουσα δημιουργήθηκε επιτυχώς", type: "success"});
                     //refresh our page
@@ -351,7 +351,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                   //clear the alerts
                   $scope.alerts = [];
                   if (result.error.id == 4 && result.error.name == "CreationFailed") {
-                    $scope.alerts.push({ msg: "Το εργαστήριο υπαρχεί ήδη", type: 'danger'});
+                    $scope.alerts.push({ msg: "Το εργαστήριο υπάρχει ήδη", type: 'danger'});
                   } else if (result.error.id == -1 && result.auth.success) {
                     $scope.alerts.push({msg : "Το εργαστήριο δημιουργήθηκε επιτυχώς", type: "success"});
                     //refresh our page
