@@ -4,8 +4,8 @@
 
 var diogenisControllers = angular.module('diogenisControllers', []);
 
-diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', 'Person', '$location',
-  function($scope, $routeParams, Person, $location) {
+diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', 'Person', '$location', '$cookieStore',
+  function($scope, $routeParams, Person, $location, $cookieStore) {
 
     $scope.loginResult;
 
@@ -22,12 +22,17 @@ diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', '
         $scope.alerts = []
         if (result && result.error.id == -1 && result.auth.success) {
           $scope.alerts.push({msg: "Συνδεθήκατε επιτυχώς", type: 'success'})
+          $cookieStore.put('type', 'secretary');
           $location.path('/secretary');
         } else {
           var teacherLogin = Person.loginTeacher(credentials);
           teacherLogin.$promise.then(function(data) {
+            console.log(data.error.id)
+            console.log(data)
             if (data && data.error.id == -1 && data.auth.success) {
               $scope.alerts.push({msg: "Συνδεθήκατε επιτυχώς", type: 'success'})
+              $cookieStore.put('type', 'teacher');
+              $location.path('/teacher')
             } else {
               $scope.alerts.push({msg: "Η σύνδεση απέτυχε", type: 'danger' })
             }

@@ -6,6 +6,7 @@ var diogenisApp = angular.module('diogenisApp', [
   'ngRoute',
   'ui.bootstrap',
   'ngGrid',
+  'ngCookies',
   'multi-select',
   'diogenisControllers',
   'diogenisServices'
@@ -21,6 +22,10 @@ diogenisApp.config(['$routeProvider',
       when('/secretary', {
         templateUrl: 'partials/secretary.html',
         controller: 'DiogenisSecretaryCtrl'
+      }).
+      when('/teacher', {
+        templateUrl: 'partials/teacher.html',
+        controller: 'DiogenisTeacherCtrl'
       }).
       otherwise({
         redirectTo: '/secretary'
