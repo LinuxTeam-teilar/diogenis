@@ -114,7 +114,8 @@ describe('Teacher', function() {
                     success: true
                 },
                 user: {
-                    username: 'superteacher@teilar.gr'
+                    username: 'superteacher@teilar.gr',
+                    id: 1
                 }
             };
 
