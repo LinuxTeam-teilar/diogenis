@@ -21,19 +21,9 @@ function authStudent(done) {
         }
     };
 
-    var opts = {
-        path: 'student/auth',
-        method: 'POST'
-    };
-
-    opts.form = {
-        username: dionysosCredentials.username,
-        password: dionysosCredentials.password
-    };
-
-    testUtils.getUrl(opts, function(res, body) {
-        res.body.should.eql(expected)
-        done();
+    testUtils.authStudent(function(res) {
+       res.body.should.eql(expected);
+       done();
     });
 }
 

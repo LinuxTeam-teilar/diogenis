@@ -47,6 +47,26 @@ module.exports.authTeacher = function(cb) {
     });
 };
 
+module.exports.authStudent = function(cb) {
+    var opts = {
+        path: 'student/auth',
+        method: 'POST'
+    };
+
+    opts.form = {
+        username: testConfig.dionysos.username,
+        password: testConfig.dionysos.password
+    };
+
+    getUrl(opts, function(res, body) {
+        cookie = res.headers['set-cookie'];
+
+        if (cb) {
+            cb(res);
+        }
+    });
+}
+
 function getUrl(opts, cb) {
     var options = {
         url: 'http://' + config.server.server_host + ':' + config.server.server_port,

@@ -6,5 +6,6 @@
                                              test/lesson.js \
                                              test/classroom.js \
                                              test/lab.js \
-                                             test/teacher_list.js
+                                             test/teacher_list.js \
+                                             test/student_list.js
 
