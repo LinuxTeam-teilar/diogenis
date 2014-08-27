@@ -15,12 +15,12 @@ describe('Teacher', function() {
                         id: -1,
                         name: ''
                     }, labs: [{
-                        classroomid: 1,
+                        classroom: 1,
                         classroomname: "new_unix",
                         day: 1,
-                        labid: 1,
+                        id: 1,
                         lablimit: 25,
-                        lessonid: 1,
+                        lesson: 1,
                         lessonname: "Programming 1",
                         recordspresence: false,
                         students: [
@@ -42,18 +42,19 @@ describe('Teacher', function() {
                 testUtils.getUrl(opts, function(res, body) {
                     res.body.auth.should.eql(expected.auth);
                     res.body.error.should.eql(expected.error);
-                    res.body.labs[0].classroomid.should.eql(expected.labs[0].classroomid);
-                    res.body.labs[0].classroomname.should.eql(expected.labs[0].classroomname);
-                    res.body.labs[0].day.should.eql(expected.labs[0].day);
-                    res.body.labs[0].labid.should.eql(expected.labs[0].labid);
-                    res.body.labs[0].lablimit.should.eql(expected.labs[0].lablimit);
-                    res.body.labs[0].lessonid.should.eql(expected.labs[0].lessonid);
-                    res.body.labs[0].lessonname.should.eql(expected.labs[0].lessonname);
-                    res.body.labs[0].recordspresence.should.eql(expected.labs[0].recordspresence);
-                    res.body.labs[0].timeend.should.eql(expected.labs[0].timeend);
-                    res.body.labs[0].timestart.should.eql(expected.labs[0].timestart);
-                    res.body.labs[0].studentsInQueue.should.eql(expected.labs[0].studentsInQueue);
-                    res.body.labs[0].students[0].id.should.eql(expected.labs[0].students[0].id);
+
+                    var lab = res.body.teacher.labs[0];
+                    lab.classroom.should.eql(expected.labs[0].classroom);
+                    lab.classroomname.should.eql(expected.labs[0].classroomname);
+                    lab.day.should.eql(expected.labs[0].day);
+                    lab.id.should.eql(expected.labs[0].id);
+                    lab.lablimit.should.eql(expected.labs[0].lablimit);
+                    lab.lesson.should.eql(expected.labs[0].lesson);
+                    lab.lessonname.should.eql(expected.labs[0].lessonname);
+                    lab.recordspresence.should.eql(expected.labs[0].recordspresence);
+                    lab.timeend.should.eql(expected.labs[0].timeend);
+                    lab.timestart.should.eql(expected.labs[0].timestart);
+                    lab.students[0].id.should.eql(expected.labs[0].students[0].id);
                     done();
                 });
             });
