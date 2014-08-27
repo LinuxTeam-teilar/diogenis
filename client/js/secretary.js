@@ -46,7 +46,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                                     columnDefs: [
                                       { field: 'classroomname', displayName: 'Όνομα Αίθουσας'},
                                       { field: 'lessonname', displayName: 'Όνομα Μαθήματος'},
-                                      { field: 'classroomname', displayName: 'Όνομα Καθηγητή'},
+                                      { field: 'teachername', displayName: 'Όνομα Καθηγητή'},
                                       { field: 'day', displayName: 'Ημέρα'},
                                       { field: 'timestart', displayName: 'Ώρα Έναρξης'},
                                       { field: 'timeend', displayName: 'Ώρα Λήξης'},
@@ -147,6 +147,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
               if (result.labs.length === 0) {
                 return;
               }
+
               $scope.labList = result.labs;
               //Make the UI of the table more user friendly
               angular.forEach($scope.labList, function(value, key) {
@@ -320,31 +321,13 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
               {
                 recordspresence: data.recordspresence,
                 limit: data.limit,
-                starttime: data.starttime,
-                endtime: data.endtime
+                teacher: data.teacher.id,
+                lesson: data.lesson.id,
+                classroom: data.classroom.id,
+                day: data.day.id,
+                starttime: data.starttime[0],
+                endtime: data.endtime[0]
               };
-              angular.forEach(data.teacherList, function(value, key) {
-                if (value.name = data.teacher) {
-                  newLab["teacher"] = value.id
-                }
-              })
-
-              angular.forEach(data.lessonList, function(value, key) {
-                if (value.name = data.lesson) {
-                  newLab["lesson"] = value.id
-                }
-              })
-
-              angular.forEach(data.classroomList, function(value, key) {
-                if (value.name = data.classroom) {
-                  newLab["classroom"] = value.id
-                }
-              })
-              angular.forEach(data.dayList, function(value, key) {
-                if (value.name = data.day) {
-                  newLab["day"] = value.id
-                }
-              })
 
               $http.post(data.url, newLab).
                 success(function (result) {
@@ -356,6 +339,8 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                     $scope.alerts.push({msg : "Το εργαστήριο δημιουργήθηκε επιτυχώς", type: "success"});
                     //refresh our page
                     $scope.changeNav($scope.navs[2])
+                  } else if (result.error.id == 10 && result.error.name == "ClassroomAlreadyUsed") {
+                    $scope.alerts.push({ msg: "Η αίθουσα του εργαστηρίου χρησιμοποιείται από άλλο μάθημα.", type: 'danger'});
                   } else {
                     $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
                   }
