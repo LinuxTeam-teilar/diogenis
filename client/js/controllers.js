@@ -27,15 +27,23 @@ diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', '
         } else {
           var teacherLogin = Person.loginTeacher(credentials);
           teacherLogin.$promise.then(function(data) {
-            console.log(data.error.id)
-            console.log(data)
             if (data && data.error.id == -1 && data.auth.success) {
               $scope.alerts.push({msg: "Συνδεθήκατε επιτυχώς", type: 'success'})
               $cookieStore.put('type', 'teacher');
               $cookieStore.put('id', data.user.id);
               $location.path('/teacher')
             } else {
-              $scope.alerts.push({msg: "Η σύνδεση απέτυχε", type: 'danger' })
+              var studentLogin = Person.loginStudent(credentials);
+              studentLogin.$promise.then(function(studentData) {
+                if (studentData && studentData.error.id == -1 && studentData.auth.success) {
+                    $scope.alerts.push({msg: "Συνδεθήκατε επιτυχώς", type: 'success'})
+                    $cookieStore.put('type', 'student');
+                    $cookieStore.put('id', studentData.student.id);
+                    $location.path('/student')
+                } else {
+                  $scope.alerts.push({msg: "Η σύνδεση απέτυχε", type: 'danger' })
+                }
+              });
             }
           });
         };

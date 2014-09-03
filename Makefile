@@ -16,9 +16,6 @@ db-create-development:
 	@./scripts/db.sh development
 	@make defaultdata
 
-db-create-sample:
-	@./scripts/db.sh development use-sample
-
 db-create:
 	@./scripts/db.sh production
 
@@ -36,11 +33,11 @@ check:
 
 test:
 	@./scripts/mocha.sh $(REPORTER)
-
+	@./scripts/db.sh  use-sample
 tools:
 	@./scripts/tools.sh
 
 help:
 	@./scripts/help.sh
 
-.PHONY: start start-production install defaultdata db-create db-create-development db-create-sample check test help tools
+.PHONY: start start-production install defaultdata db-create db-create-development check test help tools

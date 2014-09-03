@@ -44,31 +44,32 @@ DATABASE_FILES=("utils.sql"
                 "schema/lab.sql"
                 "api/lab.sql")
 
-if [ $1 == "development" ]; then
-
-    dropdb -U $DATABASE_ADMIN $DATABASE
-else
-    dropdb -i -U $DATABASE_ADMIN $DATABASE
-fi
-
-createdb -U $DATABASE_ADMIN -O $DATABASE_USER $DATABASE
-
-psqlExec "schema/superUserCommands.sql" true
-echo $DATABASE_FILES
-for i in ${DATABASE_FILES[@]}; do
-    echo "**********************************"
-    echo "Executing file: $i"
-    echo
-    psqlExec $i false
-    echo
-    echo "Done executing file: $i"
-    echo "**********************************"
-    echo
-done
-
-if [ -n "$2" ] && [ $2 == "use-sample" ]; then
+if [ -n "$1" ] && [ $1 == "use-sample" ]; then
     echo "**********************************"
     echo "Executing Sample!!!"
     psqlExec "sample.sql" false
+else
+   if [ $1 == "development" ]; then
+
+        dropdb -U $DATABASE_ADMIN $DATABASE
+    else
+        dropdb -i -U $DATABASE_ADMIN $DATABASE
+    fi
+
+    createdb -U $DATABASE_ADMIN -O $DATABASE_USER $DATABASE
+
+
+    psqlExec "schema/superUserCommands.sql" true
+    echo $DATABASE_FILES
+    for i in ${DATABASE_FILES[@]}; do
+        echo "**********************************"
+        echo "Executing file: $i"
+        echo
+        psqlExec $i false
+        echo
+        echo "Done executing file: $i"
+        echo "**********************************"
+        echo
+    done
 fi
 
