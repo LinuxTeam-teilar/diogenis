@@ -51,7 +51,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="timeendSelection">Ώρα Λήξης Εργαστηρίου</label>
   <div class="col-md-5">
-    <select id="timeendSelection" ng-model="currentTimeEnd" ng-options="i for i in timeStart" name="timeendSelection" class="form-control" required>
+    <select id="timeendSelection" ng-model="currentTimeEnd" ng-options="i for i in timeStart | gt:currentTimeStart[0]" name="timeendSelection" class="form-control" required>
     </select>
   </div>
 </div>

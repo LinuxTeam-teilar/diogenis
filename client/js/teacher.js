@@ -123,6 +123,12 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
           loadTableAsset($scope.navs[0])
           loadTableAsset($scope.navs[1])
 
+          //get all the teachers
+          $http.get('/teacher/list').
+            success(function (result) {
+              $scope.teacherList = result.teachers;
+            })
+
           $http.get('/lab/list').
             success(function (result) {
               //We have no classrooms at the moment
@@ -228,33 +234,15 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
               // everything that we don't show in the UI.
               var newLab =
               {
+                teacher: data.teacher.id,
+                lesson: data.lesson.id,
+                classroom: data.classroom.id,
+                day: data.day.id,
                 recordspresence: data.recordspresence,
                 limit: data.limit,
-                starttime: data.starttime,
-                endtime: data.endtime
+                starttime: data.starttime[0],
+                endtime: data.endtime[0]
               };
-              angular.forEach(data.teacherList, function(value, key) {
-                if (value.name = data.teacher) {
-                  newLab["teacher"] = value.id
-                }
-              })
-
-              angular.forEach(data.lessonList, function(value, key) {
-                if (value.name = data.lesson) {
-                  newLab["lesson"] = value.id
-                }
-              })
-
-              angular.forEach(data.classroomList, function(value, key) {
-                if (value.name = data.classroom) {
-                  newLab["classroom"] = value.id
-                }
-              })
-              angular.forEach(data.dayList, function(value, key) {
-                if (value.name = data.day) {
-                  newLab["day"] = value.id
-                }
-              })
 
               $http.post(data.url, newLab).
                 success(function (result) {
