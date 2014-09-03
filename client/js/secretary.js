@@ -6,10 +6,10 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
   function($scope, $routeParams, $http, $route, $location) {
 
     $scope.navs = [
-      { title: "Καθηγητές", visible: false, partial: "partials/_secretary_teacher.html"},
-      { title: "Μαθήματα", visible : false, partial: "partials/_secretary_lesson.html"},
-      { title: "Αίθουσες", visible : false, partial: "partials/_secretary_classroom.html"},
-      { title: "Εργαστήρια", visible : false, partial: "partials/_secretary_lab.html"}
+      { title: "Καθηγητές", visible: false, partial: "partials/secretary/_secretary_teacher.html"},
+      { title: "Μαθήματα", visible : false, partial: "partials/secretary/_secretary_lesson.html"},
+      { title: "Αίθουσες", visible : false, partial: "partials/secretary/_secretary_classroom.html"},
+      { title: "Εργαστήρια", visible : false, partial: "partials/secretary/_secretary_lab.html"}
     ];
 
     $scope.teacherList = null;
