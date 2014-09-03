@@ -9,15 +9,7 @@ This README would normally document whatever steps are necessary to get your app
 
 # How do I get set up? #
 
-### Installation ###
-`make install`
-
-### Configuration ###
-* start postgresql
-* start redis
-* edit diogenis.conf
-* `make db-create`
-* `make start-production`
+See `make help`
 
 # Contribution guidelines ###
 
