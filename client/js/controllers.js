@@ -28,6 +28,7 @@ diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', '
           teacherLogin.$promise.then(function(data) {
             if (data && data.error.id == -1 && data.auth.success) {
               $scope.alerts.push({msg: "Συνδεθήκατε επιτυχώς", type: 'success'})
+              $location.path('/teacher');
             } else {
               $scope.alerts.push({msg: "Η σύνδεση απέτυχε", type: 'danger' })
             }
