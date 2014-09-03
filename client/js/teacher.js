@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams', '$http', '$route', '$location',
-  function($scope, $routeParams, $http, $route, $location) {
+diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter', '$cookieStore',
+  function($scope, $routeParams, $http, $route, $location, $filter, $cookieStore) {
 
     $scope.navs = [
       { title: "Μαθήματα", visible : false, partial: "partials/teacher/_teacher_lesson.html"},
@@ -38,7 +38,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                                     columnDefs: [
                                       { field: 'classroomname', displayName: 'Όνομα Αίθουσας'},
                                       { field: 'lessonname', displayName: 'Όνομα Μαθήματος'},
-                                      { field: 'classroomname', displayName: 'Όνομα Καθηγητή'},
+                                      { field: 'teachername', displayName: 'Όνομα Καθηγητή'},
                                       { field: 'day', displayName: 'Ημέρα'},
                                       { field: 'timestart', displayName: 'Ώρα Έναρξης'},
                                       { field: 'timeend', displayName: 'Ώρα Λήξης'},
@@ -70,24 +70,6 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
 
     var loadTableAsset = function(item) {
       switch (item.title) {
-        /*case 'Καθηγητές' :
-          $http.get('/teacher/list').
-            success(function (result) {
-              //We have not teachers at the moment
-              if (result.teachers === null) {
-                return;
-              }
-              $scope.teacherList = result.teachers;
-              $scope.selectedOpts = gridPossibleOptions.gridTeacher;
-              $scope.selectedOpts.data = $scope.teacherList;
-            }).
-            error(function (result, status) {
-              if (status === 401) {
-                //Unathorized
-                $location.path('/')
-              }
-            })
-          break;*/
         case 'Μαθήματα':
           $http.get('/lesson/list').
             success(function (result) {
@@ -95,7 +77,16 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
               if (result.lessons === null) {
                 return;
               }
-              $scope.lessonList = result.lessons;
+
+              var currentTeacherId = $cookieStore.get('id');
+              $scope.lessonList = $filter('filter')(result.lessons, function(item) {
+                var showLesson = false;
+                angular.forEach(item.teachers, function(value) {
+                  showLesson = (value.id == currentTeacherId);
+                })
+                return showLesson;
+              });
+
               $scope.selectedOpts = null;
               $scope.selectedOpts = gridPossibleOptions.gridLesson;
               $scope.selectedOpts.data = $scope.lessonList;
@@ -138,7 +129,10 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
               if (result.labs.length === 0) {
                 return;
               }
-              $scope.labList = result.labs;
+
+              //return only the labs from the current teacher
+              var currentTeacherId = $cookieStore.get('id');
+              $scope.labList = $filter('filter')(result.labs, {teacherid: currentTeacherId});
               //Make the UI of the table more user friendly
               angular.forEach($scope.labList, function(value, key) {
                 //we don't need the id here, but we keep it for convinience
