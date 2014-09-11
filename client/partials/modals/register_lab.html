@@ -1,0 +1,71 @@
+<div class="modal-header">
+      <h3 class="modal-title">Δήλωση Εργαστηρίου</h3>
+    </div>
+    <div class="modal-body">
+<form name="myForm" class="form-horizontal">
+<fieldset>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="teacherSelection">Καθηγητής</label>
+  <div class="col-md-5">
+    <select id="teacherSelection" ng-model="currentTeacher" ng-options="teacher.name for teacher in teacherList" name="teacherSelection" class="form-control" required>
+    </select>
+  </div>
+</div>
+
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="lessonSelection">Μάθημα</label>
+  <div class="col-md-5">
+    <select id="lessonSelection" ng-disabled="!currentTeacher" ng-model="currentLesson" ng-options="lesson.name for lesson in lessonList | lessonFilter: currentTeacher" name="lessonSelection" class="form-control" required>
+    </select>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="classroomSelection">Αίθουσα</label>
+  <div class="col-md-5">
+    <select id="teacherSelection" ng-disabled="!currentLesson" ng-model="currentClassroom" ng-options="classroom.name for classroom in classroomList | classroomFilter:allLabs:currentTeacher:currentLesson" name="currentClassroom" class="form-control" required>
+    </select>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="daySelection">Ημέρα</label>
+  <div class="col-md-5">
+    <select
+      id="daySelection" ng-model="currentDay" ng-disabled="!currentClassroom" ng-options="currentDay.name for currentDay in days | dayFilter:allLabs:currentTeacher:currentLesson:currentClassroom" name="daySelection" class="form-control" required>
+
+    </select>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="timestartSelection">Τμήμα</label>
+  <div class="col-md-5">
+
+    <select id="timestartSelection" ng-disabled="!currentDay" ng-model="currentTimeLab" ng-options="i for i in days | generateTime:allLabs:currentTeacher:currentLesson:currentClassroom:currentDay " name="timestartSelection" class="form-control" required>
+    </select>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-primary" type="submit" ng-click="myForm.$valid ?
+    ok(data = {
+      'type': 'registerLab',
+      'url': 'lab/add/student',
+      'teacher': currentTeacher,
+      'classroom': currentClassroom,
+      'lesson': currentLesson,
+      'day': currentDay,
+      'currentTimeLab': currentTimeLab,
+      'allLabs': allLabs
+      }) : return">
+  Δήλωση Εργαστηρίου</button>
+
+  <button class="btn btn-warning" ng-click="cancel()">Ακύρωση</button>
+</div>
+
+</fieldset>
+</form>
+

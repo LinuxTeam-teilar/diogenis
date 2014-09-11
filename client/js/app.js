@@ -27,6 +27,10 @@ diogenisApp.config(['$routeProvider',
         templateUrl: 'partials/teacher.html',
         controller: 'DiogenisTeacherCtrl'
       }).
+      when('/student', {
+        templateUrl: 'partials/student.html',
+        controller: 'DiogenisStudentCtrl'
+      }).
       otherwise({
         redirectTo: '/secretary'
       });

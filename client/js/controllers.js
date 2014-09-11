@@ -35,10 +35,12 @@ diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', '
             } else {
               var studentLogin = Person.loginStudent(credentials);
               studentLogin.$promise.then(function(studentData) {
+                //FIXME why does it return false?
                 if (studentData && studentData.error.id == -1 && studentData.auth.success) {
                     $scope.alerts.push({msg: "Συνδεθήκατε επιτυχώς", type: 'success'})
                     $cookieStore.put('type', 'student');
                     $cookieStore.put('id', studentData.student.id);
+                    $cookieStore.put('studentAM', studentData.student.identity);
                     $location.path('/student')
                 } else {
                   $scope.alerts.push({msg: "Η σύνδεση απέτυχε", type: 'danger' })

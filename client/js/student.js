@@ -2,36 +2,24 @@
 
 /* Controllers */
 
-diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter', '$cookieStore',
+diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter', '$cookieStore',
   function($scope, $routeParams, $http, $route, $location, $filter, $cookieStore) {
 
     $scope.navs = [
-      { title: "Μαθήματα", visible : false, partial: "partials/teacher/_teacher_lesson.html"},
-      { title: "Αίθουσες", visible : false, partial: "partials/teacher/_teacher_classroom.html"},
-      { title: "Εργαστήρια", visible : false, partial: "partials/teacher/_teacher_lab.html"}
+      { title: "Εργαστήρια", visible : false, partial: "partials/student/_student_lab.html"},
+      //{ title: "Δήλωση Εργαστηρίου", visible : false, partial: "partials/teacher/_teacher_classroom.html"}
     ];
 
     $scope.teacherList = null;
     $scope.lessonList = null;
     $scope.classroomList = null;
     $scope.labList = null;
+    $scope.allLabs = null;
     $scope.gridData = null;
 
     var gridPossibleOptions = {};
     $scope.selectedOpts = {};
-    $scope.selectedOpts.data = $scope.teacherList
-
-    gridPossibleOptions.gridLesson = {
-                                    data: 'lessonList',
-                                    columnDefs: [
-                                      { field: 'name', displayName: 'Όνομα Μαθήματος'}
-                                    ]}
-
-    gridPossibleOptions.gridClassroom = {
-                                    data: 'classroomList',
-                                    columnDefs: [
-                                      { field: 'name', displayName: 'Όνομα Αίθουσας'}
-                                    ]}
+    $scope.selectedOpts.data = $scope.labList
 
     gridPossibleOptions.gridLab = {
                                     data: 'labList',
@@ -68,39 +56,20 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
       }
     };
 
-
     var loadTableAsset = function(item) {
       switch (item.title) {
-        case 'Μαθήματα':
+        case 'Εργαστήρια':
+
           $http.get('/lesson/list').
             success(function (result) {
-              //We have not teachers at the moment
+              //We have not lessons at the moment
               if (result.lessons === null) {
                 return;
               }
 
-              var currentTeacherId = $cookieStore.get('id');
-              $scope.lessonList = $filter('filter')(result.lessons, function(item) {
-                var showLesson = false;
-                angular.forEach(item.teachers, function(value) {
-                  showLesson = (value.id == currentTeacherId);
-                })
-                return showLesson;
-              });
+              $scope.lessonList = result.lessons
+            });
 
-              $scope.selectedOpts = null;
-              $scope.selectedOpts = gridPossibleOptions.gridLesson;
-              $scope.selectedOpts.data = $scope.lessonList;
-            }).
-            error(function (result, status) {
-              if (status === 401) {
-                //Unathorized
-                $location.path('/')
-              }
-            })
-          break;
-
-        case 'Αίθουσες':
           $http.get('/classroom/list').
             success(function (result) {
               //We have no classrooms at the moment
@@ -108,38 +77,36 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                 return;
               }
               $scope.classroomList = result.classrooms;
-              $scope.selectedOpts = null;
-              $scope.selectedOpts = gridPossibleOptions.gridClassroom;
-              $scope.selectedOpts.data = $scope.classroomList;
-            }).
-            error(function (result, status) {
-              if (status === 401) {
-                //Unathorized
-                $location.path('/')
-              }
-            })
-          break;
-        case 'Εργαστήρια':
-          //update our data
-          loadTableAsset($scope.navs[0])
-          loadTableAsset($scope.navs[1])
+            });
 
           //get all the teachers
           $http.get('/teacher/list').
             success(function (result) {
               $scope.teacherList = result.teachers;
-            })
+            });
 
           $http.get('/lab/list').
             success(function (result) {
+            $scope.allLabs = result.labs;
+          });
+
+          $http.get('/student/list/labs').
+            success(function (result) {
               //We have no classrooms at the moment
-              if (result.labs.length === 0) {
+            console.log(result)
+              if (result.student == undefined || result.student.labs == null || result.student.labs.length === 0) {
                 return;
               }
 
-              //return only the labs from the current teacher
-              var currentTeacherId = $cookieStore.get('id');
-              $scope.labList = $filter('filter')(result.labs, {teacherid: currentTeacherId});
+              $scope.labList = result.student.labs
+              angular.forEach($scope.labList, function(lab) {
+              console.log($scope.teacherList)
+                angular.forEach($scope.teacherList, function(teacher) {
+                  if (lab.teacher == teacher.id) {
+                    $scope.allLabs.teachername = teacher.name
+                  }
+                });
+              });
               //Make the UI of the table more user friendly
               angular.forEach($scope.labList, function(value, key) {
                 //we don't need the id here, but we keep it for convinience
@@ -153,6 +120,12 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                 value.recordspresence = value.recordspresence? 'Καταμέτρηση Παρουσιών' : 'Καταμέτρηση Απουσιών';
                 if (value.day !== undefined) {
                   value.day = days[value.day -1].name
+                }
+              });
+
+              angular.forEach($scope.teacherList, function(value, key) {
+                if (value.id == $scope.labList.teacher) {
+                  $scope.labList.teacherName = value.teachername;
                 }
               });
               $scope.selectedOpts = null;
@@ -169,7 +142,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
       }
     }
 
-    //Teacher Modal
+    //student Modal
     $scope.ModalDemoCtrl = function ($scope, $modal, $route) {
 
       $scope.alerts = []
@@ -194,58 +167,35 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
             },
             classroomList: function() {
               return $scope.classroomList;
+            },
+            labList: function() {
+              return $scope.labList;
+            },
+            allLabs: function() {
+              return $scope.allLabs;
             }
           }
         });
 
         modalInstance.result.then(function (data) {
           switch (data.type) {
-            case 'classroom':
-              var newClassroom =
-              {
-                name: data.name
-              };
-
-              $http.post(data.url, newClassroom).
-                success(function (result) {
-                  //clear the alerts
-                  $scope.alerts = [];
-                  if (result.error.id == 4 && result.error.name == "CreationFailed") {
-                    $scope.alerts.push({ msg: "Η αίθουσα υπάρχει ήδη", type: 'danger'});
-                  } else if (result.error.id == -1 && result.auth.success) {
-                    $scope.alerts.push({msg : "Η αίθουσα δημιουργήθηκε επιτυχώς", type: "success"});
-                    //refresh our page
-                    $scope.changeNav($scope.navs[2])
-                  } else if (result.error.id == 10 && result.error.name == "ClassroomAlreadyUsed") {
-                    $scope.alerts.push({ msg: "Η αίθουσα του εργαστηρίου χρησιμοποιείται από άλλο μάθημα.", type: 'danger'});
-                  } else {
-                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
-                  }
-                }).
-                error(function (result, status) {
-                  if (status === 401) {
-                    //Unathorized
-                    $location.path('/')
-                  }
-                })
-              break;
-            case 'lab':
+            case 'registerLab':
               // We must match the result from the html form
               // with the correct entry from our model.
               // Unfortunatly the form returns only the visual data
               // so we are ending up with losing stuff like teacher.id and in general
               // everything that we don't show in the UI.
-              var newLab =
-              {
-                teacher: data.teacher.id,
-                lesson: data.lesson.id,
-                classroom: data.classroom.id,
-                day: data.day.id,
-                recordspresence: data.recordspresence,
-                limit: data.limit,
-                starttime: data.starttime[0],
-                endtime: data.endtime[0]
-              };
+
+              var newLab = {};
+
+              angular.forEach($scope.allLabs, function(lab) {
+                if (data.classroom.id == lab.classroomid && data.teacher.id == lab.teacherid
+                   && data.lesson.id == lab.lessonid && data.day.id == lab.day
+                   && data.currentTimeLab == (lab.timestart + " - " + lab.timeend)) {
+                     newLab["labId"] = lab.labid;
+                     newLab["studentId"] = $cookieStore.get('id');
+                   }
+              });
 
               $http.post(data.url, newLab).
                 success(function (result) {
@@ -254,9 +204,9 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                   if (result.error.id == 4 && result.error.name == "CreationFailed") {
                     $scope.alerts.push({ msg: "Το εργαστήριο υπάρχει ήδη", type: 'danger'});
                   } else if (result.error.id == -1 && result.auth.success) {
-                    $scope.alerts.push({msg : "Το εργαστήριο δημιουργήθηκε επιτυχώς", type: "success"});
+                    $scope.alerts.push({msg : "Η εγγραφή ολοκληρώθηκε επιτυχώς", type: "success"});
                     //refresh our page
-                    $scope.changeNav($scope.navs[2]);
+                    $scope.changeNav($scope.navs[0])
                   } else {
                     $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
                   }
@@ -278,11 +228,13 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
     // Please note that $modalInstance represents a modal window (instance) dependency.
     // It is not the same as the $modal service used above.
 
-    $scope.ModalInstanceCtrl = function ($scope, $modalInstance, teacherList, classroomList ,lessonList) {
+    $scope.ModalInstanceCtrl = function ($scope, $modalInstance, teacherList, classroomList ,lessonList, labList, allLabs) {
+      $scope.labList = labList;
       $scope.teacherList = teacherList;
       $scope.lessonList = lessonList;
       $scope.classroomList = classroomList;
       $scope.teacherListCheckBox = teacherList;
+      $scope.allLabs = allLabs;
       $scope.days = [
         {id: 1, name: "Δευτέρα"},
         {id: 2, name: "Τρίτη"},

@@ -338,7 +338,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                   } else if (result.error.id == -1 && result.auth.success) {
                     $scope.alerts.push({msg : "Το εργαστήριο δημιουργήθηκε επιτυχώς", type: "success"});
                     //refresh our page
-                    $scope.changeNav($scope.navs[2])
+                    $scope.changeNav($scope.navs[3])
                   } else if (result.error.id == 10 && result.error.name == "ClassroomAlreadyUsed") {
                     $scope.alerts.push({ msg: "Η αίθουσα του εργαστηρίου χρησιμοποιείται από άλλο μάθημα.", type: 'danger'});
                   } else {
