@@ -5,7 +5,7 @@ var dionysosCredentials = testUtils.dionysosCredentials();
 function authStudent(done) {
     var expected = {
         "auth": {
-            "success": false
+            "success": true
         },
         "error": {
             "id": -1,

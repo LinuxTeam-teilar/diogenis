@@ -10,7 +10,7 @@ describe('Student', function() {
             testUtils.authStudent(function(studentRes) {
                 var expected = {
                     auth: {
-                        success: false
+                        success: true
                     },
                     error: {
                         id: -1,

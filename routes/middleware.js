@@ -41,3 +41,15 @@ module.exports.isSecretaryOrTeacher = function(req, res, next) {
     }
 };
 
+module.exports.isUser = function(req, res, next) {
+    if (req.session && (req.session.isSecretary ||
+                        req.session.isTeacher ||
+                        req.session.isStudent)) {
+        next();
+    } else {
+        var j = utils.errorJson(req, res, 'UnAuthorized');
+        res.statusCode = 401;
+        res.json(j);
+    }
+};
+
