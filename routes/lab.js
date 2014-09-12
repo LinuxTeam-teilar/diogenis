@@ -8,7 +8,7 @@ router.post('/create', routeMiddleware.isSecretaryOrTeacher, function(req, res) 
     labDb.create(req, res);
 });
 
-router.get('/list', routeMiddleware.isSecretaryOrTeacher, function(req, res) {
+router.get('/list', routeMiddleware.isUser, function(req, res) {
     labDb.list(req, res);
 });
 

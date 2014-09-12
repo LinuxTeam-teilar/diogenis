@@ -12,7 +12,7 @@ router.post('/rename', routeMiddleware.isSecretary, function(req, res) {
     classroomDb.rename(req, res);
 });
 
-router.get('/list', routeMiddleware.isSecretaryOrTeacher, function(req, res) {
+router.get('/list', routeMiddleware.isUser, function(req, res) {
     classroomDb.listAll(req, res);
 });
 

@@ -8,7 +8,7 @@ router.post('/create', routeMiddleware.isSecretaryOrTeacher, function(req, res) 
     lessonDb.create(req, res);
 });
 
-router.get('/list', routeMiddleware.isSecretary, function(req, res) {
+router.get('/list', routeMiddleware.isUser, function(req, res) {
     lessonDb.listAll(req, res);
 });
 
