@@ -5,8 +5,23 @@ var lesson = require('./lesson.js');
 var student = require('./student.js');
 var classroom = require('./classroom.js');
 var lab = require('./lab.js');
+var debug = require('debug')('diogenis');
 
 module.exports = function(app) {
+    app.use(function(req, res, next) {
+        debug('=====================');
+        debug('Start of %s', req.url);
+
+        if (req.method == 'POST' &&
+            req.url.indexOf('auth') == -1 &&
+            req.url.indexOf('create') == -1) {
+            debug('Form data: %s', JSON.stringify(req.body));
+        }
+        debug('Session Data: %s', JSON.stringify(req.session));
+        debug('=====================');
+        next();
+    });
+
     app.use('/', index);
     app.use('/secretary', secretary);
     app.use('/teacher', teacher);
