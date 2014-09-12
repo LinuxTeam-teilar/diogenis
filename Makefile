@@ -4,10 +4,10 @@ REPORTER = spec
 # start
 ##################################
 start:
-	@DEBUG=* ./bin/www
+	@DEBUG=diogenis ./bin/www
 
 start-production:
-	@./bin/www
+	@DEBUG=diogenis ./bin/www
 
 #################################
 # db
