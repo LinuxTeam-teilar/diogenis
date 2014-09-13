@@ -11,7 +11,7 @@ WITH result AS (
             FROM lab AS l
             INNER JOIN labAttributes As la ON l.id = la.lab
             INNER JOIN student AS s ON s.id = la.student AND s.id = $1 AND la.isStudentInQueue = false
-            INNER JOIN studentRecord as sr ON sr.lab = l.id AND sr.student = $1
+            LEFT JOIN studentRecord as sr ON sr.lab = l.id AND sr.student = $1
             INNER JOIN classroom AS c ON c.id = l.classroom
             INNER JOIN lesson AS le ON le.id = l.lesson
             GROUP BY l.id, c.id, le.id
@@ -25,7 +25,7 @@ WITH result AS (
             FROM lab AS l2
             INNER JOIN labAttributes As la2 ON l2.id = la2.lab
             INNER JOIN student AS s2 ON s2.id = la2.student AND s2.id = $1 AND la2.isStudentInQueue = true
-            INNER JOIN studentRecord as sr2 ON sr2.lab = l2.id AND sr2.student = $1
+            LEFT JOIN studentRecord as sr2 ON sr2.lab = l2.id AND sr2.student = $1
             INNER JOIN classroom AS c2 ON c2.id = l2.classroom
             INNER JOIN lesson AS le2 ON le2.id = l2.lesson
             GROUP BY l2.id, c2.id, le2.id
