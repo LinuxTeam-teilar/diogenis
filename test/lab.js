@@ -199,7 +199,7 @@ describe('lab', function() {
     describe('Add student', function() {
 
         it('Should succeed', function(done) {
-            testUtils.authSecretary(function(secretaryRes) {
+            testUtils.authStudent(function(studentRes) {
                 var expected = {
                     auth: {
                         success: true

@@ -12,7 +12,7 @@ router.get('/list', routeMiddleware.isUser, function(req, res) {
     labDb.list(req, res);
 });
 
-router.post('/add/student', routeMiddleware.isSecretaryOrTeacher, function(req, res) {
+router.post('/add/student', routeMiddleware.isStudent, function(req, res) {
     labDb.addStudent(req, res);
 });
 
