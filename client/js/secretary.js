@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams', '$http', '$route', '$location',
-  function($scope, $routeParams, $http, $route, $location) {
+diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter',
+  function($scope, $routeParams, $http, $route, $location, $filter) {
 
     $scope.navs = [
       { title: "Καθηγητές", visible: false, partial: "partials/secretary/_secretary_teacher.html"},
@@ -380,6 +380,18 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
       $scope.lessonList = lessonList;
       $scope.classroomList = classroomList;
       $scope.teacherListCheckBox = teacherList;
+      //we need the current teacher in order to show only the lessons,
+      //from the curren teacher, which has been selected above.
+      $scope.findCurrentLessonsForTeacher = function(currentTeacher) {
+        $scope.currentLessonList = $filter('filter')($scope.lessonList, function(lesson) {
+          var showLesson = false;
+          angular.forEach(lesson.teachers, function(teacher) {
+            showLesson = (teacher.id == currentTeacher.id);
+          });
+          return showLesson;
+        });
+      }
+
       $scope.days = [
         {id: 1, name: "Δευτέρα"},
         {id: 2, name: "Τρίτη"},
