@@ -9,6 +9,20 @@ diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', '
 
     $scope.loginResult;
 
+    var userType = $cookieStore.get('type');
+
+    switch (userType) {
+      case 'teacher':
+        $location.path('/teacher');
+        break;
+      case 'secretary':
+        $location.path('/secretary');
+        break;
+      case 'student':
+        $location.path('/student');
+        break;
+    }
+
     $scope.requestLogin = function(personEmail, personPassword) {
 
       var credentials = {

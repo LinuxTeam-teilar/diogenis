@@ -16,7 +16,6 @@ diogenisServices.factory('Person', ['$resource',
 diogenisServices.factory('GenerateFullName', ['$cookieStore',
   function($cookieStore) {
     var fullName = $cookieStore.get('fullName');
-    console.log(fullName)
     return fullName;
   }]);
 
