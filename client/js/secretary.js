@@ -395,9 +395,14 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
       }
 
       $scope.$watch(function() { return JSON.stringify([$scope.teacherListCheckBox]) }, function(value) {
+       var isTeacherSelected = false;
        angular.forEach($scope.teacherListCheckBox, function(value) {
-        $scope.isTeacherSelected = value.ticked;
-       })
+         if (value.ticked) {
+           isTeacherSelected = value.ticked;
+         }
+       });
+
+       $scope.isTeacherSelected = isTeacherSelected;
       });
 
       $scope.days = [
