@@ -296,6 +296,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
       $scope.lessonList = lessonList;
       $scope.classroomList = classroomList;
       $scope.teacherListCheckBox = teacherList;
+
       $scope.days = [
         {id: 1, name: "Δευτέρα"},
         {id: 2, name: "Τρίτη"},

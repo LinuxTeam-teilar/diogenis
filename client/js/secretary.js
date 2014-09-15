@@ -381,6 +381,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
       $scope.lessonList = lessonList;
       $scope.classroomList = classroomList;
       $scope.teacherListCheckBox = teacherList;
+      $scope.isTeacherSelected = false;
       //we need the current teacher in order to show only the lessons,
       //from the curren teacher, which has been selected above.
       $scope.findCurrentLessonsForTeacher = function(currentTeacher) {
@@ -392,6 +393,12 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
           return showLesson;
         });
       }
+
+      $scope.$watch(function() { return JSON.stringify([$scope.teacherListCheckBox]) }, function(value) {
+       angular.forEach($scope.teacherListCheckBox, function(value) {
+        $scope.isTeacherSelected = value.ticked;
+       })
+      });
 
       $scope.days = [
         {id: 1, name: "Δευτέρα"},
