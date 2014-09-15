@@ -20,6 +20,7 @@
     <div multi-select
       input-model="teacherListCheckBox"
       button-label="icon name"
+      helper-elements="reset"
       item-label="icon name email"
       tick-property="ticked">
     </div>
@@ -27,7 +28,7 @@
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-primary" type="submit" ng-click="myForm.$valid ?
+  <button class="btn btn-primary" type="submit" ng-click="myForm.$valid && teacherListCheckBox[1].ticked ?
     ok(data = {
       'type': 'lesson',
       'url': 'lesson/create',
