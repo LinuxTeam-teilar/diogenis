@@ -102,7 +102,7 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
               angular.forEach($scope.labList, function(lab) {
                 angular.forEach($scope.teacherList, function(teacher) {
                   if (lab.teacher == teacher.id) {
-                    $scope.allLabs.teachername = teacher.name
+                    lab.teachername = teacher.name
                   }
                 });
               });
