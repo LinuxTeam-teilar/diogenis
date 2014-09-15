@@ -32,7 +32,8 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
     gridPossibleOptions.gridLesson = {
                                     data: 'lessonList',
                                     columnDefs: [
-                                      { field: 'name', displayName: 'Όνομα Μαθήματος'}
+                                      { field: 'name', displayName: 'Όνομα Μαθήματος'},
+                                      { field: 'teachersName', displayName: 'Όνομα Καθηγητή'}
                                     ]}
 
     gridPossibleOptions.gridClassroom = {
@@ -103,7 +104,19 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
               if (result.lessons === null) {
                 return;
               }
+
               $scope.lessonList = result.lessons;
+              angular.forEach($scope.lessonList, function (lesson) {
+                angular.forEach(lesson.teachers, function(teacher) {
+                  if (lesson.teachersName === undefined) {
+                    lesson.teachersName = teacher.name;
+                  }
+                  if ((lesson.teachersName.indexOf(teacher.name) == -1 && teacher.name !== undefined)) {
+                    lesson.teachersName += teacher.name;
+                  }
+                });
+              });
+
               $scope.selectedOpts = null;
               $scope.selectedOpts = gridPossibleOptions.gridLesson;
               $scope.selectedOpts.data = $scope.lessonList;

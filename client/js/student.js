@@ -93,14 +93,12 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
           $http.get('/student/list/labs').
             success(function (result) {
               //We have no classrooms at the moment
-            console.log(result)
               if (result.student == undefined || result.student.labs == null || result.student.labs.length === 0) {
                 return;
               }
 
               $scope.labList = result.student.labs
               angular.forEach($scope.labList, function(lab) {
-              console.log($scope.teacherList)
                 angular.forEach($scope.teacherList, function(teacher) {
                   if (lab.teacher == teacher.id) {
                     $scope.allLabs.teachername = teacher.name
