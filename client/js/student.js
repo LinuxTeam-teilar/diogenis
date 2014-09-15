@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter', '$cookieStore',
-  function($scope, $routeParams, $http, $route, $location, $filter, $cookieStore) {
+diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter', '$cookieStore', 'GenerateFullName',
+  function($scope, $routeParams, $http, $route, $location, $filter, $cookieStore, GenerateFullName) {
 
     $scope.navs = [
       { title: "Εργαστήρια", visible : false, partial: "partials/student/_student_lab.html"},
@@ -16,6 +16,7 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
     $scope.labList = null;
     $scope.allLabs = null;
     $scope.gridData = null;
+    $scope.fullName = GenerateFullName;
 
     var gridPossibleOptions = {};
     $scope.selectedOpts = {};

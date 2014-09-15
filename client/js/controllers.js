@@ -23,6 +23,7 @@ diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', '
         if (result && result.error.id == -1 && result.auth.success) {
           $scope.alerts.push({msg: "Συνδεθήκατε επιτυχώς", type: 'success'})
           $cookieStore.put('type', 'secretary');
+          $cookieStore.put('fullName', result.user.username);
           $location.path('/secretary');
         } else {
           var teacherLogin = Person.loginTeacher(credentials);
@@ -31,6 +32,7 @@ diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', '
               $scope.alerts.push({msg: "Συνδεθήκατε επιτυχώς", type: 'success'})
               $cookieStore.put('type', 'teacher');
               $cookieStore.put('id', data.user.id);
+              $cookieStore.put('fullName', data.user.username);
               $location.path('/teacher')
             } else {
               var studentLogin = Person.loginStudent(credentials);
@@ -41,6 +43,7 @@ diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', '
                     $cookieStore.put('type', 'student');
                     $cookieStore.put('id', studentData.student.id);
                     $cookieStore.put('studentAM', studentData.student.identity);
+                    $cookieStore.put('fullName', studentData.student.username);
                     $location.path('/student')
                 } else {
                   $scope.alerts.push({msg: "Η σύνδεση απέτυχε", type: 'danger' })

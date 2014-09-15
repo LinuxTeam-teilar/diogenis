@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter', '$cookieStore',
-  function($scope, $routeParams, $http, $route, $location, $filter, $cookieStore) {
+diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter', '$cookieStore', 'GenerateFullName',
+  function($scope, $routeParams, $http, $route, $location, $filter, $cookieStore, GenerateFullName) {
 
     $scope.navs = [
       { title: "Μαθήματα", visible : false, partial: "partials/teacher/_teacher_lesson.html"},
@@ -16,6 +16,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
     $scope.classroomList = null;
     $scope.labList = null;
     $scope.gridData = null;
+    $scope.fullName = GenerateFullName;
 
     var gridPossibleOptions = {};
     $scope.selectedOpts = {};

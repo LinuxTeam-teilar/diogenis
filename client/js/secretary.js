@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter',
-  function($scope, $routeParams, $http, $route, $location, $filter) {
+diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter', 'GenerateFullName',
+  function($scope, $routeParams, $http, $route, $location, $filter, GenerateFullName) {
 
     $scope.navs = [
       { title: "Καθηγητές", visible: false, partial: "partials/secretary/_secretary_teacher.html"},
@@ -17,6 +17,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
     $scope.classroomList = null;
     $scope.labList = null;
     $scope.gridData = null;
+    $scope.fullName = GenerateFullName;
 
     var gridPossibleOptions = {};
     $scope.selectedOpts = {};
