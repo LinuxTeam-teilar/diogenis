@@ -15,29 +15,22 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
     $scope.classroomList = null;
     $scope.labList = null;
     $scope.allLabs = null;
-    $scope.gridData = null;
     $scope.fullName = GenerateFullName;
 
-    var gridPossibleOptions = {};
-    $scope.selectedOpts = {};
-    $scope.selectedOpts.data = $scope.labList
+    $scope.gridPossibleOptions = {};
 
-    gridPossibleOptions.gridLab = {
-                                    data: 'labList',
+    $scope.gridPossibleOptions.gridLab = {
+                                    data: [],
                                     columnDefs: [
-                                      { field: 'classroomname', displayName: 'Όνομα Αίθουσας'},
-                                      { field: 'lessonname', displayName: 'Όνομα Μαθήματος'},
-                                      { field: 'teachername', displayName: 'Όνομα Καθηγητή'},
-                                      { field: 'day', displayName: 'Ημέρα'},
-                                      { field: 'timestart', displayName: 'Ώρα Έναρξης'},
-                                      { field: 'timeend', displayName: 'Ώρα Λήξης'},
-                                      { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου'},
-                                      { field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου'}
+                                      { field: 'classroomname', displayName: 'Όνομα Αίθουσας', width: 150},
+                                      { field: 'lessonname', displayName: 'Όνομα Μαθήματος', width: 150},
+                                      { field: 'teachername', displayName: 'Όνομα Καθηγητή', width: 150},
+                                      { field: 'day', displayName: 'Ημέρα', width: 100},
+                                      { field: 'timestart', displayName: 'Ώρα Έναρξης', width: 120},
+                                      { field: 'timeend', displayName: 'Ώρα Λήξης', width: 100},
+                                      { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου', width: 180},
+                                      { field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180}
                                     ]}
-
-    $scope.gridOptions = { data: 'selectedOpts.data',
-                           columnDefs: 'selectedOpts.columnDefs'
-    }
 
     $scope.changeNav = function(item) {
       if (item.visible) {
@@ -127,9 +120,8 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
                   $scope.labList.teacherName = value.teachername;
                 }
               });
-              $scope.selectedOpts = null;
-              $scope.selectedOpts = gridPossibleOptions.gridLab;
-              $scope.selectedOpts.data = $scope.labList;
+
+              $scope.gridPossibleOptions.gridLab.data = $scope.labList;
             }).
             error(function (result, status) {
               if (status === 401) {

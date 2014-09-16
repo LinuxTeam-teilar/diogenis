@@ -5,7 +5,8 @@
 var diogenisApp = angular.module('diogenisApp', [
   'ngRoute',
   'ui.bootstrap',
-  'ngGrid',
+  'ui.grid',
+  'ui.grid.resizeColumns',
   'ngCookies',
   'multi-select',
   'diogenisControllers',

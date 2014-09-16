@@ -19,45 +19,39 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
     $scope.gridData = null;
     $scope.fullName = GenerateFullName;
 
-    var gridPossibleOptions = {};
-    $scope.selectedOpts = {};
-    $scope.selectedOpts.data = $scope.teacherList
-
-    gridPossibleOptions.gridTeacher = {
-                                    data: 'teacherList',
+    $scope.gridPossibleOptions = {};
+    $scope.gridPossibleOptions.gridTeacher = {
+                                    data: [],
                                     columnDefs: [
                                       { field: 'name', displayName: 'Όνοματεπώνυμο'},
                                       { field: 'email', displayName: 'Όνομα Χρήστη'}
                                     ]}
 
-    gridPossibleOptions.gridLesson = {
-                                    data: 'lessonList',
+    $scope.gridPossibleOptions.gridLesson = {
+                                    data: [],
                                     columnDefs: [
                                       { field: 'name', displayName: 'Όνομα Μαθήματος'},
                                       { field: 'teachersName', displayName: 'Όνομα Καθηγητή'}
                                     ]}
 
-    gridPossibleOptions.gridClassroom = {
-                                    data: 'classroomList',
+    $scope.gridPossibleOptions.gridClassroom = {
+                                    data: [],
                                     columnDefs: [
                                       { field: 'name', displayName: 'Όνομα Αίθουσας'}
                                     ]}
 
-    gridPossibleOptions.gridLab = {
-                                    data: 'labList',
+    $scope.gridPossibleOptions.gridLab = {
+                                    data: [],
+                                    enableSorting: false,
                                     columnDefs: [
-                                      { field: 'classroomname', displayName: 'Όνομα Αίθουσας'},
-                                      { field: 'lessonname', displayName: 'Όνομα Μαθήματος'},
-                                      { field: 'teachername', displayName: 'Όνομα Καθηγητή'},
-                                      { field: 'day', displayName: 'Ημέρα'},
-                                      { field: 'timestart', displayName: 'Ώρα Έναρξης'},
-                                      { field: 'timeend', displayName: 'Ώρα Λήξης'},
-                                      { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου'}
+                                      { field: 'classroomname', displayName: 'Όνομα Αίθουσας', width: 150},
+                                      { field: 'lessonname', displayName: 'Όνομα Μαθήματος', width: 150},
+                                      { field: 'teachername', displayName: 'Όνομα Καθηγητή', width: 150},
+                                      { field: 'day', displayName: 'Ημέρα', width: 150},
+                                      { field: 'timestart', displayName: 'Ώρα Έναρξης', width: 150},
+                                      { field: 'timeend', displayName: 'Ώρα Λήξης', width:150},
+                                      { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου', width: 200}
                                     ]}
-
-    $scope.gridOptions = { data: 'selectedOpts.data',
-                           columnDefs: 'selectedOpts.columnDefs'
-    }
 
     $scope.changeNav = function(item) {
       if (item.visible) {
@@ -87,9 +81,9 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
               if (result.teachers === null) {
                 return;
               }
+
               $scope.teacherList = result.teachers;
-              $scope.selectedOpts = gridPossibleOptions.gridTeacher;
-              $scope.selectedOpts.data = $scope.teacherList;
+              $scope.gridPossibleOptions.gridTeacher.data = $scope.teacherList;
             }).
             error(function (result, status) {
               if (status === 401) {
@@ -118,9 +112,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                 });
               });
 
-              $scope.selectedOpts = null;
-              $scope.selectedOpts = gridPossibleOptions.gridLesson;
-              $scope.selectedOpts.data = $scope.lessonList;
+              $scope.gridPossibleOptions.gridLesson.data = $scope.lessonList;
             }).
             error(function (result, status) {
               if (status === 401) {
@@ -137,10 +129,9 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
               if (result.classrooms.length === 0) {
                 return;
               }
+
               $scope.classroomList = result.classrooms;
-              $scope.selectedOpts = null;
-              $scope.selectedOpts = gridPossibleOptions.gridClassroom;
-              $scope.selectedOpts.data = $scope.classroomList;
+              $scope.gridPossibleOptions.gridClassroom.data = $scope.classroomList;
             }).
             error(function (result, status) {
               if (status === 401) {
@@ -178,9 +169,8 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                   value.day = days[value.day -1].name
                 }
               });
-              $scope.selectedOpts = null;
-              $scope.selectedOpts = gridPossibleOptions.gridLab;
-              $scope.selectedOpts.data = $scope.labList;
+
+              $scope.gridPossibleOptions.gridLab.data = $scope.labList;
             }).
             error(function (result, status) {
               if (status === 401) {
