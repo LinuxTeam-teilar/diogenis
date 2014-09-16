@@ -5,7 +5,7 @@
     <div class="col-md-9 col-md-9">
       <button class="btn btn-primary" ng-click="open('partials/modals/register_lab.html')">Δήλωση Εργαστηρίου</button>
       <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-      <div id="myGrid" ng-show="labList" class="gridStyleBig" ui-grid="gridPossibleOptions.gridLab"></div>
+      <div id="myGrid" ng-show="labList" class="gridStyleBig" ui-grid-resize-columns ui-grid="gridPossibleOptions.gridLab"></div>
     </div>
   </div>
 </div>
