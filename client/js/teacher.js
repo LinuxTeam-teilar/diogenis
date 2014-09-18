@@ -8,7 +8,8 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
     $scope.navs = [
       { title: "Μαθήματα", visible : false, partial: "partials/teacher/_teacher_lesson.html"},
       { title: "Αίθουσες", visible : false, partial: "partials/teacher/_teacher_classroom.html"},
-      { title: "Εργαστήρια", visible : false, partial: "partials/teacher/_teacher_lab.html"}
+      { title: "Εργαστήρια", visible : false, partial: "partials/teacher/_teacher_lab.html"},
+      { title: "Τμήματα", visible : false, partial: "partials/teacher/_teacher_lab_student.html"}
     ];
 
     $scope.teacherList = null;
@@ -18,6 +19,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
     $scope.fullName = GenerateFullName;
 
     $scope.gridPossibleOptions = {};
+    $scope.gridTmimata = [];
 
     $scope.gridPossibleOptions.gridLesson = {
                                     data: [],
@@ -33,6 +35,19 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                                     ]}
 
     $scope.gridPossibleOptions.gridLab = {
+                                    data: [],
+                                    columnDefs: [
+                                      { field: 'classroomname', displayName: 'Όνομα Αίθουσας', width: 150},
+                                      { field: 'lessonname', displayName: 'Όνομα Μαθήματος', width: 150},
+                                      { field: 'teachername', displayName: 'Όνομα Καθηγητή', width: 150},
+                                      { field: 'day', displayName: 'Ημέρα', width: 100},
+                                      { field: 'timestart', displayName: 'Ώρα Έναρξης', width: 120},
+                                      { field: 'timeend', displayName: 'Ώρα Λήξης', width: 100},
+                                      { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου', width: 180},
+                                      { field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180}
+                                    ]}
+
+    $scope.gridPossibleOptions.gridLabStudent = {
                                     data: [],
                                     columnDefs: [
                                       { field: 'classroomname', displayName: 'Όνομα Αίθουσας', width: 150},
@@ -166,6 +181,44 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                 $location.path('/')
               }
             })
+          break;
+        case "Τμήματα":
+          loadTableAsset($scope.navs[2]);
+                var days = [
+                  {id: 1, name: "Δευτέρα"},
+                  {id: 2, name: "Τρίτη"},
+                  {id: 3, name: "Τετάρτη"},
+                  {id: 4, name: "Πέμπτη"},
+                  {id: 5, name: "Παρασκευή"}
+                ]
+          $http.get('teacher/list/students').
+            success(function(result) {
+              if (result.teacher.labs === null) {
+                //return;
+              }
+
+
+            /*  result.teacher.labs = [
+                {name: "a", lessonname: "diktia1", classroomame: "unix", day: "deutera", timestart: "10", timeend:"12"},
+                {name: "b", lessonname: "diktia2", classroomame: "unix2", day: "deutera", timestart: "10", timeend:"12"},
+                {name: "b", lessonname: "diktia2", classroomame: "unix2", day: "deutera", timestart: "10", timeend:"12"},
+                {name: "c", lessonname: "diktia2", classroomame: "unix2", day: "deutera", timestart: "10", timeend:"12"}
+              ]
+
+*/
+              angular.forEach(result.teacher.labs, function(lab) {
+                var grid = {
+                  data: lab.students,
+                  headerTemplate: "partials/teacher/header_tmimata.html",
+                  //columnDefs: [{field: "name", displayName: "Onoma"}],
+                  lesson: lab.lessonname,
+                  classroom: lab.classroomame,
+                  day: days[lab.day] + " " + lab.timestart + " - " + lab.timeend
+                }
+                $scope.gridTmimata.push(grid);
+                console.log(grid)
+              });
+            });
           break;
       }
     }

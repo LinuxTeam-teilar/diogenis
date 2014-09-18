@@ -14,7 +14,7 @@ WITH result AS (
                        student.identity, array_agg(sr.record) AS records,
                        la.isStudentInQueue
                 FROM student
-                INNER JOIN studentRecord AS sr ON student.id = sr.student
+                LEFT JOIN studentRecord AS sr ON student.id = sr.student
                 INNER JOIN labAttributes AS la ON student.id = la.student
                 GROUP BY student.id, la.isStudentInQueue
             ) AS s
