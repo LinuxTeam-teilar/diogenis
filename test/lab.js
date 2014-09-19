@@ -234,7 +234,7 @@ describe('lab', function() {
         });
 
        it('Should Fail', function(done) {
-            testUtils.authSecretary(function(secretaryRes) {
+            testUtils.authStudent(function(studentRes) {
                 var expected = {
                     auth: {
                         success: true
@@ -265,7 +265,7 @@ describe('lab', function() {
 
 
         it('Invalid Parameters', function(done) {
-            testUtils.authSecretary(function(secretaryRes) {
+            testUtils.authStudent(function(studentRes) {
                 var expected = {
                     auth: {
                         success: true
@@ -355,22 +355,24 @@ describe('lab', function() {
                 };
 
                 testUtils.getUrl(opts, function(res, body) {
-                    res.body.should.eql(expected)
+                    testUtils.authStudent(function(studentRes) {
+                        res.body.should.eql(expected)
 
-                    // now we must restore the data
-                    var opts = {
-                        path: 'lab/add/student',
-                        method: 'POST',
-                        auth: true
-                    };
+                        // now we must restore the data
+                        var opts = {
+                            path: 'lab/add/student',
+                            method: 'POST',
+                            auth: true
+                        };
 
-                    opts.form = {
-                        labId: 1,
-                        studentId: 1
-                    };
+                        opts.form = {
+                            labId: 1,
+                            studentId: 1
+                        };
 
-                    testUtils.getUrl(opts, function(res, body) {
-                        done();
+                        testUtils.getUrl(opts, function(res, body) {
+                            done();
+                        });
                     });
                 });
             });
