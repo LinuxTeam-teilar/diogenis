@@ -9,5 +9,6 @@
                                                   test/teacher_list.js \
                                                   test/student_list.js \
                                                   test/classroom_remove.js \
-                                                  test/lesson_remove.js
+                                                  test/lesson_remove.js \
+                                                  test/lab_remove.js
 

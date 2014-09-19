@@ -8,6 +8,10 @@ router.post('/create', routeMiddleware.isSecretaryOrTeacher, function(req, res) 
     labDb.create(req, res);
 });
 
+router.post('/remove', routeMiddleware.isSecretaryOrTeacher, function(req, res) {
+    labDb.remove(req, res);
+});
+
 router.get('/list', routeMiddleware.isUser, function(req, res) {
     labDb.list(req, res);
 });

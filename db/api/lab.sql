@@ -57,6 +57,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION lab_remove(labId int) RETURNS BOOLEAN AS $$
+DECLARE
+BEGIN
+
+    PERFORM * FROM labAttributes WHERE lab = labId;
+    IF FOUND THEN
+        RETURN FALSE;
+    END IF;
+
+    DELETE FROM lab WHERE id = labId;
+
+    RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION lab_add_student(labId int, studentId int) RETURNS JSON AS $$
 DECLARE
     lessonDepartmentId int;
