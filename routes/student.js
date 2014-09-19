@@ -16,5 +16,9 @@ router.get('/list/labs', routeMiddleware.isStudent, function(req, res) {
     studentDb.listLabs(req, res);
 });
 
+router.post('/remove/lab', routeMiddleware.isStudent, function(req, res) {
+    studentDb.removeLab(req, res);
+});
+
 module.exports = router;
 

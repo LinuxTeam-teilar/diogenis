@@ -22,6 +22,22 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION student_remove_lab(studentId int, labId int) RETURNS BOOLEAN AS $$
+DECLARE
+BEGIN
+
+    PERFORM * FROM labAttributes
+    WHERE student = studentId AND lab = labId AND isStudentInQueue = TRUE;
+    IF FOUND THEN
+        RETURN FALSE;
+    END IF;
+
+    DELETE FROM labAttributes WHERE lab= labId AND student = studentId;
+
+    RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION student_auth(studentUsername text, passwordCandidate text) RETURNS JSON AS $$
 DECLARE
     studentPassword text;
