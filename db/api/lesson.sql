@@ -10,6 +10,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION lesson_remove(lessonId int) RETURNS BOOLEAN AS $$
+DECLARE
+BEGIN
+
+    PERFORM * FROM lab WHERE lesson = lessonId;
+    IF FOUND THEN
+        RETURN FALSE;
+    END IF;
+
+    DELETE FROM lesson WHERE id = lessonId;
+
+    RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION lesson_add_teacher(lessonId int, teacherId int) RETURNS JSON AS $$
 DECLARE
     lessonTeacherRecord record;

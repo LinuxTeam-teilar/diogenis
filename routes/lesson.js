@@ -16,5 +16,9 @@ router.post('/add/teacher', routeMiddleware.isSecretaryOrTeacher, function(req, 
     lessonDb.addTeacher(req, res);
 });
 
+router.post('/remove', routeMiddleware.isSecretaryOrTeacher, function(req, res) {
+    lessonDb.remove(req, res);
+});
+
 module.exports = router;
 
