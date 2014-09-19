@@ -38,6 +38,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION student_move(oldLabId int, newLabId int, studentId int) RETURNS BOOLEAN AS $$
+DECLARE
+BEGIN
+
+    PERFORM * FROM labAttributes
+    WHERE student = studentId AND lab = oldLabId;
+    IF FOUND THEN
+        RETURN FALSE;
+    END IF;
+
+    DELETE FROM labAttributes WHERE lab = oldLabId AND student = studentId;
+
+    PERFORM lab_add_student(newLabId, studentId);
+
+    RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION student_auth(studentUsername text, passwordCandidate text) RETURNS JSON AS $$
 DECLARE
     studentPassword text;

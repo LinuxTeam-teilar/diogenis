@@ -20,5 +20,9 @@ router.post('/remove/lab', routeMiddleware.isStudent, function(req, res) {
     studentDb.removeLab(req, res);
 });
 
+router.post('/move', routeMiddleware.isTeacher, function(req, res) {
+    studentDb.move(req, res);
+});
+
 module.exports = router;
 
