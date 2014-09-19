@@ -8,6 +8,10 @@ router.post('/create', routeMiddleware.isSecretary, function(req, res) {
     classroomDb.create(req, res);
 });
 
+router.post('/remove', routeMiddleware.isSecretary, function(req, res) {
+    classroomDb.remove(req, res);
+});
+
 router.post('/rename', routeMiddleware.isSecretary, function(req, res) {
     classroomDb.rename(req, res);
 });

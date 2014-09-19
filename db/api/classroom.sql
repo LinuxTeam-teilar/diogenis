@@ -16,6 +16,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION classroom_remove(classroomId int) RETURNS BOOLEAN AS $$
+DECLARE
+BEGIN
+
+    PERFORM * FROM lab WHERE classroom = classroomId;
+    IF FOUND THEN
+        RETURN FALSE;
+    END IF;
+
+    DELETE FROM classroom WHERE id = classroomId;
+
+    RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION classroom_change_name(classroomId int, newClassroomName text) RETURNS JSON AS $$
 DECLARE
     classroomJson json;
