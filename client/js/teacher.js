@@ -265,7 +265,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                   columnDefs: $scope.gridPossibleOptions.gridLabStudent.columnDefs,
                   lesson: lab.lessonname,
                   classroom: lab.classroomame,
-                  day: days[lab.day].name + " " + lab.timestart + " - " + lab.timeend
+                  day: days[lab.day-1].name + " " + lab.timestart + " - " + lab.timeend
                 }
 
                 if (lab.recordspresence) {
