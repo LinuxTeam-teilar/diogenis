@@ -109,7 +109,16 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
                   {id: 4, name: "Πέμπτη"},
                   {id: 5, name: "Παρασκευή"}
                 ]
-                value.recordspresence = value.recordspresence? 'Καταμέτρηση Παρουσιών' : 'Καταμέτρηση Απουσιών';
+
+                value.recordsCount = value.records[0]=== null ? 0 : value.records.length;
+                if (value.recordspresence) {
+                  $scope.gridPossibleOptions.gridLab.columnDefs.push({field: 'recordsCount', displayName: 'Παρουσίες', width: 120});
+                  value.recordspresence = 'Καταμέτρηση Παρουσιών';
+                } else {
+                  $scope.gridPossibleOptions.gridLab.columnDefs.push({field: 'recordsCount',displayName:'Απουσίες', width: 120});
+                  value.recordspresence = 'Καταμέτρηση Απουσιών';
+                }
+
                 if (value.day !== undefined) {
                   value.day = days[value.day -1].name
                 }
