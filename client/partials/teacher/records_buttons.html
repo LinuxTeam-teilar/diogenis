@@ -1,0 +1,9 @@
+<div class="ui-grid-cell-contents ng-scope ng-binding">
+{{row.entity.recordsCount}}
+<button type="button" ng-click="getExternalScopes().addStudentRecord(row, grid)" class="btn btn-default btn-sm">
+  <span class="fa fa-plus-square"></span>
+</button>
+<button type="button" ng-click="getExternalScopes().removeStudentRecord(row, grid)" class="btn btn-default btn-sm">
+  <span class="fa fa-minus-square"></span>
+</button>
+</div>

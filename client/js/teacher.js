@@ -20,6 +20,53 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
 
     $scope.gridPossibleOptions = {};
     $scope.gridTmimata = [];
+    $scope.showBusyIdicator = true;
+    $scope.alerts = []
+    $scope.closeAlert = function(index) {
+      $scope.alerts.splice(index, 1);
+    };
+
+    $scope.gridActions = {
+      addStudentRecord: function(row, grid) {
+        var newRecordEntry = {
+          labId: grid.options.labId,
+          studentId: row.entity.id
+        }
+
+        $http.post('student/add/record', newRecordEntry).
+          success(function(result) {
+            if (result.error.id == -1 && result.studentRecord) {
+              var choiceMsg = grid.options.recordspresence ? "Παρουσία" : 'Απουσία';
+              $scope.alerts = [];
+
+              $scope.alerts.push({msg: 'Προστέθηκε ' + choiceMsg + ' στον φοιτητή ' + row.entity.name, type: 'success' });
+              row.entity.recordsCount++;
+            } else {
+              $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
+            }
+          });
+      },
+      removeStudentRecord: function(row, grid) {
+        var newRecordEntry = {
+          labId: grid.options.labId,
+          studentId: row.entity.id
+        }
+
+        $http.post('student/remove/record', newRecordEntry).
+          success(function(result) {
+            if (result.error.id == -1 && result.studentRecord) {
+              var choiceMsg = grid.options.recordspresence ? "Παρουσία" : 'Απουσία';
+              $scope.alerts = [];
+
+              $scope.alerts.push({msg: 'Αφαιρέθηκε ' + choiceMsg + ' στον φοιτητή ' + row.entity.name, type: 'success' });
+              row.entity.recordsCount--;
+            } else {
+              $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
+            }
+          });
+      },
+
+    }
 
     $scope.gridPossibleOptions.gridLesson = {
                                     data: [],
@@ -50,14 +97,9 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
     $scope.gridPossibleOptions.gridLabStudent = {
                                     data: [],
                                     columnDefs: [
-                                      { field: 'classroomname', displayName: 'Όνομα Αίθουσας', width: 150},
-                                      { field: 'lessonname', displayName: 'Όνομα Μαθήματος', width: 150},
-                                      { field: 'teachername', displayName: 'Όνομα Καθηγητή', width: 150},
-                                      { field: 'day', displayName: 'Ημέρα', width: 100},
-                                      { field: 'timestart', displayName: 'Ώρα Έναρξης', width: 120},
-                                      { field: 'timeend', displayName: 'Ώρα Λήξης', width: 100},
-                                      { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου', width: 180},
-                                      { field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180}
+                                      { field: 'name', displayName: 'Ονοματεπώνυμο', width: 150},
+                                      { field: 'identity', displayName: 'AM', width: 100}
+                                      // records should be created dynamicly
                                     ]}
 
     $scope.changeNav = function(item) {
@@ -194,30 +236,59 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
           $http.get('teacher/list/students').
             success(function(result) {
               if (result.teacher.labs === null) {
-                //return;
+                return;
               }
 
+              var teacherId = result.teacher.id;
+              var currentTeacherLabs = $filter('filter')(result.teacher.labs, function (item) {
+                return item.teacher === teacherId;
+              });
 
-            /*  result.teacher.labs = [
-                {name: "a", lessonname: "diktia1", classroomame: "unix", day: "deutera", timestart: "10", timeend:"12"},
-                {name: "b", lessonname: "diktia2", classroomame: "unix2", day: "deutera", timestart: "10", timeend:"12"},
-                {name: "b", lessonname: "diktia2", classroomame: "unix2", day: "deutera", timestart: "10", timeend:"12"},
-                {name: "c", lessonname: "diktia2", classroomame: "unix2", day: "deutera", timestart: "10", timeend:"12"}
-              ]
+              $scope.gridTmimata = []
+              angular.forEach(currentTeacherLabs, function(lab) {
+                angular.forEach(lab.students, function(student) {
+                  student.recordsCount = student.records[0]=== null ? 0 : student.records.length;
+                  student.lablimit = lab.lablimit;
+                });
+                var labId = $filter('filter')($scope.labList, function(item) {
+                  return item.lessonid === lab.lesson;
+                });
 
-*/
-              angular.forEach(result.teacher.labs, function(lab) {
+                //serialise the labId
+                labId = labId[0].labid;
                 var grid = {
                   data: lab.students,
+                  recordspresence: lab.recordspresence,
+                  rowHeight: 40,
+                  labId: labId,
                   headerTemplate: "partials/teacher/header_tmimata.html",
-                  //columnDefs: [{field: "name", displayName: "Onoma"}],
+                  columnDefs: $scope.gridPossibleOptions.gridLabStudent.columnDefs,
                   lesson: lab.lessonname,
                   classroom: lab.classroomame,
-                  day: days[lab.day] + " " + lab.timestart + " - " + lab.timeend
+                  day: days[lab.day].name + " " + lab.timestart + " - " + lab.timeend
                 }
-                $scope.gridTmimata.push(grid);
-                console.log(grid)
+
+                if (lab.recordspresence) {
+                  grid.columnDefs.push({field: 'recordsCount', cellTemplate: "partials/teacher/records_buttons.html", displayName: 'Παρουσίες', width: 120},
+                                       {field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180}
+                                      );
+                } else {
+                  grid.columnDefs.push({field: 'recordsCount', cellTemplate: "partials/teacher/records_buttons.html", displayName: 'Απουσίες', width: 120},
+                                       {field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180}
+                                      );
+                }
+
+                if ($scope.gridTmimata.indexOf(grid) == -1) {
+                  $scope.gridTmimata.push(grid);
+                }
+                $scope.showBusyIdicator = false;
               });
+            }).
+            error(function (result, status) {
+              if (status === 401) {
+                //Unathorized
+                $location.path('/')
+              }
             });
           break;
       }
@@ -273,7 +344,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                   } else if (result.error.id == 10 && result.error.name == "ClassroomAlreadyUsed") {
                     $scope.alerts.push({ msg: "Η αίθουσα του εργαστηρίου χρησιμοποιείται από άλλο μάθημα.", type: 'danger'});
                   } else {
-                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
+                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error.name, type: "danger"});
                   }
                 }).
                 error(function (result, status) {
