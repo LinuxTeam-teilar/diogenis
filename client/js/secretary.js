@@ -217,7 +217,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
           $scope.currentGrid = grid;
           $scope.open('partials/modals/delete_modal.html');
         }
-      }
+      };
 
       $scope.open = function (templateUrl) {
         var modalInstance = $modal.open({
@@ -447,9 +447,6 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                   }
                 });
               break;
-
-
-
           }
         }, function () {
         });

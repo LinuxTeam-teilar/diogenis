@@ -83,6 +83,9 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
 
     $scope.gridPossibleOptions.gridLab = {
                                     data: [],
+                                    msgConfirm: 'τo εργαστήριο',
+                                    removeUrl: 'lab/remove',
+                                    type: 'labRemove',
                                     columnDefs: [
                                       { field: 'classroomname', displayName: 'Όνομα Αίθουσας', width: 150},
                                       { field: 'lessonname', displayName: 'Όνομα Μαθήματος', width: 150},
@@ -91,7 +94,8 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                                       { field: 'timestart', displayName: 'Ώρα Έναρξης', width: 120},
                                       { field: 'timeend', displayName: 'Ώρα Λήξης', width: 100},
                                       { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου', width: 180},
-                                      { field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180}
+                                      { field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180},
+                                      { field: 'id', cellTemplate: "partials/secretary/delete_button.html", displayName: 'Διαγραφή', width: 150}
                                     ]}
 
     $scope.gridPossibleOptions.gridLabStudent = {
@@ -302,6 +306,14 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
         $scope.alerts.splice(index, 1);
       };
 
+      $scope.gridActions = {
+        removeEntity: function(row, grid) {
+          $scope.currentRow = row;
+          $scope.currentGrid = grid;
+          $scope.open('partials/modals/delete_modal.html');
+        }
+      };
+
       $scope.open = function (templateUrl) {
         var modalInstance = $modal.open({
           templateUrl: templateUrl,
@@ -319,7 +331,13 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
             },
             classroomList: function() {
               return $scope.classroomList;
-            }
+            },
+            currentRow: function() {
+              return $scope.currentRow;
+            },
+            currentGrid: function() {
+              return $scope.currentGrid;
+            },
           }
         });
 
@@ -393,6 +411,21 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                   }
                 })
               break;
+            case 'labRemove':
+              var lab = {
+                lab: data.row.entity.labid
+              }
+
+              $http.post(data.url, lab).
+                success(function(result) {
+                console.log(result)
+                  if (result.error.id === -1 && result.error.auth.success) {
+                    $scope.alerts.push({msg: 'To εργαστήριο διαγράφτηκε επιτυχώς', type: 'success'});
+                  } else {
+                    $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
+                  }
+                });
+              break;
 
           }
         }, function () {
@@ -403,11 +436,13 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
     // Please note that $modalInstance represents a modal window (instance) dependency.
     // It is not the same as the $modal service used above.
 
-    $scope.ModalInstanceCtrl = function ($scope, $modalInstance, teacherList, classroomList ,lessonList) {
+    $scope.ModalInstanceCtrl = function ($scope, $modalInstance, teacherList, classroomList ,lessonList, currentRow, currentGrid) {
       $scope.teacherList = teacherList;
       $scope.lessonList = lessonList;
       $scope.classroomList = classroomList;
       $scope.teacherListCheckBox = teacherList;
+      $scope.currentRow = currentRow;
+      $scope.currentGrid = currentGrid;
 
       $scope.days = [
         {id: 1, name: "Δευτέρα"},
