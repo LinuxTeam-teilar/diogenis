@@ -1,0 +1,21 @@
+<div class="modal-header">
+      <h3 class="modal-title">Διαγραφή</h3>
+    </div>
+    <div class="modal-body">
+
+      <p>Είστε σίγουρος ότι θέλετε να διαγράψετε {{currentGrid.options.msgConfirm}} {{currentRow.entity[currentGrid.options.nameField]}} οριστικά?</p>
+
+
+<div class="modal-footer">
+  <button class="btn btn-danger" type="submit" ng-click="
+    ok(data = {
+      'type': currentGrid.options.type,
+      'url': currentGrid.options.removeUrl,
+      'row': currentRow })">
+  Οριστική Διαγραφή</button>
+  <button class="btn btn-warning" ng-click="cancel()">Ακύρωση</button>
+</div>
+
+</fieldset>
+</form>
+
