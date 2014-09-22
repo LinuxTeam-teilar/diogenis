@@ -84,6 +84,27 @@ BEGIN
     SELECT INTO lessonDepartmentId department FROM lesson
     INNER JOIN lab ON lesson.id = lab.lesson;
 
+
+    -- check if the student has already been added to the lab
+    PERFORM * FROM labAttributes
+    WHERE lab = labId AND student = studentId;
+
+    IF FOUND THEN
+        RETURN row_to_json(ROW());
+    END IF;
+
+    -- if the student has already been added to another lab of the same
+    -- lesson don't allow him to add himself again
+    PERFORM * FROM labAttributes AS la
+    INNER JOIN lab AS l
+    ON la.lab = l.id AND la.lab = labId
+    INNER JOIN lesson AS le
+    ON le.id = l.lesson;
+
+    IF FOUND THEN
+        RETURN row_to_json(ROW());
+    END IF;
+
     SELECT INTO studentDepartmentId department FROM student WHERE studentId = id;
 
     IF lessonDepartmentId != studentDepartmentId THEN
@@ -93,7 +114,7 @@ BEGIN
     SELECT INTO labLimit lab.labLimit FROM lab WHERE labId = id;
 
     SELECT INTO labCount count(student) FROM labAttributes
-    WHERE labId = lab AND studentId = student;
+    WHERE labId = lab;
 
     IF labCount >= labLimit THEN
         inQueue := TRUE;
