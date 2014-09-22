@@ -503,6 +503,8 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                 success(function(result) {
                   if (result.error.id === -1 && result.error.auth.success) {
                     $scope.alerts.push({msg: 'To εργαστήριο διαγράφτηκε επιτυχώς', type: 'success'});
+                  } else if (result.error.id === 8 && result.error.name === 'DeletionFailed') {
+                    $scope.alerts.push({msg: 'Το εργαστήριο χρησιμοποιείται, δεν μπορείται να την διαγράψετε', type: 'danger'});
                   } else {
                     $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
                   }

@@ -398,8 +398,11 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
 
               $http.post(data.url, lesson).
                 success(function(result) {
-                  if (result.error.id === -1 && result.error.auth.success) {
+                  if (result.error.id === -1 && result.auth.success) {
                     $scope.alerts.push({msg: 'Το μάθημα διαγράφτηκε επιτυχώς', type: 'success'});
+                    $scope.changeNav($scope.navs[1]);
+                  } else if (result.error.id === 8 && result.error.name === 'DeletionFailed') {
+                    $scope.alerts.push({msg: 'Το μάθημα χρησιμοποιείται, δεν μπορείται να την διαγράψετε', type: 'danger'});
                   } else {
                     $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
                   }
@@ -412,8 +415,11 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
 
               $http.post(data.url, classroom).
                 success(function(result) {
-                  if (result.error.id === -1 && result.error.auth.success) {
+                  if (result.error.id === -1 && result.auth.success) {
                     $scope.alerts.push({msg: 'Η αίθουσα διαγράφτηκε επιτυχώς', type: 'success'});
+                    $scope.changeNav($scope.navs[2])
+                  } else if (result.error.id === 8 && result.error.name === 'DeletionFailed') {
+                    $scope.alerts.push({msg: 'Η αίθουσα χρησιμοποιείται, δεν μπορείται να την διαγράψετε', type: 'danger'});
                   } else {
                     $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
                   }
@@ -426,8 +432,11 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
 
               $http.post(data.url, lab).
                 success(function(result) {
-                  if (result.error.id === -1 && result.error.auth.success) {
+                  if (result.error.id === -1 && result.auth.success) {
                     $scope.alerts.push({msg: 'To εργαστήριο διαγράφτηκε επιτυχώς', type: 'success'});
+                    $scope.changeNav($scope.navs[3])
+                  } else if (result.error.id === 8 && result.error.name === 'DeletionFailed') {
+                    $scope.alerts.push({msg: 'Το εργαστήριο χρησιμοποιείται, δεν μπορείται να την διαγράψετε', type: 'danger'});
                   } else {
                     $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
                   }
@@ -440,8 +449,10 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
 
               $http.post(data.url, teacher).
                 success(function(result) {
-                  if (result.error.id === -1 && result.error.auth.success) {
+                  if (result.error.id === -1 && result.auth.success) {
                     $scope.alerts.push({msg: 'Ο καθηγητής διαγράφτηκε επιτυχώς', type: 'success'});
+                  } else if (result.error.id === 8 && result.error.name === 'DeletionFailed') {
+                    $scope.alerts.push({msg: 'Ο καθηγητής χρησιμοποιείται, δεν μπορείται να την διαγράψετε', type: 'danger'});
                   } else {
                     $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
                   }
