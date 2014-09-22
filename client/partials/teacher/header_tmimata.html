@@ -1,4 +1,17 @@
-<div class="ui-grid-top-panel" style="text-align: center">{{grid.options.lesson}} {{grid.options.classroom}} {{grid.options.day}}
+<div class="ui-grid-top-panel" style="text-align: center; overflow:inherit">{{grid.options.lesson}} {{grid.options.classroom}} {{grid.options.day}}
+    <div class="btn-group pull-right" dropdown is-open="status.isopen">
+      <button type="button" style="text-align: right" class="btn btn-warning dropdown-toggle" ng-disabled="disabled">
+        Επεξεργασία <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a>Μετακίνηση σε:</a></li>
+        <li class="divider"></li>
+        <li ng-repeat="candidate in grid.options.candidatesForMove">
+          <a ng-click="(status.isopen = false) || grid.options.beginMoveStudents(grid, candidate.oldLab, candidate.newLab)" href="">{{candidate.newLab.fullName}}</a>
+        </li>
+      </ul>
+    </div>
+
   <div ui-grid-group-panel ng-show="grid.options.showGroupPanel"></div>
   <div class="ui-grid-header ui-grid-header-viewport">
     <div class="ui-grid-header-canvas">

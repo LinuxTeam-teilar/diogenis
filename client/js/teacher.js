@@ -22,9 +22,86 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
     $scope.gridTmimata = [];
     $scope.showBusyIdicator = true;
     $scope.alerts = []
+
     $scope.closeAlert = function(index) {
       $scope.alerts.splice(index, 1);
     };
+
+    $scope.teacherUtils = {
+      beginMoveStudents: function(grid, oldLab, newLab) {
+        angular.forEach(grid.options.data, function(student) {
+          if (student.checked) {
+            $scope.teacherUtils.moveStudent(student.id, oldLab, newLab);
+          }
+        });
+
+      },
+      moveStudent: function(studentId, oldLab, newLab) {
+      var moveData = {
+        student: studentId,
+        oldLab: oldLab.id,
+        newLab: newLab.id
+      }
+
+      $http.post('student/move', moveData).
+        success(function(result) {
+          if (result.error.id == -1 && result.operation.success) {
+            $scope.alerts.push({msg: 'Ο φοιτητής μετακινήθηκε στο τμήμα ' + newLab.fullName + ' από το τμήμα ' + oldLab.fullName});
+          } else {
+            $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name});
+          }
+        });
+      },
+
+      findLabId: function(lab, days) {
+        var labId = $filter('filter')($scope.labList, function(item) {
+          return item.lessonid === lab.lesson && item.timestart === lab.timestart
+          && item.timeend === lab.timeend && days[lab.day - 1].name === item.day;
+        });
+
+        //serialise the labId
+        labId = labId[0].labid;
+        return labId;
+      },
+
+      findAvailableLabs: function(currentTeacherLabs, currentLab) {
+        var candidates = [];
+        //optimize the loop iteration
+        var indexer = [];
+
+        var days = [
+          {id: 1, name: "Δευτέρα"},
+          {id: 2, name: "Τρίτη"},
+          {id: 3, name: "Τετάρτη"},
+          {id: 4, name: "Πέμπτη"},
+          {id: 5, name: "Παρασκευή"}
+        ]
+
+        var currentLabId = $scope.teacherUtils.findLabId(currentLab, days);
+        angular.forEach(currentTeacherLabs, function(lab) {
+          if (lab.lessonname == currentLab.lessonname) {
+            //var labId = $scope.teacherUtils.findLabId(lab, days);
+            //we shouldn't list the lab itself. We cannot move
+            //a student to the same lab.
+            var labId = $scope.teacherUtils.findLabId(lab, days);
+            if (labId !== currentLabId) {
+              lab.labId = labId;
+              currentLab.labId = currentLabId;
+              lab.fullName = lab.lessonname + " " + lab.classroomname + " " + days[lab.day-1].name + " " + lab.timestart + " - " + lab.timeend
+              currentLab.fullName = currentLab.lessonname + " " + currentLab.classroomname + " " + days[currentLab.day-1].name + " " + currentLab.timestart + " - " + currentLab.timeend
+              var moveLab = {
+                oldLab: currentLab,
+                newLab: lab
+              }
+
+              candidates.push(moveLab);
+              indexer.push(lab);
+            }
+          }
+        });
+        return candidates;
+      }
+    }
 
     $scope.gridActions = {
       addStudentRecord: function(row, grid) {
@@ -101,6 +178,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
     $scope.gridPossibleOptions.gridLabStudent = {
                                     data: [],
                                     columnDefs: [
+                                      { field: 'checked', displayName: 'A/A', cellTemplate: 'partials/teacher/checkbox.html', width: 70},
                                       { field: 'name', displayName: 'Ονοματεπώνυμο', width: 150},
                                       { field: 'identity', displayName: 'AM', width: 100}
                                       // records should be created dynamicly
@@ -253,10 +331,13 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                 angular.forEach(lab.students, function(student) {
                   student.recordsCount = student.records[0]=== null ? 0 : student.records.length;
                   student.lablimit = lab.lablimit;
+                  student.checked = false;
                 });
                 var labId = $filter('filter')($scope.labList, function(item) {
                   return item.lessonid === lab.lesson;
                 });
+
+                var candidateLabs = $scope.teacherUtils.findAvailableLabs(currentTeacherLabs, lab);
 
                 //serialise the labId
                 labId = labId[0].labid;
@@ -265,6 +346,8 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                   recordspresence: lab.recordspresence,
                   rowHeight: 40,
                   labId: labId,
+                  candidatesForMove: candidateLabs,
+                  beginMoveStudents: function(grid, oldLab, newLab) { $scope.teacherUtils.beginMoveStudents(grid, oldLab, newLab)},
                   headerTemplate: "partials/teacher/header_tmimata.html",
                   columnDefs: $scope.gridPossibleOptions.gridLabStudent.columnDefs,
                   lesson: lab.lessonname,
@@ -418,7 +501,6 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
 
               $http.post(data.url, lab).
                 success(function(result) {
-                console.log(result)
                   if (result.error.id === -1 && result.error.auth.success) {
                     $scope.alerts.push({msg: 'To εργαστήριο διαγράφτηκε επιτυχώς', type: 'success'});
                   } else {
