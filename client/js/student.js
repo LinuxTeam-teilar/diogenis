@@ -208,7 +208,7 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
                     //refresh our page
                     $scope.changeNav($scope.navs[0])
                   } else {
-                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
+                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error.name, type: "danger"});
                   }
                 }).
                 error(function (result, status) {

@@ -268,7 +268,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                     //refresh our page
                     $scope.changeNav($scope.navs[0])
                   } else {
-                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
+                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error.name, type: "danger"});
                   }
                 }).
                 error(function (result, status) {
@@ -312,7 +312,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                       }
                     });
                   } else {
-                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
+                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error.name, type: "danger"});
                   }
                 }).
                 error(function (result, status) {
@@ -381,7 +381,7 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                   } else if (result.error.id == 10 && result.error.name == "ClassroomAlreadyUsed") {
                     $scope.alerts.push({ msg: "Η αίθουσα του εργαστηρίου χρησιμοποιείται από άλλο μάθημα.", type: 'danger'});
                   } else {
-                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error, type: "danger"});
+                    $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error.name, type: "danger"});
                   }
                 }).
                 error(function (result, status) {
