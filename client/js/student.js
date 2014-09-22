@@ -201,12 +201,15 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
                 success(function (result) {
                   //clear the alerts
                   $scope.alerts = [];
+                  console.log(result)
                   if (result.error.id == 4 && result.error.name == "CreationFailed") {
                     $scope.alerts.push({ msg: "Το εργαστήριο υπάρχει ήδη", type: 'danger'});
                   } else if (result.error.id == -1 && result.auth.success) {
                     $scope.alerts.push({msg : "Η εγγραφή ολοκληρώθηκε επιτυχώς", type: "success"});
                     //refresh our page
                     $scope.changeNav($scope.navs[0])
+                  } else if (result.error.id === 5 && result.error.name === 'UpdateFailed') {
+                    $scope.alerts.push({msg: 'Έχετε ήδη γραφτεί σε αυτό το εργαστήριο', type: 'info'});
                   } else {
                     $scope.alerts.push({msg : "Σφάλμα συστήματος " + result.error.name, type: "danger"});
                   }
