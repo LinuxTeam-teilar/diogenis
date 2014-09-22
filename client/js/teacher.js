@@ -9,7 +9,8 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
       { title: "Μαθήματα", visible : false, partial: "partials/teacher/_teacher_lesson.html"},
       { title: "Αίθουσες", visible : false, partial: "partials/teacher/_teacher_classroom.html"},
       { title: "Εργαστήρια", visible : false, partial: "partials/teacher/_teacher_lab.html"},
-      { title: "Τμήματα", visible : false, partial: "partials/teacher/_teacher_lab_student.html"}
+      { title: "Τμήματα", visible : false, partial: "partials/teacher/_teacher_lab_student.html"},
+      { title: "Αίθουσα Αναμονής", visible : false, partial: "partials/teacher/_teacher_lab_queue.html"}
     ];
 
     $scope.teacherList = null;
@@ -79,7 +80,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
 
         var currentLabId = $scope.teacherUtils.findLabId(currentLab, days);
         angular.forEach(currentTeacherLabs, function(lab) {
-          if (lab.lessonname == currentLab.lessonname) {
+          if (lab.lessonname == currentLab.lessonname && indexer.indexOf(lab) < 0) {
             //var labId = $scope.teacherUtils.findLabId(lab, days);
             //we shouldn't list the lab itself. We cannot move
             //a student to the same lab.
@@ -97,6 +98,41 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
               candidates.push(moveLab);
               indexer.push(lab);
             }
+          }
+        });
+        return candidates;
+      },
+      findAvailableLabsforQueue: function(currentTeacherLabs, currentLab) {
+        var candidates = [];
+        //optimize the loop iteration
+        var indexer = [];
+
+        var days = [
+          {id: 1, name: "Δευτέρα"},
+          {id: 2, name: "Τρίτη"},
+          {id: 3, name: "Τετάρτη"},
+          {id: 4, name: "Πέμπτη"},
+          {id: 5, name: "Παρασκευή"}
+        ]
+
+        var currentLabId = $scope.teacherUtils.findLabId(currentLab, days);
+        angular.forEach(currentTeacherLabs, function(lab) {
+          if (lab.lessonname == currentLab.lessonname && indexer.indexOf(lab) < 0) {
+            //var labId = $scope.teacherUtils.findLabId(lab, days);
+            //we shouldn't list the lab itself. We cannot move
+            //a student to the same lab.
+            var labId = $scope.teacherUtils.findLabId(lab, days);
+            lab.labId = labId;
+            currentLab.labId = currentLabId;
+            lab.fullName = lab.lessonname + " " + lab.classroomname + " " + days[lab.day-1].name + " " + lab.timestart + " - " + lab.timeend
+            currentLab.fullName = currentLab.lessonname + " " + currentLab.classroomname + " " + days[currentLab.day-1].name + " " + currentLab.timestart + " - " + currentLab.timeend
+            var moveLab = {
+              oldLab: currentLab,
+              newLab: lab
+            }
+
+            candidates.push(moveLab);
+            indexer.push(lab);
           }
         });
         return candidates;
@@ -363,6 +399,77 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                   grid.columnDefs.push({field: 'recordsCount', cellTemplate: "partials/teacher/records_buttons.html", displayName: 'Απουσίες', width: 120},
                                        {field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180}
                                       );
+                }
+
+                if ($scope.gridTmimata.indexOf(grid) == -1) {
+                  $scope.gridTmimata.push(grid);
+                }
+                $scope.showBusyIdicator = false;
+              });
+            }).
+            error(function (result, status) {
+              if (status === 401) {
+                //Unathorized
+                $location.path('/')
+              }
+            });
+          break;
+          case "Αίθουσα Αναμονής":
+          loadTableAsset($scope.navs[2]);
+          $scope.gridTmimata = [];
+
+          var days = [
+            {id: 1, name: "Δευτέρα"},
+            {id: 2, name: "Τρίτη"},
+            {id: 3, name: "Τετάρτη"},
+            {id: 4, name: "Πέμπτη"},
+            {id: 5, name: "Παρασκευή"}
+          ]
+
+          $http.get('teacher/list/students').
+            success(function(result) {
+              if (result.teacher.labs !== null) {
+                $scope.normalLabs = result.teacher.labs;
+              }
+            });
+
+          $http.get('teacher/list/students').
+            success(function(result) {
+              if (result.teacher.labs === null) {
+                return;
+              }
+
+              var teacherId = result.teacher.id;
+              var currentTeacherLabs = $filter('filter')(result.teacher.labs, function (item) {
+                return item.teacher === teacherId;
+              });
+
+              $scope.gridTmimata = []
+              angular.forEach(currentTeacherLabs, function(lab) {
+                angular.forEach(lab.students, function(student) {
+                  student.lablimit = lab.lablimit;
+                  student.checked = false;
+                });
+                var labId = $filter('filter')($scope.labList, function(item) {
+                  return item.lessonid === lab.lesson;
+                });
+
+                var candidateLabs = $scope.teacherUtils.findAvailableLabsforQueue($scope.normalLabs, lab);
+
+                //serialise the labId
+                labId = labId[0].labid;
+                var grid = {
+                  data: lab.students,
+                  recordspresence: lab.recordspresence,
+                  rowHeight: 40,
+                  labId: labId,
+                  candidatesForMove: candidateLabs,
+                  beginMoveStudents: function(grid, oldLab, newLab) { $scope.teacherUtils.beginMoveStudents(grid, oldLab, newLab)},
+                  headerTemplate: "partials/teacher/header_tmimata.html",
+                  columnDefs: $scope.gridPossibleOptions.gridLabStudent.columnDefs,
+                  lesson: lab.lessonname,
+                  classroom: lab.classroomame,
+                  day: days[lab.day-1].name + " " + lab.timestart + " - " + lab.timeend
                 }
 
                 if ($scope.gridTmimata.indexOf(grid) == -1) {
