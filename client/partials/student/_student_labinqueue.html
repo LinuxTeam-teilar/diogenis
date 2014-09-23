@@ -1,0 +1,11 @@
+<div ng-controller="ModalDemoCtrl">
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-9 col-md-9">
+      <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+      <div id="myGrid" ng-show="labQueueList" class="gridStyleBig" external-scopes="gridActions" ui-grid-resize-columns ui-grid="gridPossibleOptions.gridLabQueue"></div>
+    </div>
+  </div>
+</div>
+</div>

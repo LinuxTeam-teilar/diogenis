@@ -7,13 +7,14 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
 
     $scope.navs = [
       { title: "Εργαστήρια", visible : false, partial: "partials/student/_student_lab.html"},
-      //{ title: "Δήλωση Εργαστηρίου", visible : false, partial: "partials/teacher/_teacher_classroom.html"}
+      { title: "Αίθουσες Αναμονής", visible : false, partial: "partials/student/_student_labinqueue.html"}
     ];
 
     $scope.teacherList = null;
     $scope.lessonList = null;
     $scope.classroomList = null;
     $scope.labList = null;
+    $scope.labQueueList = null;
     $scope.allLabs = null;
     $scope.fullName = GenerateFullName;
 
@@ -30,6 +31,25 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
                                       { field: 'timeend', displayName: 'Ώρα Λήξης', width: 100},
                                       { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου', width: 180},
                                       { field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180}
+                                    ]}
+
+
+    $scope.gridPossibleOptions.gridLabQueue = {
+                                    data: [],
+                                    rowHeight: 40,
+                                    msgConfirm: 'τo εργαστήριο',
+                                    removeUrl: 'student/remove/lab',
+                                    type: 'labQueueRemove',
+                                    columnDefs: [
+                                      { field: 'classroomname', displayName: 'Όνομα Αίθουσας', width: 150},
+                                      { field: 'lessonname', displayName: 'Όνομα Μαθήματος', width: 150},
+                                      { field: 'teachername', displayName: 'Όνομα Καθηγητή', width: 150},
+                                      { field: 'day', displayName: 'Ημέρα', width: 100},
+                                      { field: 'timestart', displayName: 'Ώρα Έναρξης', width: 120},
+                                      { field: 'timeend', displayName: 'Ώρα Λήξης', width: 100},
+                                      { field: 'recordspresence', displayName: 'Τύπος Εργαστηρίου', width: 180},
+                                      { field: 'lablimit', displayName: 'Μέγεθος Εργαστηρίου', width: 180},
+                                      { field: 'id', cellTemplate: "partials/secretary/delete_button.html", displayName: 'Διαγραφή', width: 150}
                                     ]}
 
     $scope.changeNav = function(item) {
@@ -139,6 +159,91 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
               }
             })
           break;
+        case 'Αίθουσες Αναμονής':
+
+          $http.get('/lesson/list').
+            success(function (result) {
+              //We have not lessons at the moment
+              if (result.lessons === null) {
+                return;
+              }
+
+              $scope.lessonList = result.lessons
+            });
+
+          $http.get('/classroom/list').
+            success(function (result) {
+              //We have no classrooms at the moment
+              if (result.classrooms.length === 0) {
+                return;
+              }
+              $scope.classroomList = result.classrooms;
+            });
+
+          //get all the teachers
+          $http.get('/teacher/list').
+            success(function (result) {
+              $scope.teacherList = result.teachers;
+            });
+
+          $http.get('/lab/list').
+            success(function (result) {
+            $scope.allLabs = result.labs;
+          });
+
+          $http.get('/student/list/labs').
+            success(function (result) {
+              //We have no classrooms at the moment
+              if (result.student == undefined || result.student.labs == null || result.student.labs.length === 0) {
+                return;
+              }
+
+              $scope.labQueueList = result.student.labs
+              angular.forEach($scope.labQueueList, function(lab) {
+                angular.forEach($scope.teacherList, function(teacher) {
+                  if (lab.teacher == teacher.id) {
+                    lab.teachername = teacher.name
+                  }
+                });
+              });
+              //Make the UI of the table more user friendly
+              angular.forEach($scope.labQueueList, function(value, key) {
+                //we don't need the id here, but we keep it for convinience
+                var days = [
+                  {id: 1, name: "Δευτέρα"},
+                  {id: 2, name: "Τρίτη"},
+                  {id: 3, name: "Τετάρτη"},
+                  {id: 4, name: "Πέμπτη"},
+                  {id: 5, name: "Παρασκευή"}
+                ]
+
+                value.recordsCount = value.records[0]=== null ? 0 : value.records.length;
+                if (value.recordspresence) {
+                  value.recordspresence = 'Καταμέτρηση Παρουσιών';
+                } else {
+                  value.recordspresence = 'Καταμέτρηση Απουσιών';
+                }
+
+                if (value.day !== undefined) {
+                  value.day = days[value.day -1].name
+                }
+              });
+
+              angular.forEach($scope.teacherList, function(value, key) {
+                if (value.id == $scope.labList.teacher) {
+                  $scope.labQueueList.teacherName = value.teachername;
+                }
+              });
+
+              $scope.gridPossibleOptions.gridLabQueue.data = $scope.labQueueList;
+            }).
+            error(function (result, status) {
+              if (status === 401) {
+                //Unathorized
+                $location.path('/')
+              }
+            })
+          break;
       }
     }
 
@@ -148,6 +253,14 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
       $scope.alerts = []
       $scope.closeAlert = function(index) {
         $scope.alerts.splice(index, 1);
+      };
+
+      $scope.gridActions = {
+        removeEntity: function(row, grid) {
+          $scope.currentRow = row;
+          $scope.currentGrid = grid;
+          $scope.open('partials/modals/delete_modal.html');
+        }
       };
 
       $scope.open = function (templateUrl) {
@@ -173,7 +286,13 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
             },
             allLabs: function() {
               return $scope.allLabs;
-            }
+            },
+            currentRow: function() {
+              return $scope.currentRow;
+            },
+            currentGrid: function() {
+              return $scope.currentGrid;
+            },
           }
         });
 
@@ -201,7 +320,6 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
                 success(function (result) {
                   //clear the alerts
                   $scope.alerts = [];
-                  console.log(result)
                   if (result.error.id == 4 && result.error.name == "CreationFailed") {
                     $scope.alerts.push({ msg: "Το εργαστήριο υπάρχει ήδη", type: 'danger'});
                   } else if (result.error.id == -1 && result.auth.success) {
@@ -221,6 +339,20 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
                   }
                 })
               break;
+            case 'labQueueRemove':
+              var lab = {
+                lab: data.row.entity.id
+              }
+
+              $http.post(data.url, lab).
+                success(function(result) {
+                  if (result.error.id === -1 && result.error.auth.success) {
+                    $scope.alerts.push({msg: 'To εργαστήριο διαγράφτηκε επιτυχώς', type: 'success'});
+                  } else {
+                    $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
+                  }
+                });
+              break;
 
           }
         }, function () {
@@ -231,13 +363,15 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
     // Please note that $modalInstance represents a modal window (instance) dependency.
     // It is not the same as the $modal service used above.
 
-    $scope.ModalInstanceCtrl = function ($scope, $modalInstance, teacherList, classroomList ,lessonList, labList, allLabs) {
+    $scope.ModalInstanceCtrl = function ($scope, $modalInstance, teacherList, classroomList ,lessonList, labList, allLabs, currentRow, currentGrid) {
       $scope.labList = labList;
       $scope.teacherList = teacherList;
       $scope.lessonList = lessonList;
       $scope.classroomList = classroomList;
       $scope.teacherListCheckBox = teacherList;
       $scope.allLabs = allLabs;
+      $scope.currentRow = currentRow;
+      $scope.currentGrid = currentGrid;
       $scope.days = [
         {id: 1, name: "Δευτέρα"},
         {id: 2, name: "Τρίτη"},
