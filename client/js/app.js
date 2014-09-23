@@ -36,6 +36,10 @@ diogenisApp.config(['$routeProvider',
         templateUrl: 'partials/logout.html',
         controller: 'DiogenisLogoutCtrl'
       }).
+      when('/help', {
+        templateUrl: 'partials/help.html',
+        controller: 'DiogenisHelpCtrl'
+      }).
       otherwise({
         redirectTo: '/secretary'
       });
