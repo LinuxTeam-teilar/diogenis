@@ -13,13 +13,13 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li>
+            <li ng-show="isUserLoggedIn">
               <a class="navbar-brand" href=""> {{fullName}}</a>
             </li>
-            <li ng-show="fullName">
+            <li ng-show="isUserLoggedIn">
               <a href="/#/logout">Έξοδος <span class="icon-bar fa fa-sign-out"> </a> </span>
             </li>
-            <li ng-show="!fullName">
+            <li ng-show="!isUserLoggedIn">
               <a href="/">Αρχική Σελίδα <span class="icon-bar fa fa-home"> </a> </span>
             </li>
           </ul>
@@ -35,9 +35,9 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6 col-md-offset-3" >
+          <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-
-<form class="form-horizontal">
+<form class="form-horizontal" ng-submit="sendMail()">
 <fieldset>
 
 <!-- Form Name -->
@@ -47,7 +47,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="email">Email:</label>
   <div class="col-md-8">
-  <input id="email" name="email" type="text" placeholder="Δώστε ένα έγκυρο Emai" class="form-control input-md" required="">
+  <input id="email" name="email" type="text" ng-model="email" placeholder="Δώστε ένα έγκυρο Emai" class="form-control input-md" required="">
 
   </div>
 </div>
@@ -56,7 +56,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="title">Τίτλος Email:</label>
   <div class="col-md-8">
-  <input id="title" name="title" type="text" placeholder="Δώστε ένα τίτλο για το email" class="form-control input-md" required="">
+  <input id="title" name="title" type="text" ng-model="title" placeholder="Δώστε ένα τίτλο για το email" class="form-control input-md" required="">
 
   </div>
 </div>
@@ -65,7 +65,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="user">Χρήστης:</label>
   <div class="col-md-8">
-  <input id="user" name="user" type="text" placeholder="Δώστε το όνομα χρήστη του λογαριασμού σας" ng-disabled="fullName" ng-model="fullName" class="form-control input-md" required="">
+  <input id="user" name="user" type="text" placeholder="Δώστε το όνομα χρήστη του λογαριασμού σας" ng-disabled="isUserLoggedIn" ng-model="fullName" class="form-control input-md" required="">
 
   </div>
 </div>
@@ -74,7 +74,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="message">Μύνημα:</label>
   <div class="col-md-8">
-    <textarea class="form-control" rows="6" id="message" name="message"></textarea>
+    <textarea class="form-control" ng-model="message" rows="6" id="message" name="message"></textarea>
   </div>
 </div>
 
@@ -82,8 +82,8 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="submitButton"></label>
   <div class="col-md-8">
-    <button id="submitButton" name="submitButton" class="btn btn-success">Αποστολή</button>
-    <button id="resetButton" name="resetButton" class="btn btn-danger">Καθαρισμός Φόρμας</button>
+    <button id="submitButton" type="submit" name="submitButton" class="btn btn-success">Αποστολή</button>
+    <button id="resetButton" ng-click="resetForm()" name="resetButton" class="btn btn-danger">Καθαρισμός Φόρμας</button>
   </div>
 </div>
 
