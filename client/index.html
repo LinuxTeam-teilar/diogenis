@@ -11,6 +11,7 @@
 
   <link rel="stylesheet" href="vendors/angular-multi-select.css">
   <link rel="stylesheet" href="vendors/style.css">
+  <link rel="stylesheet" href="vendors/footer.css">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
   <script src="vendors/angular.min.js"></script>
@@ -35,10 +36,19 @@
 </head>
 <body>
 
-  <div class="view-container">
+  <div id="wrap" class="view-container">
     <div ng-view class="view-frame"></div>
   </div>
 
+  <div class="footer">
+    <div class="container">
+      <ul>
+        <li>&copy; Diogenis 2014</li>
+        <li><a href="https://github.com/kokeroulis/diogenis" <span class="fa fa-github"> Ο Κώδικας Στο GitHub</a></span></li>
+        <li><a href=" https://www.facebook.com/diogenis.teilar"<span class="fa fa-facebook-square" > Facebook</a> </span></li>
+      </ul>
+    </div>
+  </div>
 
 </body>
 </html>
