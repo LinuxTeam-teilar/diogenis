@@ -9,16 +9,16 @@ WITH result AS (
             SELECT l.*,  c.name AS classroomName, le.name AS lessonName,
                    array_agg(s.*) AS students
             FROM lab AS l
-            CROSS JOIN (
-                SELECT student.id, student.name, student.username,
-                       student.identity, array_agg(sr.record) AS records,
+            INNER JOIN labAttributes As la ON l.id = la.lab
+            LEFT JOIN (
+                SELECT student.id, student.name, student.username, student.identity,
+                       array_agg(sr.record) AS records,
                        la.isStudentInQueue
                 FROM student
                 LEFT JOIN studentRecord AS sr ON student.id = sr.student
                 INNER JOIN labAttributes AS la ON student.id = la.student
                 GROUP BY student.id, la.isStudentInQueue
-            ) AS s
-            INNER JOIN labAttributes As la ON l.id = la.lab
+            ) AS s ON s.id = la.student
             INNER JOIN classroom AS c ON c.id = l.classroom
             INNER JOIN lesson AS le ON le.id = l.lesson
             GROUP BY l.id, c.id, le.id

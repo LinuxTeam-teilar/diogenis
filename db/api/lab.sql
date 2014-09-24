@@ -97,7 +97,7 @@ BEGIN
     -- lesson don't allow him to add himself again
     PERFORM * FROM labAttributes AS la
     INNER JOIN lab AS l
-    ON la.lab = l.id AND la.lab = labId
+    ON la.lab = l.id AND la.lab = labId AND la.student = studentId
     INNER JOIN lesson AS le
     ON le.id = l.lesson;
 
