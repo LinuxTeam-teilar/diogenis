@@ -12,6 +12,10 @@ router.post('/add/record', routeMiddleware.isTeacher, function(req, res) {
     studentDb.addRecord(req, res);
 });
 
+router.post('/remove/record', routeMiddleware.isTeacher, function(req, res) {
+    studentDb.removeRecord(req, res);
+});
+
 router.get('/list/labs', routeMiddleware.isStudent, function(req, res) {
     studentDb.listLabs(req, res);
 });

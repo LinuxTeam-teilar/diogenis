@@ -603,5 +603,139 @@ describe('lab', function() {
 
     });
 
+    describe('Remove student record', function() {
+
+        it('Should succeed', function(done) {
+            testUtils.authTeacher(function(teacherRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: -1,
+                        name: ''
+                    },
+                    studentRecord: {
+                        id: 1,
+                        lab: 1,
+                        student: 1
+                    }
+
+                };
+
+                var opts = {
+                    path: 'student/remove/record',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    labId: 1,
+                    studentId: 1
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.auth.should.eql(expected.auth)
+                    res.body.error.should.eql(expected.error)
+                    res.body.studentRecord.id.should.eql(expected.studentRecord.id)
+                    res.body.studentRecord.lab.should.eql(expected.studentRecord.lab)
+                    res.body.studentRecord.student.should.eql(expected.studentRecord.student)
+                    done();
+                });
+            });
+        });
+
+       it('Should Fail', function(done) {
+            testUtils.authTeacher(function(teacherRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: 8,
+                        name: 'DeletionFailed'
+                    }
+                };
+
+                var opts = {
+                    path: 'student/remove/record',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    labId: 1000000000,
+                    studentId: 1000000000
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+
+        it('Invalid Parameters', function(done) {
+            testUtils.authTeacher(function(teacherRes) {
+                var expected = {
+                    auth: {
+                        success: true
+                    },
+                    error: {
+                        id: 3,
+                        name: 'InvalidParameters'
+                    }
+                };
+
+                var opts = {
+                    path: 'student/remove/record',
+                    method: 'POST',
+                    auth: true
+                };
+
+                opts.form = {
+                    labId: 1
+                    //studentId: 1
+                };
+
+                testUtils.getUrl(opts, function(res, body) {
+                    res.body.should.eql(expected)
+                    done();
+                });
+            });
+        });
+
+        it('UnAuthorized Request', function(done) {
+            var expected = {
+                auth: {
+                    success: false
+                },
+                error: {
+                    id: 2,
+                    name: 'UnAuthorized'
+                }
+            };
+
+            var opts = {
+                path: 'student/remove/record',
+                method: 'POST',
+                statusCode: 401
+            };
+
+            opts.form = {
+                labId: 1,
+                studentId: 1
+            };
+
+            testUtils.getUrl(opts, function(res, body) {
+                res.body.should.eql(expected)
+                done();
+            });
+        });
+
+    });
+
+
 });
 
