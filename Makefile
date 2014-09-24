@@ -26,7 +26,7 @@ install:
 	@npm install
 
 defaultdata:
-	@node defaultdata.js
+	@./scripts/db.sh defaultdata
 
 check:
 	@./node_modules/.bin/jshint --verbose --extra-ext .json . ; if [ $$? -eq 0 ] ; then echo "Done. Clean!" ; fi

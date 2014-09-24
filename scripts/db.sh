@@ -48,6 +48,10 @@ if [ -n "$1" ] && [ $1 == "use-sample" ]; then
     echo "**********************************"
     echo "Executing Sample!!!"
     psqlExec "sample.sql" false
+elif [ -n "$1" ] && [ $1 == "defaultdata" ]; then
+    echo "**********************************"
+    echo "Executing Defaultdata!!!"
+    psqlExec "defaultdata.sql" false
 else
    if [ $1 == "development" ]; then
 
