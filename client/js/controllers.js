@@ -38,6 +38,7 @@ diogenisControllers.controller('DiogenisLoginCtrl', ['$scope', '$routeParams', '
           $scope.alerts.push({msg: "Συνδεθήκατε επιτυχώς", type: 'success'})
           $cookieStore.put('type', 'secretary');
           $cookieStore.put('fullName', result.user.username);
+          $cookieStore.put('departmentId', result.user.departmentId);
           $location.path('/secretary');
         } else {
           var teacherLogin = Person.loginTeacher(credentials);

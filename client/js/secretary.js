@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams', '$http', '$route', '$location', '$filter', 'GenerateFullName',
-  function($scope, $routeParams, $http, $route, $location, $filter, GenerateFullName) {
+diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams', '$http', '$cookieStore', '$route', '$location', '$filter', 'GenerateFullName',
+  function($scope, $routeParams, $http, $cookieStore, $route, $location, $filter, GenerateFullName) {
 
     $scope.navs = [
       { title: "Καθηγητές", visible: false, partial: "partials/secretary/_secretary_teacher.html"},
@@ -279,9 +279,15 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
                 })
               break;
             case 'lesson':
+              var departmentId = $cookieStore.get('departmentId');
+              if (!departmentId) {
+                $scope.alerts.push({msg: 'Σφάλμα συστήματος, δεν υπάρχουν τα σωστά cookies στο σύστημα σας', type: 'danger'});
+                return;
+              }
+
               var newLesson = {
                 name: data.name,
-                department: 1,
+                department: departmentId,
               };
 
               var currentTeachers;

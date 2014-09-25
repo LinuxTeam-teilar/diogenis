@@ -15,7 +15,8 @@ describe('Secretary', function() {
                 },
                 user: {
                     username: 'tpt-secretary',
-                    email: ''
+                    email: '',
+                    departmentId: 1
                 }
             };
 
