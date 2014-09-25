@@ -86,7 +86,7 @@ DECLARE
     inQueue boolean;
 BEGIN
     SELECT INTO lessonDepartmentId department FROM lesson
-    INNER JOIN lab ON lesson.id = lab.lesson;
+    INNER JOIN lab ON lesson.id = lab.lesson AND lab.id = labId;
 
 
     -- check if the student has already been added to the lab
