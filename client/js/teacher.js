@@ -38,16 +38,18 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
 
       },
       moveStudent: function(studentId, oldLab, newLab) {
+      //oldLab and newLab should be reversed,
+      //otherwise we are providing wrong data to the server
       var moveData = {
         student: studentId,
-        oldLab: oldLab.id,
-        newLab: newLab.id
+        oldLab: newLab.labid,
+        newLab: oldLab.id
       }
 
       $http.post('student/move', moveData).
         success(function(result) {
           if (result.error.id == -1 && result.operation.success) {
-            $scope.alerts.push({msg: 'Ο φοιτητής μετακινήθηκε στο τμήμα ' + newLab.fullName + ' από το τμήμα ' + oldLab.fullName});
+            $scope.alerts.push({msg: 'Ο φοιτητής μετακινήθηκε στο τμήμα ' + newLab.fullName + ' από το τμήμα ' + oldLab.fullName, type:'success'});
           } else {
             $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name});
           }
@@ -84,11 +86,10 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
             //var labId = $scope.teacherUtils.findLabId(lab, days);
             //we shouldn't list the lab itself. We cannot move
             //a student to the same lab.
-            var labId = $scope.teacherUtils.findLabId(lab, days);
-            if (labId !== currentLabId) {
-              lab.labId = labId;
+            if (lab.labid !== currentLabId) {
+              lab.labId = lab.labid;
               currentLab.labId = currentLabId;
-              lab.fullName = lab.lessonname + " " + lab.classroomname + " " + days[lab.day-1].name + " " + lab.timestart + " - " + lab.timeend
+              lab.fullName = lab.lessonname + " " + lab.classroomname + " " + lab.day + " " + lab.timestart + " - " + lab.timeend
               currentLab.fullName = currentLab.lessonname + " " + currentLab.classroomname + " " + days[currentLab.day-1].name + " " + currentLab.timestart + " - " + currentLab.timeend
               var moveLab = {
                 oldLab: currentLab,
@@ -373,7 +374,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                   return item.lessonid === lab.lesson;
                 });
 
-                var candidateLabs = $scope.teacherUtils.findAvailableLabs(currentTeacherLabs, lab);
+                var candidateLabs = $scope.teacherUtils.findAvailableLabs($scope.labList, lab);
 
                 //serialise the labId
                 labId = labId[0].labid;
