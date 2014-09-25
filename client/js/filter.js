@@ -79,7 +79,7 @@ diogenisApp.filter('dayFilter', function () {
                 }
               });
 
-              if (!classroomExists) {
+              if (!classroomExists && filteredItems.indexOf(day) < 0) {
                 filteredItems.push(day);
               }
 
@@ -98,6 +98,14 @@ diogenisApp.filter('generateTime', function () {
         if (currentTeacher === undefined || currentLesson === undefined || currentClassroom === undefined || currentDay == undefined) {
           return filteredItems;
         }
+
+        var day = [
+          {id: 1, name: "Δευτέρα"},
+          {id: 2, name: "Τρίτη"},
+          {id: 3, name: "Τετάρτη"},
+          {id: 4, name: "Πέμπτη"},
+          {id: 5, name: "Παρασκευή"}
+        ]
 
         angular.forEach(labList, function(lab){
           if (lab.teacherid == currentTeacher.id && lab.lessonid == currentLesson.id
