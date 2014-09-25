@@ -3,7 +3,7 @@ var should = require('should');
 
 describe('student', function() {
 
-        describe('Move student', function() {
+    describe('Move student', function() {
 
         it('Should succeed', function(done) {
             testUtils.authTeacher(function(teacherRes) {
@@ -50,9 +50,27 @@ describe('student', function() {
                 };
 
                 testUtils.getUrl(optsCreate, function(res, body) {
-                    testUtils.getUrl(opts, function(res, body) {
-                        res.body.should.eql(expected)
-                        done();
+                    testUtils.authStudent(function(studentRes) {
+
+                        var optsAdd = {
+                            path: 'lab/add/student',
+                            method: 'POST',
+                            auth: true
+                        };
+
+                        optsAdd.form = {
+                            labId: 1,
+                            studentId: 1
+                        };
+
+                        testUtils.getUrl(optsAdd, function(res, body) {
+                            testUtils.authTeacher(function(teacherRes) {
+                                testUtils.getUrl(opts, function(res, body) {
+                                    res.body.should.eql(expected);
+                                    done();
+                                });
+                            });
+                        });
                     });
                 });
             });
@@ -65,8 +83,8 @@ describe('student', function() {
                         success: true
                     },
                     error: {
-                        id: 9,
-                        name: 'DbError'
+                        id: 11,
+                        name: 'MoveFailed'
                     }
                 };
 

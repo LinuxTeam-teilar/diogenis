@@ -44,7 +44,7 @@ BEGIN
 
     PERFORM * FROM labAttributes
     WHERE student = studentId AND lab = oldLabId;
-    IF FOUND THEN
+    IF NOT FOUND THEN
         RETURN FALSE;
     END IF;
 
