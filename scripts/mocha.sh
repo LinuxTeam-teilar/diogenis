@@ -12,5 +12,6 @@
                                                   test/lesson_remove.js \
                                                   test/lab_remove.js \
                                                   test/student_remove.js \
-                                                  test/student_move.js
+                                                  test/student_move.js \
+                                                  test/teacher_remove.js
 

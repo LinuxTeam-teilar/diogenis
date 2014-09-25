@@ -20,5 +20,9 @@ router.get('/list/students', routeMiddleware.isTeacher, function(req, res) {
     teacherDb.listStudents(req, res);
 });
 
+router.post('/remove', routeMiddleware.isSecretary, function(req, res) {
+    teacherDb.remove(req, res);
+});
+
 module.exports = router;
 
