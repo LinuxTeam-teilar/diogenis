@@ -5,6 +5,7 @@ var lesson = require('./lesson.js');
 var student = require('./student.js');
 var classroom = require('./classroom.js');
 var lab = require('./lab.js');
+var contact = require('./contact.js')
 var debug = require('debug')('diogenis');
 
 module.exports = function(app) {
@@ -28,7 +29,8 @@ module.exports = function(app) {
     app.use('/lesson', lesson);
     app.use('/student', student);
     app.use('/classroom', classroom);
-    app.use('/lab', lab)
+    app.use('/lab', lab);
+    app.use('/contact', contact);
 
     /// catch 404 and forward to error handler
     app.use(function(req, res, next) {
