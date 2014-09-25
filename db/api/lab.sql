@@ -33,6 +33,10 @@ BEGIN
         RETURN 7;
     END IF;
 
+    IF startTime >= endTime THEN
+        RETURN 8;
+    END IF;
+
     -- so our parameters are valid, lets continue by checking
     -- if the classroom is available
 
@@ -43,7 +47,7 @@ BEGIN
           AND day = _day;
 
     IF FOUND THEN
-        RETURN 8;
+        RETURN 9;
     END IF;
 
     -- no errors so lets associate the classroom with the lesson
