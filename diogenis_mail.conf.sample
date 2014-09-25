@@ -4,4 +4,4 @@ port =
 auth_username =
 auth_password =
 from =
-cc =
+to =
