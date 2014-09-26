@@ -13,5 +13,6 @@
                                                   test/lab_remove.js \
                                                   test/student_remove.js \
                                                   test/student_move.js \
-                                                  test/teacher_remove.js
+                                                  test/teacher_remove.js \
+                                                  test/laptop.js
 

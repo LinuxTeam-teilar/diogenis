@@ -135,6 +135,22 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION lab_modify_laptop(labId int, studentId int, _hasLaptop boolean) RETURNS BOOLEAN AS $$
+DECLARE
+BEGIN
+    PERFORM * FROM labAttributes WHERE lab = labId AND student = studentId;
+    IF NOT FOUND THEN
+        RETURN FALSE;
+    END IF;
+
+
+    UPDATE labAttributes SET hasLaptop = _hasLaptop
+    WHERE lab = labId AND student = studentId;
+
+    RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION lab_remove_student(labId int, studentId int) RETURNS INT AS $$
 DECLARE
 BEGIN

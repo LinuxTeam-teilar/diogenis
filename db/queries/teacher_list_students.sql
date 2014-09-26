@@ -13,11 +13,11 @@ WITH result AS (
             LEFT JOIN (
                 SELECT student.id, student.name, student.username, student.identity,
                        array_agg(sr.record) AS records,
-                       la.isStudentInQueue
+                       la.isStudentInQueue, la.hasLaptop
                 FROM student
                 LEFT JOIN studentRecord AS sr ON student.id = sr.student
                 INNER JOIN labAttributes AS la ON student.id = la.student
-                GROUP BY student.id, la.isStudentInQueue
+                GROUP BY student.id, la.isStudentInQueue, la.hasLaptop
             ) AS s ON s.id = la.student
             INNER JOIN classroom AS c ON c.id = l.classroom
             INNER JOIN lesson AS le ON le.id = l.lesson

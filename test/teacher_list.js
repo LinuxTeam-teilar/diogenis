@@ -27,6 +27,7 @@ describe('Teacher', function() {
                             {
                                 id: 1,
                                 isstudentinqueue: false,
+                                hasLaptop: false
                             }],
                         studentsInQueue: [],
                         timeend: 10,
@@ -55,6 +56,7 @@ describe('Teacher', function() {
                     lab.timeend.should.eql(expected.labs[0].timeend);
                     lab.timestart.should.eql(expected.labs[0].timestart);
                     lab.students[0].id.should.eql(expected.labs[0].students[0].id);
+                    lab.students[0].haslaptop.should.eql(expected.labs[0].students[0].hasLaptop);
                     done();
                 });
             });

@@ -211,7 +211,8 @@ describe('lab', function() {
                     labAttributes: {
                         lab: 1,
                         student: 1,
-                        isstudentinqueue: false
+                        isstudentinqueue: false,
+                        haslaptop: false
                     }
                 };
 

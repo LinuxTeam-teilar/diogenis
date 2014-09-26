@@ -17,7 +17,8 @@ CREATE TABLE labAttributes
 (
     lab              int      not null references lab(id) on delete cascade,
     student          int      not null references student(id) on delete cascade,
-    isStudentInQueue boolean
+    isStudentInQueue boolean,
+    hasLaptop        boolean default false
 );
 
 -- student record table has been placed here
