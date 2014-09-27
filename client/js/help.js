@@ -11,16 +11,31 @@ diogenisControllers.controller('DiogenisHelpCtrl', ['$scope', '$routeParams', '$
     $scope.alerts.splice(index, 1);
   };
 
+  $scope.busyButton = false;
   $scope.isUserLoggedIn = $cookieStore.get('fullName') !== undefined;
   $scope.sendMail = function() {
-    //do something with the data.
-    console.log($scope.fullName)
-    console.log($scope.email)
-    console.log($scope.message)
-    console.log($scope.title)
     //clear the previous alerts
     $scope.alerts = [];
-    $scope.alerts.push({msg: 'Το email στάλθηκε επιτυχώς, θα επικοινωνήσουμε σύστομα μαζί σας.', type: 'success'});
+
+    var newMail = {
+      subject: $scope.title,
+      content: $scope.message,
+      contactemail: $scope.email,
+      accountname: $scope.fullName
+    };
+
+    $scope.busyButton = true;
+
+    $http.post('contact/sendmail', newMail).
+      success(function(result) {
+      if (result.auth.success && result.error.id ===-1 && result.operation.status === 'ok' ) {
+        $scope.alerts.push({msg: 'Το email στάλθηκε επιτυχώς, θα επικοινωνήσουμε σύστομα μαζί σας.', type: 'success'});
+      } else {
+        $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
+      }
+
+      $scope.busyButton = false;
+    });
   }
 
   $scope.resetForm = function() {

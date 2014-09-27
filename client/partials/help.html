@@ -47,7 +47,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="email">Email:</label>
   <div class="col-md-8">
-  <input id="email" name="email" type="text" ng-model="email" placeholder="Δώστε ένα έγκυρο Emai" class="form-control input-md" required="">
+  <input id="email" name="email" type="email" ng-model="email" placeholder="Δώστε ένα έγκυρο Emai" class="form-control input-md" required="">
 
   </div>
 </div>
@@ -82,7 +82,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="submitButton"></label>
   <div class="col-md-8">
-    <button id="submitButton" type="submit" name="submitButton" class="btn btn-success">Αποστολή</button>
+    <button id="submitButton" ng-disabled="busyButton" type="submit" name="submitButton" class="btn btn-success">Αποστολή</button>
     <button id="resetButton" ng-click="resetForm()" name="resetButton" class="btn btn-danger">Καθαρισμός Φόρμας</button>
   </div>
 </div>
