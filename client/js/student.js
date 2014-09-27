@@ -6,8 +6,8 @@ diogenisControllers.controller('DiogenisStudentCtrl', ['$scope', '$routeParams',
   function($scope, $routeParams, $http, $route, $location, $filter, $cookieStore, GenerateFullName) {
 
     $scope.navs = [
-      { title: "Εργαστήρια", visible : false, partial: "partials/student/_student_lab.html"},
-      { title: "Αίθουσες Αναμονής", visible : false, partial: "partials/student/_student_labinqueue.html"}
+      { title: "Εργαστήρια", visible : false, partial: "partials/student/_student_lab.html"}
+      //{ title: "Αίθουσες Αναμονής", visible : false, partial: "partials/student/_student_labinqueue.html"}
     ];
 
     $scope.teacherList = null;

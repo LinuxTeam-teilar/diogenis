@@ -9,8 +9,8 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
       { title: "Μαθήματα", visible : false, partial: "partials/teacher/_teacher_lesson.html"},
       { title: "Αίθουσες", visible : false, partial: "partials/teacher/_teacher_classroom.html"},
       { title: "Εργαστήρια", visible : false, partial: "partials/teacher/_teacher_lab.html"},
-      { title: "Τμήματα", visible : false, partial: "partials/teacher/_teacher_lab_student.html"},
-      { title: "Αίθουσα Αναμονής", visible : false, partial: "partials/teacher/_teacher_lab_queue.html"}
+      { title: "Τμήματα", visible : false, partial: "partials/teacher/_teacher_lab_student.html"}
+     // { title: "Αίθουσα Αναμονής", visible : false, partial: "partials/teacher/_teacher_lab_queue.html"}
     ];
 
     $scope.teacherList = null;
