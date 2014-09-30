@@ -30,7 +30,7 @@ defaultdata:
 	@./scripts/db.sh defaultdata
 
 defaultdata-production:
-	@./scripts/db.sh defaultdata
+	@./scripts/db.sh defaultdata-production
 
 check:
 	@./node_modules/.bin/jshint --verbose --extra-ext .json . ; if [ $$? -eq 0 ] ; then echo "Done. Clean!" ; fi
@@ -44,4 +44,4 @@ tools:
 help:
 	@./scripts/help.sh
 
-.PHONY: start start-production install defaultdata db-create db-create-development check test help tools defaultdata_production
+.PHONY: start start-production install defaultdata db-create db-create-development check test help tools defaultdata-production

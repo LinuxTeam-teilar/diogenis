@@ -1,5 +1,8 @@
 SELECT university_create('T.E.I. Thessalias');
 
+SELECT department_create('ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ ΠΛΗΡΟΦΟΡΙΚΗΣ ΤΕ', 1);
+SELECT secretary_create('secry-cs', 'superpassword', 1);
+
 SELECT department_create('ΤΜΗΜΑ ΛΟΓΙΣΤΙΚΗΣ ΚΑΙ ΧΡΗΜΑΤΟΟΙΚΟΝΟΜΙΚΗΣ', 1);
 SELECT secretary_create('secry-account', 'superpassword', 2);
 
