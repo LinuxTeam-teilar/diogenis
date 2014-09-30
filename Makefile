@@ -18,6 +18,7 @@ db-create-development:
 
 db-create:
 	@./scripts/db.sh production
+	@make defaultdata-production
 
 #################################
 # install
@@ -26,6 +27,9 @@ install:
 	@npm install
 
 defaultdata:
+	@./scripts/db.sh defaultdata
+
+defaultdata-production:
 	@./scripts/db.sh defaultdata
 
 check:
@@ -40,4 +44,4 @@ tools:
 help:
 	@./scripts/help.sh
 
-.PHONY: start start-production install defaultdata db-create db-create-development check test help tools
+.PHONY: start start-production install defaultdata db-create db-create-development check test help tools defaultdata_production

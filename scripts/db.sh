@@ -52,6 +52,10 @@ elif [ -n "$1" ] && [ $1 == "defaultdata" ]; then
     echo "**********************************"
     echo "Executing Defaultdata!!!"
     psqlExec "defaultdata.sql" false
+elif [ -n "$1" ] && [ $1 == "defaultdata-production" ]; then
+    echo "**********************************"
+    echo "Executing Defaultdata Production!!!"
+    psqlExec "defaultdata_production.sql" false
 else
    if [ $1 == "development" ]; then
 
