@@ -17,7 +17,8 @@
         "async": ">= 0.9.0",
         "cheerio": ">= 0.17.0",
         "nodemailer": ">= 1.3.0",
-        "nodemailer-smtp-transport": "*"
+        "nodemailer-smtp-transport": "*",
+        "forever": "*"
     },
     "devDependencies": {
         "jshint": ">= 2.5.1",

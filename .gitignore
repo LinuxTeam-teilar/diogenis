@@ -2,3 +2,6 @@ node_modules
 test/test_passwords.conf
 tmp
 diogenis_mail.conf
+diogenis-error-production.log
+diogenis-out-production.log
+diogenis-production.log

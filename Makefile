@@ -7,7 +7,10 @@ start:
 	@DEBUG=diogenis ./bin/www
 
 start-production:
-	@DEBUG=diogenis ./bin/www
+	@DEBUG=diogenis ./node_modules/forever/bin/forever start -a \
+	-l diogenis-production.log \
+	-o diogenis-out-production.log \
+	-e diogenis-error-production.log ./bin/www &
 
 #################################
 # db
