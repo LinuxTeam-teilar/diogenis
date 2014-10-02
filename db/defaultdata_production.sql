@@ -10,7 +10,7 @@ SELECT department_create('ΤΜΗΜΑ ΤΕΧΝΟΛΟΓΩΝ ΓΕΩΠΟΝΩΝ', 1);
 SELECT secretary_create('secry-agric', 'superpassword', 3);
 
 SELECT department_create('ΤΜΗΜΑ ΔΙΟΙΚΗΣΗΣ ΕΠΙΧΕΙΡΗΣΕΩΝ - ΔΙΟΙΚΗΣΗ ΕΠΙΧΕΙΡΗΣΕΩΝ', 1);
-SELECT secretary_create('secry-business ', 'superpassword', 4);
+SELECT secretary_create('secry-business', 'superpassword', 4);
 
 SELECT department_create('ΤΜΗΜΑ ΠΟΛΙΤΙΚΩΝ ΜΗΧΑΝΙΚΩΝ Τ.Ε. (ΤΡΙΚΑΛΑ)', 1);
 SELECT secretary_create('secry-civil-trikala', 'superpassword', 5);
