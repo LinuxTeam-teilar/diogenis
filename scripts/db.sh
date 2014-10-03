@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ ! -f diogenis.conf ]; then
+    echo "diogenis.conf is missing, check diogenis.conf.sample for an example"
+    exit 1
+fi
+
 function readConfigurationValue()
 {
     local key=$1
@@ -53,6 +58,12 @@ elif [ -n "$1" ] && [ $1 == "defaultdata" ]; then
     echo "Executing Defaultdata!!!"
     psqlExec "defaultdata.sql" false
 elif [ -n "$1" ] && [ $1 == "defaultdata-production" ]; then
+
+    if [ ! -f db/defaultdata_production.sql ]; then
+        echo "db/defaultdata_production.sql is missing, check db/defaultdata_production.sql.sample for an example"
+        exit 1
+    fi
+
     echo "**********************************"
     echo "Executing Defaultdata Production!!!"
     psqlExec "defaultdata_production.sql" false
