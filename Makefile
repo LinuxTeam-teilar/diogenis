@@ -17,11 +17,15 @@ start-production:
 #################################
 db-create-development:
 	@./scripts/db.sh development
+	@make db-update
 	@make defaultdata
 
 db-create:
 	@./scripts/db.sh production
 	@make defaultdata-production
+
+db-update:
+	@./scripts/db.sh db-update
 
 #################################
 # install

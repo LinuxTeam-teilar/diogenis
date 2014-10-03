@@ -8,7 +8,7 @@ cat << EOF
         5. start redis
         6. modify the diogenis.conf
         7. make install
-        8. make db-create
+        8. make db-create && make db-update
         9. modify defaultdata.js
         10. make defaultdata
         11. make tools
