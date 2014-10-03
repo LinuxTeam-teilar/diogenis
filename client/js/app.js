@@ -58,6 +58,10 @@ diogenisApp.config(['$routeProvider',
         templateUrl: 'partials/help.html',
         controller: 'DiogenisHelpCtrl'
       }).
+      when('/faq', {
+        templateUrl: 'partials/faq.html',
+        controller: 'DiogenisFaqCtrl'
+      }).
       otherwise({
         redirectTo: '/secretary'
       });
