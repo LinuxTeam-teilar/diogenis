@@ -11,6 +11,6 @@ mkdir $gopath
 GOPATH=$gopath go get github.com/tools/godep
 
 pushd $PWD/tools > /dev/null
-GOBIN=$gopath/bin $gopath/bin/godep go install dionysos.go
+GOBIN=$gopath/bin $gopath/bin/godep go install -ldflags '-extldflags=-fno-PIC' dionysos.go
 popd > /dev/null
 
