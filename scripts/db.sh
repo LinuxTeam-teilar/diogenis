@@ -69,6 +69,8 @@ elif [ -n "$1" ] && [ $1 == "defaultdata-production" ]; then
     psqlExec "defaultdata_production.sql" false
 elif [ -n "$1" ] && [ $1 == "db-update" ]; then
     psqlExec "updates/1.sql" false
+    psqlExec "updates/2_department.sql" false
+    psqlExec "updates/2_lab.sql" false
 else
    if [ $1 == "development" ]; then
 

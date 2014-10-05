@@ -18,11 +18,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 var express = require('express');
 var router = express.Router();
+var routeMiddleware = require('./middleware.js');
 
 var secretaryDb = require('../lib/db/secretary.js');
 
 router.post('/auth', function(req, res) {
     secretaryDb.auth(req, res);
+});
+
+router.post('/isDepartmentLocked', routeMiddleware.isSecretary, function(req, res) {
+    secretaryDb.isDepartmentLocked(req, res);
+});
+
+router.post('/lockDepartment', routeMiddleware.isSecretary, function(req, res) {
+    secretaryDb.lockDepartment(req, res);
+});
+
+router.post('/unlockDepartment', routeMiddleware.isSecretary, function(req, res) {
+    secretaryDb.unLockDepartment(req, res);
 });
 
 module.exports = router;

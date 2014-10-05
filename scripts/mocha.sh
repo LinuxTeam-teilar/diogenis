@@ -14,5 +14,6 @@
                                                   test/student_remove.js \
                                                   test/student_move.js \
                                                   test/teacher_remove.js \
-                                                  test/laptop.js
+                                                  test/laptop.js \
+                                                  test/department_lock.js
 
