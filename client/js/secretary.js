@@ -505,7 +505,9 @@ diogenisControllers.controller('DiogenisSecretaryCtrl', ['$scope', '$routeParams
         $scope.currentLessonList = $filter('filter')($scope.lessonList, function(lesson) {
           var showLesson = false;
           angular.forEach(lesson.teachers, function(teacher) {
-            showLesson = (teacher.id == currentTeacher.id);
+            //if two teachers have the same lesson, we should break our for here.
+            //angularjs forEach doesn't support break, so we are faking it
+            showLesson = showLesson ? true : (teacher.id == currentTeacher.id);
           });
           return showLesson;
         });
