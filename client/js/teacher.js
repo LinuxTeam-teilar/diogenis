@@ -60,8 +60,8 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
       //otherwise we are providing wrong data to the server
       var moveData = {
         student: studentId,
-        oldLab: newLab.labid,
-        newLab: oldLab.id
+        oldLab: oldLab.labId,
+        newLab: newLab.labid
       }
 
       $http.post('student/move', moveData).
