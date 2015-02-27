@@ -26,6 +26,7 @@ import (
     "flag"
     "github.com/qiniu/iconv"
     "net/http/cookiejar"
+    "crypto/tls"
 )
 
 func main() {
@@ -44,7 +45,12 @@ func main() {
 
     cookieJar, _ := cookiejar.New(nil)
 
+    tr := &http.Transport{
+       TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+
     client := &http.Client{
+        Transport: tr,
         Jar: cookieJar,
     }
 
