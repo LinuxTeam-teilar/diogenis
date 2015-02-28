@@ -43,12 +43,12 @@ DECLARE
 BEGIN
 
     PERFORM * FROM labAttributes
-    WHERE student = studentId AND lab = labId AND isStudentInQueue = TRUE;
-    IF FOUND THEN
+    WHERE student = studentId AND lab = labId;
+    IF NOT FOUND THEN
         RETURN FALSE;
     END IF;
 
-    DELETE FROM labAttributes WHERE lab= labId AND student = studentId;
+    DELETE FROM labAttributes WHERE lab = labId AND student = studentId;
 
     RETURN TRUE;
 END;

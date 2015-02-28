@@ -220,8 +220,23 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
           });
       },
 
+      removeStudentFromLab: function(row, grid) {
+        var removeStudentData = {
+          labId: grid.options.labId,
+          studentId: row.entity.id
+        }
 
+        $http.post('student/remove/lab', removeStudentData).
+          success(function(result) {
+            if (result.error.id == -1 && result.operation.success) {
+              $scope.alerts = [];
 
+              $scope.alerts.push({msg: 'Ο φοιτητής ' + row.entity.name + " διαγράφτηκε επιτυχώς από το εργαστήριο, παρακαλώ κάντε ανανέωση της σελίδας, για να δείτε τις αλλαγές!", type: 'success' });
+            } else {
+              $scope.alerts.push({msg: 'Σφάλμα συστήματος ' + result.error.name, type: 'danger'});
+            }
+          });
+      },
     }
 
     $scope.gridPossibleOptions.gridLesson = {
@@ -446,6 +461,7 @@ diogenisControllers.controller('DiogenisTeacherCtrl', ['$scope', '$routeParams',
                 }
 
                 grid.columnDefs.push({field: 'haslaptop', cellTemplate: 'partials/teacher/laptop_button.html', displayName: 'Έχει Laptop', width:120});
+                grid.columnDefs.push({field: 'removeStudentFromLab', cellTemplate: 'partials/teacher/remove_student_from_lab.html', displayName: 'Διαγραφή', width:160});
 
                 if ($scope.gridTmimata.indexOf(grid) == -1) {
                   $scope.gridTmimata.push(grid);
